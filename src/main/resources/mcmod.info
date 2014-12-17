@@ -1,0 +1,16 @@
+[
+{
+  "modid": "WitchingGadgets",
+  "name": "Witching Gadgets",
+  "description": "It's a kind of magic",
+  "version": "1.0.8",
+  "mcversion": "1.6.4",
+  "url": "",
+  "updateUrl": "",
+  "authors": ["BluSunrize"],
+  "credits": "The Forge guys, Azanor for Thaucmraft, 'The Skype Guys' for inspiration and criticism",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": ["Thaumcraft"]
+}
+]
