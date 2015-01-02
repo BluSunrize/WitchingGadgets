@@ -10,7 +10,7 @@ public class WGEnchantGemBrittle extends Enchantment
 	public WGEnchantGemBrittle(int id, int weight)
 	{
 		super(id, weight, EnumEnchantmentType.all);
-		this.setName("gemstoneBrittle");
+		this.setName("wg.gemstoneBrittle");
 	}
 
 	@Override

@@ -12,7 +12,7 @@ public class WGEnchantInvisibleGear extends Enchantment
 	public WGEnchantInvisibleGear(int id)
 	{
 		super(id, 0, EnumEnchantmentType.all);
-		this.setName("invisibleGear");
+		this.setName("wg.invisibleGear");
 	}
 
 	@Override

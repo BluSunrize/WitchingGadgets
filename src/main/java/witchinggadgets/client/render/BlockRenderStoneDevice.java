@@ -53,7 +53,16 @@ public class BlockRenderStoneDevice implements ISimpleBlockRenderingHandler
 	{
 		if(world.getTileEntity(x, y, z) instanceof TileEntityEtherealWall)
 		{
-			//return false;
+			TileEntityEtherealWall tile = (TileEntityEtherealWall) world.getTileEntity(x, y, z);
+			Block blockToRender = tile.camoID!=null?tile.camoID:block;
+			if(!blockToRender.canRenderInPass(renderPass))
+				return false;
+		}
+		else if(renderPass!=0)
+			return false;
+
+		if(world.getTileEntity(x, y, z) instanceof TileEntityEtherealWall)
+		{
 			TileEntityEtherealWall tile = (TileEntityEtherealWall) world.getTileEntity(x, y, z);
 
 			Block blockToRender = tile.camoID!=null?tile.camoID:block;
@@ -64,10 +73,6 @@ public class BlockRenderStoneDevice implements ISimpleBlockRenderingHandler
 				return renderer.renderStandardBlock(block, x, y, z);
 			if (renderType == -1)
 				return false;
-			//			if(!blockToRender.canRenderInPass(renderPass))
-			//				return false;
-//			if(renderPass==0)
-//				return false;
 			blockToRender.setBlockBoundsBasedOnState(renderer.blockAccess, x, y, z);
 			renderer.setRenderBoundsFromBlock(blockToRender);
 
@@ -120,7 +125,7 @@ public class BlockRenderStoneDevice implements ISimpleBlockRenderingHandler
 				renderer.renderStandardBlockWithAmbientOcclusion(block, x, y, z, rgb[0], rgb[1], rgb[2]);
 				if(true)
 					return true;
-				
+
 				renderer.enableAO=true;
 				if(block.shouldSideBeRendered(world, x, y-1, z, 0))
 				{
@@ -343,30 +348,34 @@ public class BlockRenderStoneDevice implements ISimpleBlockRenderingHandler
 			}
 			return renderer.renderStandardBlock(block, x, y, z);
 		}
-		else if(world.getTileEntity(x, y, z) instanceof TileEntityBlastfurnace)
-		{
-			byte pos = ((TileEntityBlastfurnace)world.getTileEntity(x, y, z)).position;
-			//ForgeDirection facing = ((TileEntityBlastfurnace)world.getTileEntity(x, y, z)).facing;
-			if(pos==22)
-				renderer.setRenderBounds(0,0,0, 1,.875,1);
-			else if(pos>=18)
+		else 
+			if(world.getBlockMetadata(x, y, z) == 8)
 			{
-				pos-=18;
-				renderer.setRenderBounds(0,0,0, 1,.5,1);
+				//			if(true)
+				//			return false;
+				byte pos = ((TileEntityBlastfurnace)world.getTileEntity(x, y, z)).position;
+				//ForgeDirection facing = ((TileEntityBlastfurnace)world.getTileEntity(x, y, z)).facing;
+				//System.out.println(pos);
+				if(pos==22)
+					renderer.setRenderBounds(0,0,0, 1,.875,1);
+				else if(pos>=18)
+				{
+					pos-=18;
+					renderer.setRenderBounds(0,0,0, 1,.5,1);
+					renderer.renderStandardBlock(block, x, y, z);
+					renderer.setRenderBounds(pos%3==0?.5:0,.5,pos<3?.5:0, (pos+1)%3==0?.5:1,1,pos>5?.5:1);
+				}
+				else
+					renderer.setRenderBounds(0,0,0, 1,1,1);
 				renderer.renderStandardBlock(block, x, y, z);
-				renderer.setRenderBounds(pos%3==0?.5:0,.5,pos<3?.5:0, (pos+1)%3==0?.5:1,1,pos>5?.5:1);
 			}
 			else
-				renderer.setRenderBounds(0,0,0, 1,1,1);
-			renderer.renderStandardBlock(block, x, y, z);
-			return true;
-		}
-		else
-		{
-			renderer.setRenderBounds(0,0,0, 1,1,1);
-			return renderer.renderStandardBlock(block, x, y, z);
-		}
-		//		return true;
+			{
+				block.setBlockBoundsBasedOnState(world, x, y, z);
+				renderer.setRenderBoundsFromBlock(block);
+				return renderer.renderStandardBlock(block, x, y, z);
+			}
+		return false;
 	}
 
 	@Override

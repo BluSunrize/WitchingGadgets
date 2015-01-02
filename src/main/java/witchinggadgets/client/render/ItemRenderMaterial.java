@@ -77,7 +77,7 @@ public class ItemRenderMaterial implements IItemRenderer
 		int aspectColour=0xffffff;
 		if(stack.getTagCompound()!=null)
 		{
-			ScanResult scan = Utilities.readScanResultFromNBT(stack.getTagCompound().getCompoundTag("scanResult"));
+			ScanResult scan = Utilities.readScanResultFromNBT(stack.getTagCompound().getCompoundTag("scanResult"), entityclientplayermp.worldObj);
 			AspectList scanAspects = new AspectList();
 			if(scan!=null)
 			{

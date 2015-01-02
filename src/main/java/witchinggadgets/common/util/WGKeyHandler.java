@@ -3,12 +3,14 @@ package witchinggadgets.common.util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.potion.Potion;
+import net.minecraftforge.common.ForgeHooks;
+import travellersgear.api.TravellersGearAPI;
 import witchinggadgets.WitchingGadgets;
+import witchinggadgets.common.WGContent;
 import witchinggadgets.common.items.tools.ItemPrimordialGlove;
 import witchinggadgets.common.util.network.PacketPrimordialGlove;
-import witchinggadgets.common.util.network.PacketUseCloak;
 import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -16,16 +18,17 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class WGKeyHandler
 {
-	public static KeyBinding useCloakKey = new KeyBinding("Use Cloak", 34, "key.categories.misc");
 	public static KeyBinding thaumcraftFKey;
+	public static KeyBinding jumpKey;
 
-	public boolean[] keyDown = {false,false};
+	public boolean[] keyDown = {false,false,false};
 	public static float gemRadial;
 	public static boolean gemLock = false;
+	private boolean isJumping = false;
+	private int multiJumps=0;
 
 	public WGKeyHandler()
 	{
-		ClientRegistry.registerKeyBinding(useCloakKey);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -41,24 +44,37 @@ public class WGKeyHandler
 				for(KeyBinding kb : Minecraft.getMinecraft().gameSettings.keyBindings)
 					if(kb.getKeyCategory()=="key.categories.misc" && kb.getKeyDescription()=="Change Wand Focus")
 						thaumcraftFKey=kb;
-			}	
+			}
+			if(jumpKey==null)
+				jumpKey=Minecraft.getMinecraft().gameSettings.keyBindJump;
 
 			EntityPlayer player = event.player;
-			if (FMLClientHandler.instance().getClient().inGameHasFocus)
+			if(FMLClientHandler.instance().getClient().inGameHasFocus)
 			{
-				if(useCloakKey.getIsKeyPressed() && !keyDown[0] && Minecraft.getMinecraft().currentScreen==null)//&& (player.getCurrentArmor(2).getItem() instanceof ItemCloak || player.getCurrentArmor(2).getItem() instanceof ItemRunicCloak) )
+				if(jumpKey.getIsKeyPressed() && !keyDown[2] && Minecraft.getMinecraft().currentScreen==null)
 				{
-//					if(Utilities.getActiveMagicalCloak(player)!=null)
-//					{
-						WitchingGadgets.packetPipeline.sendToServer(new PacketUseCloak(player));
-//						ItemStack cloakStack = Utilities.getActiveMagicalCloak(player);
-//						if(cloakStack != null && cloakStack.getItem() instanceof ItemCloak)
-//							ItemCloak.getCloakFromStack(cloakStack).onCloakUsed(player, cloakStack);
-//					}
-					keyDown[0] = true;
+					if(isJumping && multiJumps>0)
+					{
+						event.player.motionY = 0.42D;
+						event.player.fallDistance = 0;
+
+						if (event.player.isPotionActive(Potion.jump))
+							event.player.motionY += (double) ((float) (event.player.getActivePotionEffect(Potion.jump).getAmplifier() + 1) * 0.1F);
+						ForgeHooks.onLivingJump(event.player);
+						multiJumps--;
+					}
+					if(!isJumping)
+					{
+						multiJumps = 0;
+						isJumping = event.player.isAirBorne;
+
+						if(TravellersGearAPI.getExtendedInventory(event.player)[1]!=null && TravellersGearAPI.getExtendedInventory(event.player)[1].getItem().equals(WGContent.ItemMagicalBaubles) && TravellersGearAPI.getExtendedInventory(event.player)[1].getItemDamage()==0)
+							multiJumps += 1;
+					}
+					keyDown[2] = true;
 				}
-				else if(keyDown[0])
-					keyDown[0] = false;
+				else if(keyDown[2])
+					keyDown[2] = false;
 			}
 			float step = .15f;
 			if(thaumcraftFKey!=null && thaumcraftFKey.getIsKeyPressed() && !keyDown[1])
@@ -94,6 +110,11 @@ public class WGKeyHandler
 				}
 
 			}
+		}
+		if(isJumping && event.player.onGround)
+		{
+			event.player.isAirBorne = false;
+			isJumping=false;
 		}
 	}
 

@@ -11,6 +11,7 @@ public class WGConfig
 	public static int cloakAnimationMode;
 	public static boolean enableEnchFabLoom;
 	public static boolean limitBookSearchToCategory;
+	public static boolean allowBootsRepair;
 	
 	public static int smelteryResultForClusters;
 	
@@ -30,6 +31,7 @@ public class WGConfig
 		enableEnchFabLoom = config.get("Other Options", "Enable Weaving Recipe: Enchanted Fabric", true, "Determines wether Enchanted Fabric can be made on a loom.").getBoolean(true);
 		smelteryResultForClusters = config.get("Other Options", "Smeltery Result for Clusters", 144*3, "How many milliBuckets of molten Metal a cluster should give. 144mB equal 1 ingot. Set to 0 to disable smeltery recipes.").getInt();
 		limitBookSearchToCategory = config.get("Other Options", "Limit Book Search", false, "Thaumonomicon Search to currently active category").getBoolean(false);
+		//allowBootsRepair = config.get("Other Options", "Allow Boot repair", true, "Dis-/enable repairing the Boots of the Traveller with leather").getBoolean(true);
 
 		config.save();
 	}

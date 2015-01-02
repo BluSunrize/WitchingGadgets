@@ -15,7 +15,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import travellersgear.api.ITravellersGear;
@@ -31,7 +30,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemMagicalBaubles extends Item implements IBauble, ITravellersGear
 {
 	//String[] subNames = {"ringSocketed_gold","ringSocketed_thaumium","ringSocketed_silver"};
-	String[] subNames = {"ring_warpWard","shouldersKnockback","vambraceStrength"};
+	String[] subNames = {"shouldersDoublejump","shouldersKnockback","vambraceStrength","vambraceHaste","titleCrimsonCult"};
 	IIcon[] icons = new IIcon[subNames.length];
 	IIcon[] ringGems = new IIcon[ItemInfusedGem.GemCut.values().length];
 
@@ -46,20 +45,12 @@ public class ItemMagicalBaubles extends Item implements IBauble, ITravellersGear
 	@Override
 	public int getColorFromItemStack(ItemStack stack, int pass)
 	{
-		if(stack.getItemDamage()==0 && pass>0)
-		{
-			ItemStack gem = getInlaidGem(stack);
-			if(gem!=null)
-				return gem.getItem().getColorFromItemStack(gem, 0);
-		}
 		return super.getColorFromItemStack(stack,pass);
 	}
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
 	{
-		if(!world.isRemote && stack.getItemDamage()==0)
-			player.openGui(WitchingGadgets.instance, 8, world, MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posY), MathHelper.floor_double(player.posZ));
 		return super.onItemRightClick(stack, world, player);
 	}
 
@@ -69,6 +60,8 @@ public class ItemMagicalBaubles extends Item implements IBauble, ITravellersGear
 	{
 		String type = getSlot(stack)>0?"tg."+getSlot(stack):"bauble."+getBaubleType(stack);
 		list.add(StatCollector.translateToLocalFormatted(Lib.DESCRIPTION+"gearSlot."+type));
+		if(stack.hasTagCompound() && stack.getTagCompound().hasKey("title"))
+			list.add(StatCollector.translateToLocalFormatted(stack.getTagCompound().getString("title")));
 	}
 
 	@Override
@@ -91,11 +84,11 @@ public class ItemMagicalBaubles extends Item implements IBauble, ITravellersGear
 	{
 		return ModelMagicalBaubles.getModel(entity, stack);
 	}
-	
+
 	@Override
 	public boolean requiresMultipleRenderPasses()
 	{
-		return true;
+		return false;
 	}
 	@Override
 	public int getRenderPasses(int meta)
@@ -137,7 +130,20 @@ public class ItemMagicalBaubles extends Item implements IBauble, ITravellersGear
 	public void getSubItems(Item item, CreativeTabs tab, List itemList)
 	{
 		for(int i=0;i<subNames.length;i++)
-			itemList.add(new ItemStack(this,1,i));
+			if(i==4)
+			{
+				itemList.add(getItemWithTitle(new ItemStack(this,1,i),Lib.TITLE+"crimsonKnight"));
+				itemList.add(getItemWithTitle(new ItemStack(this,1,i),Lib.TITLE+"crimsonPraetor"));
+			}
+			else
+				itemList.add(new ItemStack(this,1,i));
+	}
+	public static ItemStack getItemWithTitle(ItemStack stack, String title)
+	{
+		if(!stack.hasTagCompound())
+			stack.setTagCompound(new NBTTagCompound());
+		stack.getTagCompound().setString("title", title);
+		return stack;
 	}
 
 	@Override
@@ -159,27 +165,19 @@ public class ItemMagicalBaubles extends Item implements IBauble, ITravellersGear
 	@Override
 	public int getSlot(ItemStack stack)
 	{
-		return this.subNames[stack.getItemDamage()].startsWith("cloak")?0: this.subNames[stack.getItemDamage()].startsWith("shoulders")?1: this.subNames[stack.getItemDamage()].startsWith("vambrace")?2: -1;
+		return this.subNames[stack.getItemDamage()].startsWith("cloak")?0: this.subNames[stack.getItemDamage()].startsWith("shoulders")?1: this.subNames[stack.getItemDamage()].startsWith("vambrace")?2: this.subNames[stack.getItemDamage()].startsWith("title")?3: -1;
 	}
 
 
 	@Override
 	public void onWornTick(ItemStack stack, EntityLivingBase living)
 	{
-		if(living.ticksExisted<1)
-		{
-			onItemUnequipped(living,stack);
-			onItemEquipped(living,stack);
-		}
+		onItemTicked(living,stack);
 	}
 	@Override
 	public void onTravelGearTick(EntityPlayer player, ItemStack stack)
 	{
-		if(player.ticksExisted<1)
-		{
-			onItemUnequipped(player,stack);
-			onItemEquipped(player,stack);
-		}
+		onItemTicked(player,stack);
 	}
 
 	@Override
@@ -203,7 +201,23 @@ public class ItemMagicalBaubles extends Item implements IBauble, ITravellersGear
 		onItemUnequipped(player,stack);
 	}
 
+	public void onItemTicked(EntityLivingBase living, ItemStack stack)
+	{
+		if(living.ticksExisted<1)
+		{
+			onItemUnequipped(living,stack);
+			onItemEquipped(living,stack);
+		}
 
+		if(stack.getItemDamage()==3 && living.isOnLadder())
+		{
+			if(living.isCollidedHorizontally)
+				living.moveEntity(0, .25, 0);
+			else if(!living.isSneaking())
+				living.moveEntity(0, -.1875, 0);
+		}
+
+	}
 	public void onItemEquipped(EntityLivingBase living, ItemStack stack)
 	{
 		if(stack.getItemDamage()==1)

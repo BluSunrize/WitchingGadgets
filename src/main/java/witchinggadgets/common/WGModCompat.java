@@ -15,9 +15,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
-
-import com.xcompwiz.mystcraft.api.MystObjects;
-
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -28,8 +25,6 @@ public class WGModCompat
 	public static Item tfRavensFeather;
 	public static Item tfMagicMapFocus;
 	public static Block tfTowerWood;
-
-	public static Block mystCrystal;
 
 	public static boolean loaded_TCon;
 	public static boolean loaded_Twilight;
@@ -43,7 +38,6 @@ public class WGModCompat
 		tfRavensFeather = GameRegistry.findItem("TwilightForest", "item.tfFeather");
 		tfMagicMapFocus = GameRegistry.findItem("TwilightForest", "item.magicMapFocus");
 		tfTowerWood = GameRegistry.findBlock("TwilightForest", "tile.TFTowerStone");
-		mystCrystal = MystObjects.crystal;
 		tConResource = GameRegistry.findItem("TConstruct", "materials");
 		
 		loaded_TCon = Loader.isModLoaded("TConstruct");

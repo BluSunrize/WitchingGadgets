@@ -6,7 +6,6 @@ import java.util.Arrays;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -195,12 +194,10 @@ implements IAspectContainer, IEssentiaTransport, IWandable
 	{
 		RenderBlocks renderer = new RenderBlocks(new PartMetaAccess(this));
 		BlockTube b = (BlockTube) ConfigBlocks.blockTube;
-
-		Tessellator tes = Tessellator.instance;
-
-		tes.setColorOpaque_I(0xffffff);
-		//		tes.setBrightness(b.getMixedBrightnessForBlock(renderer.blockAccess, x(), y(), z()));
-
+		
+		renderer.setRenderBounds(.5,.5,.5, .5,.5,.5);
+		renderer.renderStandardBlock(this.getWorld().getBlock(x(),y(),z()), x(),y(),z());
+		
 		boolean hasConnections = false;
 		for(int i=0; i<6; i++)
 		{

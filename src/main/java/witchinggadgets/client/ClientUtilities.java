@@ -36,7 +36,6 @@ import org.lwjgl.opengl.GL11;
 
 import thaumcraft.api.aspects.Aspect;
 import witchinggadgets.WitchingGadgets;
-import witchinggadgets.common.WGContent;
 
 
 /**
@@ -50,7 +49,6 @@ public class ClientUtilities
 	public static int colour_CloakNil = 14737632;
 	public static int colour_CloakRaven = 3487288;
 	public static int colour_CloakStorage = Aspect.VOID.getColor();
-	public static int colour_BagDefault = 9073853;
 
 	public static String[] nodeTypeChatColour = {"7","2","8","5","4","f"};
 	public static String[] nodeModifierChatColour = {"f","7","8"};
@@ -636,37 +634,12 @@ public class ClientUtilities
 					for(int rgb : data)
 						if(rgb!=0)
 						{
-							//						System.out.println("Before: "+Integer.toHexString(rgb));
 							int coloured = blendColoursToInt(rgb,passColour)&0xffffff;
-							//						System.out.println("After: "+Integer.toHexString(coloured));
 							if(coloured>0 /*&& !colourSet.contains(coloured)*/)
 							{
-								//System.out.println("herro?");
 								colourSet.add(coloured);
 							}
 						}
-					//					int maxFrames = ((TextureAtlasSprite)icon).hasAnimationMetadata()?((TextureAtlasSprite)icon).getFrameCount():1;
-					//					for(int frame=0;frame<maxFrames;frame++)
-					//					{
-					//
-					//
-					//						//				System.out.println("Frame "+frame);
-					//						//					int[][] frameColours = ((TextureAtlasSprite)icon).getFrameTextureData(frame);
-					//						//
-					//						//					//System.out.println(frameColours);
-					//						//					for(int[] lvl : frameColours)
-					//						//						for(int px : lvl)
-					//						//						{
-					//						//							//						System.out.print("Pixel: ");
-					//						//							int full = blendColoursToInt(px,passColour);
-					//						//							if(full>0 && !colourSet.contains(full))
-					//						//							{
-					//						//								//							System.out.print("Legit");
-					//						//								colourSet.add(full);
-					//						//							}
-					//						//							//						System.out.println();
-					//						//						}
-					//					}
 				}
 
 			}

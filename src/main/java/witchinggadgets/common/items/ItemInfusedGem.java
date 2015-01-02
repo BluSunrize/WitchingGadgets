@@ -421,7 +421,7 @@ public class ItemInfusedGem extends Item implements IInfusedGem
 	public void registerIcons(IIconRegister ir)
 	{
 		for(int i=0;i<icons.length;i++)
-			this.icons[i] = ir.registerIcon("witchinggadgets:infusedgem_"+GemCut.values()[i].toString().toLowerCase());
+			this.icons[i] = ir.registerIcon("witchinggadgets:infusedGem_"+GemCut.values()[i].toString().toLowerCase());
 	}
 	@Override
 	public int getItemEnchantability(ItemStack stack)

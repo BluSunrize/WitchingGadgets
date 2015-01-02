@@ -92,7 +92,7 @@ public class ItemMaterials extends Item
 			{
 				if(!stack.hasTagCompound())
 					return;
-				ScanResult scan = Utilities.readScanResultFromNBT(stack.getTagCompound().getCompoundTag("scanResult"));
+				ScanResult scan = Utilities.readScanResultFromNBT(stack.getTagCompound().getCompoundTag("scanResult"), player.worldObj);
 				if(scan!=null)
 				{
 					String name = "";
@@ -352,7 +352,7 @@ public class ItemMaterials extends Item
 		{
 			if(stack.hasTagCompound())
 			{
-				ScanResult scan = Utilities.readScanResultFromNBT(stack.getTagCompound().getCompoundTag("scanResult"));
+				ScanResult scan = Utilities.readScanResultFromNBT(stack.getTagCompound().getCompoundTag("scanResult"), world);
 				if(scan != null && !ScanManager.hasBeenScanned(player, scan))
 				{
 					if(world.isRemote && ScanManager.completeScan(player, scan, "@"))

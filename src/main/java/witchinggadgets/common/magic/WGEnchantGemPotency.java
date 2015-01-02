@@ -10,7 +10,7 @@ public class WGEnchantGemPotency extends Enchantment
 	public WGEnchantGemPotency(int id, int weight)
 	{
 		super(id, weight, EnumEnchantmentType.all);
-		this.setName("gemstonePotency");
+		this.setName("wg.gemstonePotency");
 	}
 
 	@Override

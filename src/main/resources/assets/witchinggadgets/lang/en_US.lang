@@ -1,4 +1,4 @@
-	# -- Blocks --
+# -- Blocks --
 tile.WG_WallMirror.name=Mirror on the Wall
 tile.WG_VoidWalkway.name=Void Walkway
 tile.WG_StoneDevice.etherealWall.name=Ethereal Wall
@@ -54,7 +54,10 @@ item.WG_Material.gemstoneDust.name=Gemstone Dust
 
 item.WG_Cluster.name=Cluster
 
-item.WG_Bag.name=Bag of Tricks
+item.WG_Bag.normal.name=Bag of Tricks
+item.WG_Bag.void.name=Voidlinked Bag
+item.WG_Bag.ender.name=Enderlinked Bag
+
 item.WG_ThaumiumShears.name=Thaumium Shears
 item.WG_MagicFood.sweetwart.name=Sweetwart
 item.WG_MagicFood.nethercake.name=Nethercake
@@ -69,11 +72,11 @@ item.WG_Cloak.raven.name=Mantle of the Raven
 item.WG_Cloak.spectral.name=Spectral Mantle
 item.WG_Cloak.wolf.name=Wolven Cloak
 
-item.WG_CloakRunic.STANDARD.name=Runic Cloak
-item.WG_CloakRunic.STORAGE.name=Runic Cloak of Voluminous Pockets
-item.WG_CloakRunic.RAVEN.name=Runic Mantle of the Raven
-item.WG_CloakRunic.INVISIBILITY.name=Runic Cloak of Invisibility
-item.WG_CloakRunic.WOLF.name=Runic Cloak of the Wolf
+item.WG_Kama.standard.name=Kama
+item.WG_Kama.storage.name=Kama of Voluminous Pockets
+item.WG_Kama.raven.name=Kama of the Raven
+item.WG_Kama.spectral.name=Spectral Kama
+item.WG_Kama.wolf.name=Wolven Kama
 
 item.WG_EliteArmorHelm.ANGELIC_0.name=Ophanic Helm
 item.WG_EliteArmorChest.ANGELIC_1.name=Seraph's Cuirass
@@ -95,12 +98,15 @@ item.WG_PrimordialSword.name=Primordial Claymore
 
 item.WG_Baubles.ring_primordial.name=Primordial Ring
 item.WG_Baubles.ring_lifeProtection.name=Ring of Life Protection
-item.WG_Baubles.vambraceStrength.name=Berseker Bracers
+item.WG_Baubles.shouldersDoublejump.name=Seraph's Shoulders
 item.WG_Baubles.shouldersKnockback.name=Steadfast Spaulders
+item.WG_Baubles.vambraceStrength.name=Berseker Bracers
+item.WG_Baubles.vambraceHaste.name=Vambraces of Steady Progression
+item.WG_Baubles.titleCrimsonCult.name=Title: Crimson Cult
+wg.title.crimsonKnight=Crimson Knight
+wg.title.crimsonPraetor=Crimson Praetor
 
 item.WG_ScanCamera.name=Thaumic Iconograph Box
-
-item.WG_VoidBag.name=Voidlinked Bag
 
 item.WG_CrystalFlask.name=Crystal Capsule
 
@@ -108,18 +114,24 @@ item.WG_CrystalFlask.name=Crystal Capsule
 itemGroup.witchinggadgets=Witching Gadgets
 
 # -- Enchant --
-enchantment.gemstonePotency=Brilliance
-enchantment.gemstoneBrittle=Brittle
-enchantment.invisibleGear=Translucency
-enchantment.unveiling=Unveiling
+enchantment.wg.gemstonePotency=Brilliance
+enchantment.wg.gemstoneBrittle=Brittle
+enchantment.wg.invisibleGear=Translucency
+enchantment.wg.unveiling=Unveiling
+enchantment.wg.stealth=Stealth
+enchantment.wg.backstab=Backstabbing
 #
 # -- Random bits of text --
-wg.chat.notyourbag=This bag belongs to %1$s! You are not allowed to open it.
+wg.chat.notyourbag=§7This bag belongs to§r %1$s! §7You are not allowed to open it.§r
+wg.chat.bagunlocked=§7The bag was unlocked, others can now open it.§r
+wg.chat.baglocked=§7The bag was locked, no one but you can open it.§r
 
 wg.gui.textCurNest=Current Nest:
 wg.gui.buttonSetNest=Set new nest
 wg.gui.buttonMigrate=Return to nest
 wg.gui.noFeathersToMigrate=You don't have the Items required to return to your nest
+
+wg.desc.noGlide=Gliding disabled
 
 wg.gui.visSize=Vis Capacity
 wg.gui.shiftForAspectList=§7Hold §aShift§7 for a list of Aspects§r
@@ -137,13 +149,13 @@ wg.desc.gemaversion=Natural Aversions:
 wg.desc.ctrlForAspectList=§7Hold §aCtrl§7 for a list of Aspects§r
 wg.desc.scanCompleted=Scan Completed
 
-wg.desc.gearSlot.tg.0=Equipped in the §aCloak§r slot
-wg.desc.gearSlot.tg.1=Equipped in the §aPauldron§r slot
-wg.desc.gearSlot.tg.2=Equipped in the §aVambrace§r slot
-wg.desc.gearSlot.tg.3=Equipped in the §aTitle§r slot
-wg.desc.gearSlot.bauble.RING=Equipped in the §aRing§r slot
-wg.desc.gearSlot.bauble.BELT=Equipped in the §aBelt§r slot
-wg.desc.gearSlot.bauble.AMULET=Equipped in the §aAmulet§r slot
+wg.desc.gearSlot.tg.0=Equipped in the §aCloak§7 slot
+wg.desc.gearSlot.tg.1=Equipped in the §aPauldron§7 slot
+wg.desc.gearSlot.tg.2=Equipped in the §aVambrace§7 slot
+wg.desc.gearSlot.tg.3=Equipped in the §aTitle§7 slot
+wg.desc.gearSlot.bauble.RING=Equipped in the §aRing§7 slot
+wg.desc.gearSlot.bauble.BELT=Equipped in the §aBelt§7 slot
+wg.desc.gearSlot.bauble.AMULET=Equipped in the §aAmulet§7 slot
 
 wg.desc.filteredItems=Accepted Items:
 
@@ -188,7 +200,7 @@ witchinggadgets_research_page.WALLMIRROR.2=§lAccess:§r<BR>Place the mirror whe
 #
 witchinggadgets_research_name.ETHEREALWALL=Ethereal Wall
 witchinggadgets_research_text.ETHEREALWALL=[WG] Hidden in plain sight
-witchinggadgets_research_page.ETHEREALWALL.1=Refining the enchantments on arcane stone just a bit more has led to an interesting discovery. Simply applying a redstone signal to this new type of stone will make it §onon-corporeal§r, allowing you to pass through it.<BR>This also affects any other Etheral Wall connected to the powered block.
+witchinggadgets_research_page.ETHEREALWALL.1=Refining the enchantments on arcane stone just a bit more has led to an interesting discovery. Simply applying a redstone signal to this new type of stone will make it §onon-corporeal§r, allowing you to pass through it.<BR>This also affects any other Etheral Wall connected to the powered block.<BR>Furthermore, you can disguise this stone to the appearance of most common blocks. Simply click it with a block in hand it and this one will take its texture. Sneak and click it with an empty hand to remove the disguise.
 witchinggadgets_research_page.ETHEREALWALL.2=Furthermore, you can disguise this stone to the appearance of most common blocks. Simply click it with a block in hand it and this one will take its texture. Sneak and click it with an empty hand to remove the disguise. (It will only accept the texture of normally rendered blocks. Vanilla transparency works, Thaumcraft's Amber doesn't because it's coloured transparency, directional textures like wooden logs and quartz pillars are not fully supported)
 #
 witchinggadgets_research_name.STONEEXTRUDER=Thaumic Stone Extruder
@@ -229,8 +241,9 @@ witchinggadgets_research_page.ENCHFABRIC.r1=<IMG>witchinggadgets:textures/gui/re
 #
 witchinggadgets_research_name.BAGOFTRICKS=Bag of Tricks
 witchinggadgets_research_text.BAGOFTRICKS=[WG] Did I hear an echo in there?
-witchinggadgets_research_page.BAGOFTRICKS.1=Further advancements in magical weaving have led you to the discovery of the §lCloth of Spacious Folds§r. A most interesting weave, which seems to contain more room in its folds than visible from the outside. Crafting a bag from this provides you with space for storage to easily carry on your person.
+witchinggadgets_research_page.BAGOFTRICKS.1=Further advancements in magical weaving have led you to the discovery of the §lCloth of Spacious Folds§r. A most interesting weave, which seems to contain more room in its folds than visible from the outside. Crafting a bag from this provides you with space for storage to easily carry on your person.<BR>The fabric also turns out to be very protective of its contents, and it will harm any but the owner, should they try to access the bag. §oThis behaviour can be toggled by the owner by sneak+rightlick.§r
 witchinggadgets_research_page.BAGOFTRICKS.r1=<IMG>witchinggadgets:textures/gui/research/weavingRecipes1.png:0:0:255:255:0.5</IMG>§lCloth of Spacious Folds§r
+witchinggadgets_research_page.BAGOFTRICKS.2=Any of the bags created from the cloth are dyeable, craft them without any dye to return them to their default colour.
 #
 witchinggadgets_research_name.ADVANCEDROBES=Bewitched Fleece
 witchinggadgets_research_text.ADVANCEDROBES=[WG] Sizzling with Magic
@@ -247,12 +260,12 @@ witchinggadgets_research_page.CLOAK_STORAGE.1=Combining the concept of your Bag 
 #
 witchinggadgets_research_name.CLOAK_RAVEN=Mantle of the Raven
 witchinggadgets_research_text.CLOAK_RAVEN=[WG] CA-CAW!
-witchinggadgets_research_page.CLOAK_RAVEN.1=On your travels throughout the Twilight Forest, you have come across the most fascinating Forest Raven. This remarkable bird displays high agility and maneuverability in the air, a feat to be envious of.<BR>Instead of being envious you could also just adorne your cloak with their feathers and imbue it with magical power...<BR>While wearing this cloak, your speed while flying increases noticeably. And should you not be flying, the cloak will allow you to glide instead.
+witchinggadgets_research_page.CLOAK_RAVEN.1=On your travels throughout the Twilight Forest, you have come across the most fascinating Forest Raven. This remarkable bird displays high agility and maneuverability in the air, a feat to be envious of.<BR>Instead of being envious you could also just adorne your cloak with their feathers and imbue it with magical power...<BR>While wearing this cloak, your speed while flying increases noticeably. And should you not be flying, the cloak will allow you to glide instead. Gliding can be disabled in the ActiveAbility menu.
 # OLD witchinggadgets_research_page.CLOAK_RAVEN.1=On your travels throughout the Twilight Forest, you have come across the most fascinating Forest Raven. This remarkable bird appears to always find back to his nesting place, even within the dense and dark forest it calls home.<BR>Plucking a feather from it, you have discovered that it, albeit in small scale, inherits this ability. Now you just have to amplify this ability with your thaumic capabilities and infuse your garment with it. The result is the §lMantle of the Raven§r which allows you to set and return to your nesting place at the cost of a raven's feather. You may substitute three chicken feathers.
 #
 witchinggadgets_research_name.CLOAK_SPECTRAL=Spectral Mantle
 witchinggadgets_research_text.CLOAK_SPECTRAL=[WG] Now you see me...
-witchinggadgets_research_page.CLOAK_SPECTRAL.1=The plane of the spectral beings is a mystery to most common men. Fortunately, you are not most men. After infusing a cloak with eldritch and spectral energies it will grant you the ability to 'shift' yourself to that plane. While walking among it, you are invisble to those that walk along the normal plane. Enemies will not see or target you unless they are creatures of eldritch, posses exemptual powers or are wearing Goggles of Revealing.<BR>This ability comes at the cost of 1 aer vis from you inventory every 5 seconds.
+witchinggadgets_research_page.CLOAK_SPECTRAL.1=The plane of the spectral beings is a mystery to most common men. Fortunately, you are not most men. After infusing a cloak with eldritch and spectral energies it will grant you the ability to 'shift' yourself to that plane. While walking among it, you are invisble to those that walk along the normal plane. Enemies will not see or target you unless they are creatures of eldritch, posses exemptual powers or are wearing Goggles of Revealing.<BR>This ability comes at the cost of being unable to interact with the physical world. You cannot attack, use items, break or activate blocks. Furthermore it will drain 1 aer vis from you inventory every 5 seconds.
 witchinggadgets_research_page.CLOAK_SPECTRAL.2=§oDisclaimer: Creatures that can still see you include: Eldritch Guardians, Eldritch Wardens, Eldritch Golems, Cultist Praetors, as well as boss mobs like the Wither or the Enderdragon. Any other user of this cloak will also be able to see you.§r
 #Creating a cloak that is invisible is an easy task for a thaumaturge, but applying the effect to it's wearer was the hard task. After tedious research however, you have created the §lCloak of Invisibility§r, a garment that renders you invisible to the naked eye. The cloak itself lost a bit of his magic in the process, now only turning mostly transparent, leaving a slight shimmer. Other armor pieces or items that you are holding in your hand are not affected.
 #
@@ -260,10 +273,20 @@ witchinggadgets_research_name.CLOAK_WOLF=Cloak of the Wolf
 witchinggadgets_research_text.CLOAK_WOLF=[WG] What a big mouth you have!
 witchinggadgets_research_page.CLOAK_WOLF.1=The old tales tell of the beserkers, unrelenting warriors, imbued by ancient magic and wrapped in the fur of a wolf.<BR>Your studies have revealed magical procedures like these and for reasons of style and nostalgia you decided they were best integrated into a cloak of wolf fur. Should you sustain damage while wearing it, you gain additional attack damage and speed, akin to the fearless warriors of old.
 #
+witchinggadgets_research_name.ENDERBAG=Enderlinked Bag
+witchinggadgets_research_text.ENDERBAG=[WG] Everywhere and nowhere at once!
+witchinggadgets_research_page.ENDERBAG.1=By attuning your Bag of Tricks to the enderic frequencies of your personal Ender Chest, you now have access to its contents from anywhere in the world.<BR>Don't try to turn it inside out.
+#
 witchinggadgets_research_name.WGBAUBLES=Witching Wearables
 witchinggadgets_research_text.WGBAUBLES=[WG] It's like a magic boutique
-witchinggadgets_research_page.WGBAUBLES.1=What looks like catalogue pages from a wizarding equipment store actually proved to be arcane shematics for magical garments!<BR><BR>§lSteadfast Shoulders:§r<BR>These shoulderpads are not designed to be very fashionable, and their protection value is negligable. However, the magic infused into them is able to root you to the floor, so that you shall not waver when stuck by enemy attacks. §oGrants you 60% knockback resistance. To be equipped in the Traveller's Gear inventory, the default keybinding is 'Numpad 7'.§r
-witchinggadgets_research_page.WGBAUBLES.2=§lBeserkers Bracers:§r<BR>Covered in wolven fur, these vambraces wont hold off blades. But by the magic infused into them, they grant the user the ferociousness of a wolf. Also, they are incredibly fluffy. §oIncreases your attack damage by 2 points. To be equipped in the Traveller's Gear inventory, the default keybinding is 'Numpad 7'.§r
+witchinggadgets_research_page.WGBAUBLES.1=What looks like catalogue pages from a wizarding equipment store actually proved to be arcane shematics for magical garments! §oAll of these are to be equipped in Baubles or Traveller's Gear slots. The default keybinding for the TG inventory is 'Numpad 7'.§r<BR>§lSteadfast Spaulders:§r<BR>These shoulderpads are not designed to be very fashionable, and their protection value is negligable. However, the magic infused into them is able to root you to the floor, so that you shall not waver when stuck by enemy attacks. §oGrants you 60% knockback resistance.§r
+witchinggadgets_research_page.WGBAUBLES.2=§lBeserkers Bracers:§r<BR>Covered in wolven fur, these vambraces wont hold off blades. But by the magic infused into them, they grant the user the ferociousness of a wolf. Also, they are incredibly fluffy. §oIncreases your attack damage by 2 points.§r
+witchinggadgets_research_page.WGBAUBLES.3=§lVambraces of Steady Progression:§r<BR>These vambraces, designed by dwarven thaumaturgists, are designed to grant you the ability of digging a hole at a steady pace without interruption. To achieve that, they react dynamically to the working conditions, increasing the user's dig speed while sumberged in water, flying in the air, or when confronted with highly resilient materials.<BR>They also increase the speed at which you climb ladders, for when you eventually need to outrun the thing you woke in the dark below.
+witchinggadgets_research_page.WGBAUBLES.4=§lSeraph's Shoulders:§r<BR>Flying is an ability many wish for. It is quite an advanced form of magic that allows users to fly, but a small jump in the air is within your possibilities.<BR>These shoulders spawn some powerful magical wings, which allow you to perform a second jump in midair.
+#
+witchinggadgets_research_name.CLOAKKAMA=Kama
+witchinggadgets_research_text.CLOAKKAMA=[WG] It's not a kilt!
+witchinggadgets_research_page.CLOAKKAMA.1=Cloaks and their advanced deriatives have proven to be both fashionable and useful, but also quite big and unwieldly. Shortening them and attaching them to a belt transforms them into a Kama, a sort of half-skirt covering the back of the legs. They still perform the same tasks, they are just located at a different part of your body now.<BR>§l§4WARNING: Due to an unknown error, shift clicking the result out of the crafting table will result in a loss of NBT-data. In order to preserve enchantments on the cloak, its colouration and items stored inside it, make sure to take the Kama out of the slot with a normal click.
 #
 witchinggadgets_research_name.RUNICCLOAK=Runic Cloaks
 witchinggadgets_research_text.RUNICCLOAK=[WG] The best of both worlds
@@ -364,6 +387,15 @@ witchinggadgets_research_page.ENCH_INVISIBLEGEAR.1=Armor is incredibly useful, e
 witchinggadgets_research_name.ENCH_UNVEILING=Enchantment: Unveiling
 witchinggadgets_research_text.ENCH_UNVEILING=[WG] Xray Specs
 witchinggadgets_research_page.ENCH_UNVEILING.1=Every Thaumaturge has those moments, when it feels like someone or something is watching them. But they look around, and nothing can be seen. With the right glasses, you can see those creeps, and look right back at them!<BR>This enchantment can be applied to the Goggles of Revealing or other headgear of the same function. While wearing the enchanted item, you will be able to see creatures with the invisibility buff. Furthermore, the Translucency enchantment is rendered ineffective when used by others and users of the spectral mantle are shown more clearly.
+#
+witchinggadgets_research_name.ENCH_STEALTH=Enchantment: Stealth
+witchinggadgets_research_text.ENCH_STEALTH=[WG] Sneaky!
+witchinggadgets_research_page.ENCH_STEALTH.1=More often than not, sneaking is not an option due to the high senses of the creatures you face. Well now it is! Applying this enchantment to your boots or leggings will give you a chance of staying undetected while you are crouching. The chance rises by 20% with every level, but is diminished by 50% if you are in view of the target in question.<BR>Should you be discovered, all enemies in a 5 block radius will be notified.
+#
+witchinggadgets_research_name.ENCH_BACKSTAB=Enchantment: Backstabbing
+witchinggadgets_research_text.ENCH_BACKSTAB=[WG] Rogues do it from behind
+witchinggadgets_research_page.ENCH_BACKSTAB.1=With your newfound ability to sneak, comes a new option of combat. By attacking enemies from behind you use the element of surpise to avoid the enemy's defenses. Items enchanted with Backstabbing do additional 20% damage per level when attacking from behind, plus another 40% when the target is not aware of you.
+
 
 #GEMCUTTING
 witchinggadgets_research_name.GEMCUTTING=Gem Cutting
@@ -410,7 +442,7 @@ witchinggadgets_research_page.PRIMORDIALGLOVE.2=It should be noted that the sock
 
 #VOIDBAG
 witchinggadgets_research_name.VOIDBAG=Voidlinked Bag
-witchinggadgets_research_text.VOIDBAG=[WG] Throw all the trash into the black hole
+witchinggadgets_research_text.VOIDBAG=[WG] Supermassive Black Hole
 witchinggadgets_research_page.VOIDBAG.1=Don't you just hate picking up all that useless cobblestone? Wouldn't it be much better if it just vanished? Well here is your solution! A bag of magical cloth, infused with the energies of the void, which destroys the physical matter of all things inserted into it and sets the magical energies of that item free.<BR>How to work it: Open it up and give it examples of the items you would like to go into it. Then, when that item is picked up (only works on in-world pickups, not on items added to your inventory through other means), they will be destroyed and a random primal aspect contained within them is given to you as vis, charging your wand. 
 
 

@@ -2,7 +2,6 @@ package witchinggadgets;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
-import net.minecraftforge.classloading.FMLForgePlugin;
 import net.minecraftforge.common.MinecraftForge;
 
 import org.apache.logging.log4j.Level;
@@ -30,7 +29,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 
-@Mod(modid = WitchingGadgets.MODID, name = WitchingGadgets.MODNAME, version = WitchingGadgets.VERSION, dependencies="required-after:Thaumcraft;required-after:TravellersGear;after:TwilightForest;after:Mystcraft;after:TConstruct;after:MagicBees;after:ForgeMultipart")
+@Mod(modid = WitchingGadgets.MODID, name = WitchingGadgets.MODNAME, version = WitchingGadgets.VERSION, dependencies="required-after:Thaumcraft;required-after:TravellersGear@[1.13,);after:TwilightForest;after:Mystcraft;after:TConstruct;after:MagicBees;after:ForgeMultipart")
 public class WitchingGadgets
 {
 	public static final String MODID = "WitchingGadgets";
@@ -58,9 +57,6 @@ public class WitchingGadgets
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
-		//TODO CARPENTERS WORKAROUND
-		FMLForgePlugin.RUNTIME_DEOBF = true;
-
 		logger.log(Level.INFO, "Setting up 'WitchingGadgets'");
 
 		WGConfig.loadConfig(event);
@@ -76,23 +72,12 @@ public class WitchingGadgets
 		FMLCommonHandler.instance().bus().register(playerTickHandler);
 
 
-		//		if (RailcraftConfig.isWorldGenEnabled("workshop"))
-		//		{
-		//			int id = RailcraftConfig.villagerID();
-		//			VillagerRegistry.instance().registerVillagerId(id);
-		//			VillagerRegistry.instance().registerVillageTradeHandler(id, new VillagerTradeHandler());
 		VillagerRegistry.instance().registerVillageCreationHandler(new VillageComponentPhotoshop.VillageManager());
-		try {
-			MapGenStructureIO.func_143031_a(VillageComponentPhotoshop.class, "WGVillagePhotoWorkshop");
-			//				MapGenStructureIO.func_143031_a(ComponentWorkshop.class, "railcraft:workshop");
-		} catch (Throwable e) {
-		}
-		//		}
 		try
 		{
 			MapGenStructureIO.func_143031_a(VillageComponentPhotoshop.class, "WGVillagePhotoWorkshop");
 		}
-		catch (Throwable e)
+		catch (Exception e)
 		{
 			logger.log(Level.ERROR, "Photographer's Workshop not added to Villages");
 		}

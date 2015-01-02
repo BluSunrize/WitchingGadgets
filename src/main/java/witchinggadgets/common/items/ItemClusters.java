@@ -116,16 +116,20 @@ public class ItemClusters extends Item
 		for(String ore : subNames)
 			if(!OreDictionary.getOres("ore"+ore).isEmpty() && !OreDictionary.getOres("ingot"+ore).isEmpty())
 			{
-				int oreBlockColour = ClientUtilities.getItemColours( OreDictionary.getOres("ore"+ore).get(0) ).get(0);
-				int[] rgb = {oreBlockColour>>16&0xff, oreBlockColour>>8&0xff, oreBlockColour&0xff};
-				int clustertype = rgb[0]>rgb[2]&&rgb[1]>rgb[2]?2 :rgb[0]>rgb[1]&&rgb[0]>rgb[2]?1 : 0;
-				List<Integer> colours = ClientUtilities.getItemColours(OreDictionary.getOres("ingot"+ore).get(0));
-				
-				int colour = ClientUtilities.getVibrantColourToInt(colours.get((int)(colours.size()*.65)));
-				colour = ClientUtilities.getVibrantColourToInt(colour);
-				
-				materialMap.put(ore, new Integer[]{colour, clustertype} );
-				WitchingGadgets.logger.log(Level.INFO, "Initialized Cluster "+ore+": type: "+clustertype+", colour: "+Integer.toHexString(colour));
+				List<Integer> colList = ClientUtilities.getItemColours( OreDictionary.getOres("ore"+ore).get(0) );
+				if(!colList.isEmpty())
+				{
+					int oreBlockColour = colList.get(0);
+					int[] rgb = {oreBlockColour>>16&0xff, oreBlockColour>>8&0xff, oreBlockColour&0xff};
+					int clustertype = rgb[0]>rgb[2]&&rgb[1]>rgb[2]?2 :rgb[0]>rgb[1]&&rgb[0]>rgb[2]?1 : 0;
+					List<Integer> colours = ClientUtilities.getItemColours(OreDictionary.getOres("ingot"+ore).get(0));
+
+					int colour = ClientUtilities.getVibrantColourToInt(colours.get((int)(colours.size()*.65)));
+					colour = ClientUtilities.getVibrantColourToInt(colour);
+
+					materialMap.put(ore, new Integer[]{colour, clustertype} );
+					WitchingGadgets.logger.log(Level.INFO, "Initialized Cluster "+ore+": type: "+clustertype+", colour: "+Integer.toHexString(colour));
+				}
 			}
 	}
-}
+}	

@@ -3,6 +3,7 @@ package witchinggadgets.common.items.tools;
 import java.util.List;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
@@ -12,77 +13,98 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import witchinggadgets.WitchingGadgets;
-import witchinggadgets.client.ClientUtilities;
 import witchinggadgets.common.util.Lib;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemBag extends Item
 {
+	String[] subNames = {"normal","void","ender"};
+	IIcon[] overlayIcons = new IIcon[subNames.length];
+
 	public ItemBag()
 	{
 		super();
+		this.setHasSubtypes(true);
 		setMaxStackSize(1);
 		setCreativeTab(WitchingGadgets.tabWG);
 	}
-	
+
+	public static int getDefaultBagColour(int meta)
+	{
+		return meta==1?0x484848: meta==2?0x2d4741: 0x8a74bd;
+	}
 	@Override
-	public int getColorFromItemStack(ItemStack stack, int par2)
+	public int getColorFromItemStack(ItemStack stack, int pass)
+	{
+		return getBagColorFromItemStack(stack,pass);
+	}
+	public int getBagColorFromItemStack(ItemStack stack, int pass)
+	{
+		if(pass>0)
+			return 0xffffff;
+		NBTTagCompound tag = stack.getTagCompound();
+		if (tag == null)
+			return getDefaultBagColour(stack.getItemDamage());
+		NBTTagCompound tagDisplay = tag.getCompoundTag("display");
+		return tagDisplay == null ? getDefaultBagColour(stack.getItemDamage()) : (tagDisplay.hasKey("color") ? tagDisplay.getInteger("color") : getDefaultBagColour(stack.getItemDamage()));
+	}
+	public void removeColorFromItemStack(ItemStack stack)
 	{
 		NBTTagCompound tag = stack.getTagCompound();
 
-		if (tag == null)
+		if (tag != null)
 		{
-			return ClientUtilities.colour_BagDefault;
-		}
-		NBTTagCompound tagDisplay = tag.getCompoundTag("display");
-		return tagDisplay == null ? ClientUtilities.colour_BagDefault : (tagDisplay.hasKey("color") ? tagDisplay.getInteger("color") : ClientUtilities.colour_BagDefault);
-	}
-	
-	public void removeColorFromItemStack(ItemStack stack)
-	{
-		NBTTagCompound nbttagcompound = stack.getTagCompound();
-
-		if (nbttagcompound != null)
-		{
-			NBTTagCompound nbttagcompound1 = nbttagcompound.getCompoundTag("display");
-
-			if (nbttagcompound1.hasKey("color"))
-			{
-				nbttagcompound1.removeTag("color");
-			}
+			NBTTagCompound tag1 = tag.getCompoundTag("display");
+			if (tag1.hasKey("color"))
+				tag1.removeTag("color");
 		}
 	}
-
 	public void modifyColorOnItemStack(ItemStack stack, int par2)
 	{
-		NBTTagCompound nbttagcompound = stack.getTagCompound();
-
-		if (nbttagcompound == null)
+		NBTTagCompound tag = stack.getTagCompound();
+		if (tag == null)
 		{
-			nbttagcompound = new NBTTagCompound();
-			stack.setTagCompound(nbttagcompound);
+			tag = new NBTTagCompound();
+			stack.setTagCompound(tag);
 		}
+		NBTTagCompound tag1 = tag.getCompoundTag("display");
 
-		NBTTagCompound nbttagcompound1 = nbttagcompound.getCompoundTag("display");
-
-		if (!nbttagcompound.hasKey("display"))
-		{
-			nbttagcompound.setTag("display", nbttagcompound1);
-		}
-
-		nbttagcompound1.setInteger("color", par2);
+		if (!tag.hasKey("display"))
+			tag.setTag("display", tag1);
+		tag1.setInteger("color", par2);
 	}
 
 	@Override
 	public void registerIcons(IIconRegister iconRegister)
 	{
-		this.itemIcon = iconRegister.registerIcon("witchinggadgets:bag");
+		itemIcon = iconRegister.registerIcon("witchinggadgets:bag");
+		for(int i=0; i<overlayIcons.length; i++)
+			if(i!=0)
+				overlayIcons[i] = iconRegister.registerIcon("witchinggadgets:bagOverlay_"+subNames[i]);
+	}
+	@Override
+	public boolean requiresMultipleRenderPasses()
+	{
+		return true;
+	}
+	@Override
+	public int getRenderPasses(int meta)
+	{
+		return meta>0?2:1;
+	}
+	@Override
+	public IIcon getIconFromDamageForRenderPass(int meta, int pass)
+	{
+		if(pass==0)
+			return this.itemIcon;
+		return overlayIcons[meta];
 	}
 
 	@Override
@@ -105,54 +127,75 @@ public class ItemBag extends Item
 	}
 
 	@Override
-	public IIcon getIconFromDamage(int par1)
+	public EnumRarity getRarity(ItemStack stack)
 	{
-		return this.itemIcon;
-	}
-
-	@Override
-	public EnumRarity getRarity(ItemStack itemstack)
-	{
-		return EnumRarity.rare;
+		return stack.getItemDamage()==1?EnumRarity.epic: EnumRarity.rare;
 	}
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
 	{
-		if (!world.isRemote)
+		if(!world.isRemote)
 		{
-			if(!stack.getTagCompound().getString("Owner").equalsIgnoreCase(player.getCommandSenderName()))
+			if(stack.hasTagCompound())
 			{
-				player.attackEntityFrom(DamageSource.magic, 4f);
-				player.dropOneItem(true);
-				String s = StatCollector.translateToLocalFormatted(Lib.CHAT+"notyourbag", stack.getTagCompound().getString("Owner"));
-				player.addChatComponentMessage(new ChatComponentTranslation(s,new Object[0]));
-				return stack;
+				if(!stack.getTagCompound().getBoolean("unlocked") && !stack.getTagCompound().getString("Owner").equalsIgnoreCase(player.getCommandSenderName()))
+				{
+					player.attackEntityFrom(DamageSource.magic, 4f);
+					player.dropOneItem(true);
+					player.addChatComponentMessage(new ChatComponentTranslation(Lib.CHAT+"notyourbag", stack.getTagCompound().getString("Owner")));
+					return stack;
+				}
+				if(stack.getTagCompound().getString("Owner").equalsIgnoreCase(player.getCommandSenderName()) && player.isSneaking())
+				{
+					stack.getTagCompound().setBoolean("unlocked", !stack.getTagCompound().getBoolean("unlocked"));
+					player.addChatComponentMessage(new ChatComponentTranslation(Lib.CHAT+"bag"+(stack.getTagCompound().getBoolean("unlocked")?"un":"")+"locked",new Object[0]));
+					return stack;
+				}
 			}
-			
-			player.openGui(WitchingGadgets.instance, 3, world, MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posY), MathHelper.floor_double(player.posZ));
+
+			if(stack.getItemDamage()==0)
+				player.openGui(WitchingGadgets.instance, 3, world, MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posY), MathHelper.floor_double(player.posZ));
+			else if(stack.getItemDamage()==1)
+				player.openGui(WitchingGadgets.instance, 11, world, MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posY), MathHelper.floor_double(player.posZ));
+			else if(stack.getItemDamage()==2)
+				player.displayGUIChest(player.getInventoryEnderChest());
 		}
-		
 		return super.onItemRightClick(stack, world, player);
 	}
 
+	@Override
+	public String getUnlocalizedName(ItemStack itemstack)
+	{
+		return getUnlocalizedName() + "." + subNames[itemstack.getItemDamage()];
+	}
+	@Override
+	public void getSubItems(Item item, CreativeTabs tab, List itemList)
+	{
+		for(int i=0;i<subNames.length;i++)
+			itemList.add(new ItemStack(this,1,i));
+	}
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack item, EntityPlayer par2EntityPlayer, List list, boolean par4)
 	{
-
+		if(item.getItemDamage()==1)
+		{
+			list.add(EnumChatFormatting.DARK_PURPLE+StatCollector.translateToLocal(Lib.DESCRIPTION+"filteredItems"));
+			for(ItemStack stack : this.getStoredItems(item))
+				if(stack!=null)
+					list.add(EnumChatFormatting.DARK_GRAY+" "+stack.getDisplayName());
+		}
 	}
 
 	public ItemStack[] getStoredItems(ItemStack item)	
 	{
 		ItemStack[] stackList = new ItemStack[18];
-		//System.out.println("Starting getting Items from NBT");
 
-		if (item.hasTagCompound()) {
+		if (item.hasTagCompound())
+		{
 			NBTTagList inv = item.getTagCompound().getTagList("Inventory",10);
-			//			NBTTagList inv = (NBTTagList)item.getTagCompound().getTag("Inventory");
 
-			//System.out.println("Getting Items from NBT");
 			for (int i = 0; i < inv.tagCount(); i++)
 			{
 				NBTTagCompound tag = inv.getCompoundTagAt(i);
@@ -160,7 +203,6 @@ public class ItemBag extends Item
 
 				if ((slot >= 0) && (slot < stackList.length))
 				{
-					//System.out.println("Loading Stack in Slot "+slot);
 					stackList[slot] = ItemStack.loadItemStackFromNBT(tag);
 				}
 			}
@@ -176,27 +218,14 @@ public class ItemBag extends Item
 		{
 			if (stackList[i] != null)
 			{
-				//System.out.println("Saving:");
-				//System.out.println(stackList[i].getDisplayName()+": "+stackList[i].stackSize+" to Slot "+i);
 				NBTTagCompound tag = new NBTTagCompound();
 				tag.setByte("Slot", (byte)i);
 				stackList[i].writeToNBT(tag);
 				inv.appendTag(tag);
 			}
 		}
-		//item.setTagInfo("Inventory", inv);
 		if(!item.hasTagCompound())
-		{
-			//System.out.println("creating new Tag Compound");
 			item.setTagCompound(new NBTTagCompound());
-		}
-		for (int i = 0; i < inv.tagCount(); i++)
-		{
-			//NBTTagCompound tag = (NBTTagCompound)inv.tagAt(i);
-			//ItemStack testStack = ItemStack.loadItemStackFromNBT(tag);
-			//System.out.println("Saved:");
-			//System.out.println(testStack.getDisplayName()+": "+testStack.stackSize+" to Slot "+tag.getByte("Slot"));
-		}
 		item.getTagCompound().setTag("Inventory",inv);
 	}
 }

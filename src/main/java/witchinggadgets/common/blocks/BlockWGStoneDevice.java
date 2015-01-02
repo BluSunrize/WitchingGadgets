@@ -611,7 +611,7 @@ public class BlockWGStoneDevice extends BlockContainer
 	public boolean canRenderInPass(int pass)
 	{
 		BlockRenderStoneDevice.renderPass=pass;
-		return pass==1;
+		return true;
 	}
 
 	@Override

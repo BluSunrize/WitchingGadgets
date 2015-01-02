@@ -18,36 +18,31 @@ public class BagColourizationRecipe implements IRecipe
 		ItemStack itemstack = null;
 		ArrayList<ItemStack> arraylist = new ArrayList<ItemStack>();
 
-		for (int i = 0; i < par1InventoryCrafting.getSizeInventory(); i++)
+		for(int i = 0; i < par1InventoryCrafting.getSizeInventory(); i++)
 		{
 			ItemStack itemstack1 = par1InventoryCrafting.getStackInSlot(i);
 
-			if (itemstack1 != null)
+			if(itemstack1 != null)
 			{
-				if ((itemstack1.getItem() instanceof ItemBag))
+				if(itemstack1.getItem() instanceof ItemBag)
 				{
 					Item itembag = itemstack1.getItem();
 
-					if ((!(itembag instanceof ItemBag)) || (itemstack != null))
-					{
+					if( !(itembag instanceof ItemBag) || itemstack!=null)
 						return false;
-					}
 
 					itemstack = itemstack1;
 				}
 				else
 				{
-					if (!Utilities.isDye(itemstack1))
-					{
+					if(!Utilities.isDye(itemstack1))
 						return false;
-					}
-
 					arraylist.add(itemstack1);
 				}
 			}
 		}
 
-		return (itemstack != null) && (!arraylist.isEmpty());
+		return itemstack!=null;
 	}
 
 	@Override
@@ -57,27 +52,25 @@ public class BagColourizationRecipe implements IRecipe
 		int[] aint = new int[3];
 		int i = 0;
 		int j = 0;
-		Item itembag = null;
+		ItemBag itembag = null;
+		boolean revert = true;
 
-		for (int k = 0; k < par1InventoryCrafting.getSizeInventory(); k++)
+		for(int k = 0; k < par1InventoryCrafting.getSizeInventory(); k++)
 		{
 			ItemStack itemstack1 = par1InventoryCrafting.getStackInSlot(k);
 
-			if (itemstack1 != null)
+			if(itemstack1 != null)
 			{
-				if ((itemstack1.getItem() instanceof ItemBag))
+				if(itemstack1.getItem() instanceof ItemBag)
 				{
-					itembag = itemstack1.getItem();
-
-					if ((!(itembag instanceof ItemBag)) || (itemstack != null))
-					{
+					if(itemstack!=null)
 						return null;
-					}
+					itembag = (ItemBag) itemstack1.getItem();
 
 					itemstack = itemstack1.copy();
 					itemstack.stackSize = 1;
 
-					int l = itembag.getColorFromItemStack(itemstack,0);
+					int l = itembag.getBagColorFromItemStack(itemstack,0);
 					float f = (l >> 16 & 0xFF) / 255.0F;
 					float f1 = (l >> 8 & 0xFF) / 255.0F;
 					float f2 = (l & 0xFF) / 255.0F;
@@ -89,11 +82,11 @@ public class BagColourizationRecipe implements IRecipe
 				}
 				else
 				{
-					if (!Utilities.isDye(itemstack1))
-					{
+					if(!Utilities.isDye(itemstack1))
 						return null;
-					}
 
+					if(revert)
+						revert=false;
 					float[] afloat = net.minecraft.entity.passive.EntitySheep.fleeceColorTable[net.minecraft.block.BlockColored.func_150032_b(Utilities.getDamageForDye(itemstack1))];
 					int j1 = (int)(afloat[0] * 255.0F);
 					int k1 = (int)(afloat[1] * 255.0F);
@@ -107,10 +100,14 @@ public class BagColourizationRecipe implements IRecipe
 			}
 		}
 
-		if (itembag == null)
+		if(revert)
 		{
-			return null;
+			itembag.modifyColorOnItemStack(itemstack, ItemBag.getDefaultBagColour(itemstack.getItemDamage()));
+			return itemstack;
 		}
+		
+		if(itembag == null)
+			return null;
 
 		int k = aint[0] / j;
 		int l1 = aint[1] / j;
@@ -122,7 +119,7 @@ public class BagColourizationRecipe implements IRecipe
 		l = (int)(l * f / f1);
 		int i1 = (k << 8) + l1;
 		i1 = (i1 << 8) + l;
-		((ItemBag)itembag).modifyColorOnItemStack(itemstack, i1);
+		itembag.modifyColorOnItemStack(itemstack, i1);
 		return itemstack;
 	}
 

@@ -11,7 +11,7 @@ public class WGEnchantUnveiling extends Enchantment
 	public WGEnchantUnveiling(int id)
 	{
 		super(id, 0, EnumEnchantmentType.all);
-		this.setName("unveiling");
+		this.setName("wg.unveiling");
 	}
 
 	@Override
@@ -41,6 +41,6 @@ public class WGEnchantUnveiling extends Enchantment
 	@Override
 	public boolean canApplyAtEnchantingTable(ItemStack stack)
 	{
-		return true;
+		return false;
 	}
 }

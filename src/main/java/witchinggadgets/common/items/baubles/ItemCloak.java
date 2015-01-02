@@ -14,33 +14,44 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
+import net.minecraftforge.event.entity.living.LivingFallEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import thaumcraft.api.IGoggles;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.entities.IEldritchMob;
+import thaumcraft.api.nodes.IRevealer;
 import thaumcraft.common.items.armor.Hover;
 import travellersgear.api.IActiveAbility;
+import travellersgear.api.IEventGear;
 import travellersgear.api.ITravellersGear;
 import witchinggadgets.WitchingGadgets;
 import witchinggadgets.client.ClientUtilities;
 import witchinggadgets.client.render.ModelCloak;
 import witchinggadgets.common.WGModCompat;
+import witchinggadgets.common.util.Lib;
 import witchinggadgets.common.util.Utilities;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemCloak extends Item implements ITravellersGear, IActiveAbility
+public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, IEventGear
 {
-	String[] subNames = {"standard","spectral","storage","wolf","raven"};
+	public static String[] subNames = {"standard","spectral","storage","wolf","raven"};
 	int[] defaultColours = {};
 	IIcon iconRaven;
 	IIcon iconWolf;
 
 	public ItemCloak()
 	{
-		//		super(WGContent.standardCloak, 2, 1);
 		this.setHasSubtypes(true);
 		this.setCreativeTab(WitchingGadgets.tabWG);
 	}
@@ -87,7 +98,6 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility
 		}
 		return meta==1?Aspect.DARKNESS.getColor(): meta==2?Aspect.VOID.getColor(): 0xffffff;
 	}
-
 	public void removeColor(ItemStack stack)
 	{
 		if(stack==null)
@@ -127,13 +137,6 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility
 	@Override
 	public String getArmorTexture(ItemStack itemstack, Entity entity, int slot, String layer)
 	{
-		//System.out.println("error: "+layer);
-		//if(layer != null)
-		//	return "witchinggadgets:textures/blocks/nil.png";
-
-		//		Cloak cloak = getCloakFromStack(itemstack);
-		//		if(cloak != null)
-		//			return cloak.getTexture();cloakRaven
 		if(itemstack.getItemDamage()<subNames.length)
 			if(subNames[itemstack.getItemDamage()].equals("wolf"))
 				return "witchinggadgets:textures/models/cloakWolf.png";
@@ -146,10 +149,6 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility
 	public int getMaxDamage(ItemStack stack)
 	{
 		return 0;
-		//		Cloak cloak = getCloakFromStack(stack);
-		//		if(cloak != null)
-		//			return cloak.getMaxDamage();
-		//		return getMaxDamage();
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -161,10 +160,7 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility
 	@Override
 	public String getUnlocalizedName(ItemStack stack)
 	{
-		//		Cloak cloak = getCloakFromStack(itemstack);
-		//		if(cloak != null)
 		return getUnlocalizedName() + "." + subNames[stack.getItemDamage()];
-		//		return getUnlocalizedName();
 	}
 
 	@Override
@@ -173,37 +169,7 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility
 		for(int i=0; i<subNames.length; i++)
 			if(i!=4 || WGModCompat.loaded_Twilight)
 				itemList.add(new ItemStack(item,1,i));
-		//		for(String tag: WGContent.cloakRegistry.keySet())
-		//			if(tag != null)
-		//			{
-		//				itemList.add(getCloakWithTag(tag));
-		//			}
 	}
-
-	//	public static ItemStack getCloakWithTag(String tag)
-	//	{
-	//		Cloak c = WGContent.cloakRegistry.get(tag);
-	//		if(c==null)
-	//		{
-	//			WitchingGadgets.logger.log(Level.ERROR, "Cloak with tag '"+tag+"' not found.");
-	//			return null;
-	//		}
-	//		ItemStack cStack = new ItemStack(WGContent.ItemCloak);
-	//		NBTTagCompound nbt = new NBTTagCompound();
-	//		nbt.setString("cloak", c.getUnlocalizedName());
-	//		cStack.setTagCompound(nbt);
-	//		return cStack;
-	//	}
-
-	//	public static Cloak getCloakFromStack(ItemStack stack)
-	//	{
-	//		if(!(stack.getItem() instanceof ItemCloak))
-	//			return null;
-	//		if(stack.getTagCompound() == null)
-	//			return null;
-	//		String tag = stack.getTagCompound().getString("cloak");
-	//		return WGContent.cloakRegistry.get(tag);
-	//	}
 
 	public ItemStack[] getStoredItems(ItemStack item)	
 	{
@@ -244,38 +210,19 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility
 		{
 			item.setTagCompound(new NBTTagCompound());
 		}
-		for (int i = 0; i < inv.tagCount(); i++)
-		{
-			//NBTTagCompound tag = (NBTTagCompound)inv.tagAt(i);
-			//ItemStack testStack = ItemStack.loadItemStackFromNBT(tag);
-		}
 		item.getTagCompound().setTag("InternalInventory",inv);
 	}
 
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer par2EntityPlayer, List list, boolean par4)
 	{
-		//		if(hasCloakUniqueDiscounter(getCloakFromStack(stack)))
-		//		{
-		//			AspectList al = getCloakFromStack(stack).getVisDiscount();
-		//			list.add(EnumChatFormatting.DARK_PURPLE + StatCollector.translateToLocal("tc.visdiscount") + ":");
-		//			for(Aspect a:al.getAspects())
-		//				list.add("\u00a7"+a.getChatcolor()+a.getName()+": "+al.getAmount(a) + "%");
-		//		}
-		//		else
-	}
+		if(stack.hasTagCompound() && stack.getTagCompound().getBoolean("noGlide"))
+			list.add(StatCollector.translateToLocal(Lib.DESCRIPTION+"noGlide"));
 
-	//	private boolean hasCloakUniqueDiscounter(Cloak cloak)
-	//	{
-	//		AspectList al = cloak.getVisDiscount();
-	//		int aer = al.getAmount(Aspect.AIR);
-	//		int terra = al.getAmount(Aspect.EARTH);
-	//		int ignis = al.getAmount(Aspect.FIRE);
-	//		int aqua = al.getAmount(Aspect.WATER);
-	//		int ordo = al.getAmount(Aspect.ORDER);
-	//		int perdito = al.getAmount(Aspect.ENTROPY);
-	//		return !(aer==terra&&aer==ignis&&aer==aqua&&aer==ordo&&aer==perdito);
-	//	}
+		for(ItemStack ss : this.getStoredItems(stack))
+			if(ss!=null)
+				list.add(ss.getDisplayName());
+	}
 
 	@Override
 	public int getSlot(ItemStack stack)
@@ -283,8 +230,7 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility
 		return 0;
 	}
 
-	@Override
-	public void onTravelGearTick(EntityPlayer player, ItemStack stack)
+	public void onGearTick(EntityPlayer player, ItemStack stack)
 	{
 		if(stack.getItemDamage()<subNames.length)
 		{
@@ -303,7 +249,7 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility
 							player.moveFlying(0,1, .05f);
 						player.motionY *= 1.125;
 					}
-					else if(player.motionY<0)
+					else if(player.motionY<0 && (!stack.hasTagCompound()||!stack.getTagCompound().getBoolean("noGlide")))
 					{
 						float mod = player.isSneaking()?.1f:.05f;
 						player.motionY *= player.isSneaking()?.75:.5;
@@ -318,29 +264,37 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility
 			}
 		}
 	}
-	@Override
-	public void onArmorTick(World world, EntityPlayer player, ItemStack stack)
+	public void onGearEquip(EntityPlayer player, ItemStack stack)
 	{
-		this.onTravelGearTick(player, stack);
 	}
-
-	@Override
-	public void onTravelGearEquip(EntityPlayer player, ItemStack stack)
-	{
-
-	}
-
-	@Override
-	public void onTravelGearUnequip(EntityPlayer player, ItemStack stack)
+	public void onGearUnequip(EntityPlayer player, ItemStack stack)
 	{
 		if(stack.hasTagCompound() && stack.getTagCompound().getBoolean("isSpectral"))
 			stack.getTagCompound().setBoolean("isSpectral",false);
 	}
 
 	@Override
-	public boolean canActivate(EntityPlayer player, ItemStack stack)
+	public void onTravelGearTick(EntityPlayer player, ItemStack stack)
 	{
-		return true;
+		onGearTick(player,stack);
+	}
+	@Override
+	public void onTravelGearEquip(EntityPlayer player, ItemStack stack)
+	{
+		onGearEquip(player,stack);
+	}
+	@Override
+	public void onTravelGearUnequip(EntityPlayer player, ItemStack stack)
+	{
+		onGearUnequip(player,stack);
+	}
+
+
+
+	@Override
+	public boolean canActivate(EntityPlayer player, ItemStack stack, boolean isInHand)
+	{
+		return !isInHand;
 	}
 
 	@Override
@@ -350,7 +304,11 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility
 			if(subNames[stack.getItemDamage()].equals("storage") && !player.worldObj.isRemote)
 				player.openGui(WitchingGadgets.instance, 4, player.worldObj, MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posY), MathHelper.floor_double(player.posZ));
 			else if(subNames[stack.getItemDamage()].equals("raven") && !player.worldObj.isRemote)
-				player.openGui(WitchingGadgets.instance, 5, player.worldObj, MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posY), MathHelper.floor_double(player.posZ));
+			{
+				if(!stack.hasTagCompound())
+					stack.setTagCompound(new NBTTagCompound());
+				stack.getTagCompound().setBoolean("noGlide", !stack.getTagCompound().getBoolean("noGlide"));
+			}
 			else if(subNames[stack.getItemDamage()].equals("spectral") && !player.worldObj.isRemote && Utilities.consumeVisFromInventoryWithoutDiscount(player, new AspectList().add(Aspect.AIR,1)))
 			{
 				if(!stack.hasTagCompound())
@@ -363,6 +321,56 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility
 							e.setAttackTarget(null);
 				}
 			}
+	}
+
+	@Override
+	public void onUserDamaged(LivingHurtEvent event, ItemStack stack)
+	{
+		if(!stack.equals(event.entityLiving.getEquipmentInSlot(0)))
+		{
+			if(stack.getItemDamage()==3)
+			{	
+				EntityPlayer player = (EntityPlayer) event.entityLiving;
+				int amp = 1;
+				if(event.ammount>=8)
+					amp++;
+				if(event.ammount>=12)
+					amp++;
+				if(player.getActivePotionEffect(Potion.damageBoost) == null || player.getActivePotionEffect(Potion.damageBoost).getDuration()<2 || player.getActivePotionEffect(Potion.damageBoost).getAmplifier()<amp)
+					player.addPotionEffect(new PotionEffect(Potion.damageBoost.id, 60, amp));
+				if(player.getActivePotionEffect(Potion.moveSpeed) == null || player.getActivePotionEffect(Potion.moveSpeed).getDuration()<2 || player.getActivePotionEffect(Potion.moveSpeed).getAmplifier()<amp)
+					player.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, 60, amp));
+				if(player.getActivePotionEffect(Potion.resistance) == null || player.getActivePotionEffect(Potion.resistance).getDuration()<2 || player.getActivePotionEffect(Potion.resistance).getAmplifier()<amp)
+					player.addPotionEffect(new PotionEffect(Potion.resistance.id, 60, amp));
+			}
+		}
+	}
+
+	@Override
+	public void onUserAttacking(AttackEntityEvent event, ItemStack stack)
+	{
+	}
+
+	@Override
+	public void onUserJump(LivingJumpEvent event, ItemStack stack)
+	{
+	}
+
+	@Override
+	public void onUserFall(LivingFallEvent event, ItemStack stack)
+	{
+	}
+
+	@Override
+	public void onUserTargeted(LivingSetAttackTargetEvent event, ItemStack stack)
+	{
+		if(stack.hasTagCompound() && stack.getTagCompound().getBoolean("isSpectral"))
+		{
+			boolean goggles = event.entityLiving.getEquipmentInSlot(4)!=null && (event.entityLiving.getEquipmentInSlot(4).getItem() instanceof IRevealer || event.entityLiving.getEquipmentInSlot(4).getItem() instanceof IGoggles);
+			boolean special = event.entityLiving instanceof IEldritchMob || event.entityLiving instanceof IBossDisplayData;
+			if(!goggles && !special)
+				((EntityCreature)event.entityLiving).setAttackTarget(null);
+		}
 	}
 
 }

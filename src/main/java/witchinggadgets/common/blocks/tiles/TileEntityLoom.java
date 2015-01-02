@@ -368,8 +368,6 @@ public class TileEntityLoom extends TileEntityWGBase implements IInventory
 		{
 			if(a != null)
 			{
-				int amount = aspects.getAmount(a);
-				boolean flag = this.storedAspects.reduce(a, amount);
 			}
 		}
 	}

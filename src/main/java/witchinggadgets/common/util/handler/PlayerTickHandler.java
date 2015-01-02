@@ -55,20 +55,20 @@ public class PlayerTickHandler
 				else
 					TileEntitySaunaStove.targetedPlayers.remove(player.getEntityId());	
 			}
-//			System.out.println("Hi "+world.isRemote);
+
 			if(!world.isRemote && world.provider.dimensionId == WGConfig.dimensionMirrorID)
 			{
-//				int x = (int)Math.round(player.posX);
-//				int y = (int)player.posY;
-//				int z = (int)Math.round(player.posZ);
-//				if(player.isSneaking())y--;
-//				if(!player.isRiding() && !player.capabilities.isFlying)
-//				{
-//					for(int xx=-2;xx<=2;xx++)
-//						for(int zz=-2;zz<=2;zz++)
-//							if(world.isAirBlock(x+xx, y-1, z+zz))
-//								world.setBlock(x+xx, y-1, z+zz, WGContent.BlockVoidWalkway);
-//				}
+				//				int x = (int)Math.round(player.posX);
+				//				int y = (int)player.posY;
+				//				int z = (int)Math.round(player.posZ);
+				//				if(player.isSneaking())y--;
+				//				if(!player.isRiding() && !player.capabilities.isFlying)
+				//				{
+				//					for(int xx=-2;xx<=2;xx++)
+				//						for(int zz=-2;zz<=2;zz++)
+				//							if(world.isAirBlock(x+xx, y-1, z+zz))
+				//								world.setBlock(x+xx, y-1, z+zz, WGContent.BlockVoidWalkway);
+				//				}
 			}
 		}
 	}

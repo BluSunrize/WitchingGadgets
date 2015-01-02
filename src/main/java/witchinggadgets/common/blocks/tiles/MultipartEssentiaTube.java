@@ -7,7 +7,6 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -332,12 +331,11 @@ implements IEssentiaTransport, IWandable, TSlottedPart
 	{
 		RenderBlocks renderer = new RenderBlocks(new PartMetaAccess(this));
 		BlockTube b = (BlockTube) ConfigBlocks.blockTube;
-
+		Block bMP = this.getWorld().getBlock(x(),y(),z());
+		renderer.setRenderBounds(.375,.375,.375, .625,.625,.625);
+		renderer.renderStandardBlock(bMP, x(),y(),z());
+		
 		IIcon icon = meta==5?b.icon[6]: b.icon[0];
-
-		Tessellator tes = Tessellator.instance;
-
-		tes.setColorOpaque_I(0xffffff);
 
 		boolean hasConnections = false;
 		boolean overrideCenter = false;

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
+import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -165,7 +165,7 @@ public class Utilities
 	/**
 	 * Returns a ScanResult from a given NBTTagCompound. Make sure you're passing a valid NBT, otherwise, who knows what will happen! D=
 	 */
-	public static ScanResult readScanResultFromNBT(NBTTagCompound tag)
+	public static ScanResult readScanResultFromNBT(NBTTagCompound tag, World world)
 	{
 		byte type = tag.getByte("type");
 		int blockId = tag.getInteger("blockId");
@@ -176,7 +176,7 @@ public class Utilities
 			try{
 				Class<Entity> clazz = (Class<Entity>) Class.forName(tag.getString("entityClass"));
 				Constructor<Entity> cons = clazz.getConstructor(World.class);
-				entity = cons.newInstance(Minecraft.getMinecraft().theWorld);
+				entity = cons.newInstance(world);
 				entity.readFromNBT(tag.getCompoundTag("entity"));
 			}catch(Exception e)
 			{
@@ -439,26 +439,26 @@ public class Utilities
 
 	public static ItemStack getActiveMagicalCloak(EntityPlayer player)
 	{
-		if(TravellersGearAPI.getExtendedInventory(player)[0]!=null && TravellersGearAPI.getExtendedInventory(player)[0].getItem() instanceof ItemCloak)//ItemCloak.getCloakFromStack(TravellersGearAPI.getExtendedInventory(player)[0])!=null)
+		if(TravellersGearAPI.getExtendedInventory(player)[0]!=null && TravellersGearAPI.getExtendedInventory(player)[0].getItem() instanceof ItemCloak)
 			return TravellersGearAPI.getExtendedInventory(player)[0];
-		else if(player.inventory.armorItemInSlot(2)!=null  && player.inventory.armorItemInSlot(2).getItem() instanceof ItemCloak)//ItemCloak.getCloakFromStack(player.inventory.armorItemInSlot(2))!=null)
-			return player.inventory.armorItemInSlot(2);
+		else if(BaublesApi.getBaubles(player).getStackInSlot(3)!=null && BaublesApi.getBaubles(player).getStackInSlot(3).getItem() instanceof ItemCloak)
+			return BaublesApi.getBaubles(player).getStackInSlot(3);
 		return null;
 	}
 	public static void updateActiveMagicalCloak(EntityPlayer player, ItemStack cloak)
 	{
-		if(TravellersGearAPI.getExtendedInventory(player)[0]!=null && TravellersGearAPI.getExtendedInventory(player)[0].getItem() instanceof ItemCloak)//ItemCloak.getCloakFromStack(TravellersGearAPI.getExtendedInventory(player)[0])!=null)
+		if(TravellersGearAPI.getExtendedInventory(player)[0]!=null && TravellersGearAPI.getExtendedInventory(player)[0].getItem() instanceof ItemCloak)
 		{
 			ItemStack[] tgInv = TravellersGearAPI.getExtendedInventory(player);
 			if(tgInv[0].getItemDamage() == cloak.getItemDamage())
 				tgInv[0]=cloak;
 			TravellersGearAPI.setExtendedInventory(player, tgInv);
 		}
-		else if(player.inventory.armorItemInSlot(2)!=null && player.inventory.armorItemInSlot(2).getItem() instanceof ItemCloak)//ItemCloak.getCloakFromStack(player.inventory.armorItemInSlot(2))!=null)
+		else if(BaublesApi.getBaubles(player).getStackInSlot(3)!=null && BaublesApi.getBaubles(player).getStackInSlot(3).getItem() instanceof ItemCloak)
 		{
-			if(player.inventory.armorItemInSlot(2).getItemDamage() == cloak.getItemDamage())
-				player.setCurrentItemOrArmor(3, cloak);
-			player.inventory.markDirty();
+			if(BaublesApi.getBaubles(player).getStackInSlot(3).getItemDamage() == cloak.getItemDamage())
+				BaublesApi.getBaubles(player).setInventorySlotContents(3, cloak);
+			BaublesApi.getBaubles(player).markDirty();
 		}
 	}
 
@@ -470,4 +470,11 @@ public class Utilities
 		return s;
 	}
 
+	public static boolean isRightMaterial(Material mat, Material[] materials)
+	{
+		for(Material m : materials)
+			if(m == mat)
+				return true;
+		return false;
+	}
 }

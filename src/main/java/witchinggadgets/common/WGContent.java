@@ -18,7 +18,6 @@ import net.minecraft.potion.Potion;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
@@ -47,6 +46,7 @@ import witchinggadgets.common.blocks.ItemBlockStoneDevice;
 import witchinggadgets.common.blocks.ItemBlockWoodenDevice;
 import witchinggadgets.common.blocks.tiles.TileEntityAgeingStone;
 import witchinggadgets.common.blocks.tiles.TileEntityBlastfurnace;
+import witchinggadgets.common.blocks.tiles.TileEntityBrewery;
 import witchinggadgets.common.blocks.tiles.TileEntityCobbleGen;
 import witchinggadgets.common.blocks.tiles.TileEntityCuttingTable;
 import witchinggadgets.common.blocks.tiles.TileEntityEtherealWall;
@@ -56,7 +56,6 @@ import witchinggadgets.common.blocks.tiles.TileEntitySarcophagus;
 import witchinggadgets.common.blocks.tiles.TileEntitySaunaStove;
 import witchinggadgets.common.blocks.tiles.TileEntitySnowGen;
 import witchinggadgets.common.blocks.tiles.TileEntitySpinningWheel;
-import witchinggadgets.common.blocks.tiles.TileEntityTelescope;
 import witchinggadgets.common.blocks.tiles.TileEntityTempLight;
 import witchinggadgets.common.blocks.tiles.TileEntityTerraformFocus;
 import witchinggadgets.common.blocks.tiles.TileEntityTerraformer;
@@ -71,6 +70,7 @@ import witchinggadgets.common.items.ItemMaterials;
 import witchinggadgets.common.items.ItemThaumiumShears;
 import witchinggadgets.common.items.armor.ItemAdvancedRobes;
 import witchinggadgets.common.items.baubles.ItemCloak;
+import witchinggadgets.common.items.baubles.ItemKama;
 import witchinggadgets.common.items.baubles.ItemMagicalBaubles;
 import witchinggadgets.common.items.tools.ItemBag;
 import witchinggadgets.common.items.tools.ItemPrimordialAxe;
@@ -78,10 +78,11 @@ import witchinggadgets.common.items.tools.ItemPrimordialGlove;
 import witchinggadgets.common.items.tools.ItemPrimordialHammer;
 import witchinggadgets.common.items.tools.ItemPrimordialSword;
 import witchinggadgets.common.items.tools.ItemScanCamera;
-import witchinggadgets.common.items.tools.ItemVoidBag;
+import witchinggadgets.common.magic.WGEnchantBackstab;
 import witchinggadgets.common.magic.WGEnchantGemBrittle;
 import witchinggadgets.common.magic.WGEnchantGemPotency;
 import witchinggadgets.common.magic.WGEnchantInvisibleGear;
+import witchinggadgets.common.magic.WGEnchantStealth;
 import witchinggadgets.common.magic.WGEnchantUnveiling;
 import witchinggadgets.common.magic.WGPotion;
 import witchinggadgets.common.util.Utilities;
@@ -113,7 +114,8 @@ public class WGContent
 	public static Item ItemCluster;
 	public static Item ItemCrystalCapsule;
 	public static Item ItemBag;
-	public static ItemCloak ItemCloak;
+	public static Item ItemCloak;
+	public static Item ItemKama;
 	public static Item ItemThaumiumShears;
 	public static Item ItemAdvancedRobeChest;
 	public static Item ItemAdvancedRobeLegs;
@@ -133,7 +135,6 @@ public class WGContent
 	public static Item ItemMagicalBaubles;
 	public static Item ItemScanCamera;
 	public static Item ItemRelic;
-	public static Item ItemVoidBag;
 
 	public static Fluid moltenFzDarkIronFluid;
 
@@ -143,6 +144,8 @@ public class WGContent
 	public static Enchantment enc_gemstoneBrittle;
 	public static Enchantment enc_invisibleGear;
 	public static Enchantment enc_unveiling;
+	public static Enchantment enc_stealth;
+	public static Enchantment enc_backstab;
 
 	public static ArmorMaterial armorMatSpecialRobe = EnumHelper.addArmorMaterial("WG:ADVANEDCLOTH", 25, new int[] { 2, 4, 3, 2 }, 25);
 	public static ArmorMaterial standardCloak = EnumHelper.addArmorMaterial("WG:CLOAKMATERIAL", 0, new int[] {0,0,0,0}, 0);
@@ -185,6 +188,12 @@ public class WGContent
 		eid = Utilities.getNextEnchantmentId(eid);
 		if(eid >= 0)
 			enc_unveiling = new WGEnchantUnveiling(eid);
+		eid = Utilities.getNextEnchantmentId(eid);
+		if(eid >= 0)
+			enc_stealth = new WGEnchantStealth(eid);
+		eid = Utilities.getNextEnchantmentId(eid);
+		if(eid >= 0)
+			enc_backstab = new WGEnchantBackstab(eid);
 
 	}
 	public static void postInit()
@@ -265,7 +274,7 @@ public class WGContent
 		registerTile(TileEntityCuttingTable.class);
 		registerTile(TileEntitySaunaStove.class);
 		//METAL
-		registerTile(TileEntityTelescope.class);
+		registerTile(TileEntityBrewery.class);
 		registerTile(TileEntityTerraformer.class);
 		registerTile(TileEntityTerraformFocus.class);
 
@@ -314,6 +323,8 @@ public class WGContent
 
 		ItemCloak = (ItemCloak) new ItemCloak().setUnlocalizedName("WG_Cloak");
 		GameRegistry.registerItem(ItemCloak, ItemCloak.getUnlocalizedName());
+		ItemKama = (ItemKama) new ItemKama().setUnlocalizedName("WG_Kama");
+		GameRegistry.registerItem(ItemKama, ItemKama.getUnlocalizedName());
 
 		ItemInfusedGem = new ItemInfusedGem().setUnlocalizedName("WG_InfusedGem");
 		GameRegistry.registerItem(ItemInfusedGem, ItemInfusedGem.getUnlocalizedName());
@@ -323,9 +334,6 @@ public class WGContent
 
 		ItemScanCamera = new ItemScanCamera().setUnlocalizedName("WG_ScanCamera");
 		GameRegistry.registerItem(ItemScanCamera, ItemScanCamera.getUnlocalizedName());
-
-		ItemVoidBag = new ItemVoidBag().setUnlocalizedName("WG_VoidBag");
-		GameRegistry.registerItem(ItemVoidBag, ItemVoidBag.getUnlocalizedName());
 
 		ItemPrimordialGlove = new ItemPrimordialGlove().setUnlocalizedName("WG_PrimordialGlove");
 		GameRegistry.registerItem(ItemPrimordialGlove, ItemPrimordialGlove.getUnlocalizedName());
@@ -398,6 +406,10 @@ public class WGContent
 
 	private static void postInitThaumcraft()
 	{
+		//Add repair for boots
+		//if(WGConfig.allowBootsRepair)
+		//	ThaumcraftApi.armorMatSpecial.customCraftingMaterial = Items.leather;
+			
 		//Add aspects where needed
 		AspectList addAspects = new AspectList().add(Aspect.TREE, 4).add(Aspect.CLOTH, 2).add(Aspect.MECHANISM, 2).add(Aspect.AIR, 2);
 		ThaumcraftApi.registerObjectTag(new ItemStack(BlockWoodenDevice,1,1),addAspects);
@@ -419,7 +431,7 @@ public class WGContent
 		ThaumcraftApi.registerObjectTag("gemTopaz", new AspectList().add(Aspect.CRYSTAL, 2).add(Aspect.GREED, 2));
 		ThaumcraftApi.registerObjectTag("gemTanzanite", new AspectList().add(Aspect.CRYSTAL, 2).add(Aspect.GREED, 2));
 		ThaumcraftApi.registerObjectTag("gemMalachite", new AspectList().add(Aspect.CRYSTAL, 2).add(Aspect.GREED, 2));
-
+		
 		//Botania
 		addOreAspects("Manasteel", new AspectList().add(Aspect.MAGIC, 1), false);
 		addOreAspects("Terrasteel", new AspectList().add(Aspect.EARTH, 1).add(Aspect.MAGIC, 1), false);

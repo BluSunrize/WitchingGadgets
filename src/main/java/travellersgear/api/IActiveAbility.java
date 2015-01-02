@@ -11,6 +11,6 @@ import net.minecraft.item.ItemStack;
  */
 public interface IActiveAbility
 {
-	public boolean canActivate(EntityPlayer player, ItemStack stack);
+	public boolean canActivate(EntityPlayer player, ItemStack stack, boolean isInHand);
 	public void activate(EntityPlayer player, ItemStack stack);
 }

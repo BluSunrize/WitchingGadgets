@@ -22,7 +22,7 @@ import thaumcraft.api.aspects.Aspect;
 import witchinggadgets.WitchingGadgets;
 import witchinggadgets.api.ITerraformFocus;
 import witchinggadgets.client.render.BlockRenderMetalDevice;
-import witchinggadgets.common.blocks.tiles.TileEntityTelescope;
+import witchinggadgets.common.blocks.tiles.TileEntityBrewery;
 import witchinggadgets.common.blocks.tiles.TileEntityTerraformFocus;
 import witchinggadgets.common.blocks.tiles.TileEntityTerraformer;
 import cpw.mods.fml.relauncher.Side;
@@ -30,7 +30,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockWGMetalDevice extends BlockContainer implements ITerraformFocus
 {
-	public static String[] subNames = {"telescope","terraformer","tfFocusPlains","tfFocusColdTaiga","tfFocusDesert","tfFocusJungle","tfFocusHell"};
+	public static String[] subNames = {"brewery","terraformer","tfFocusPlains","tfFocusColdTaiga","tfFocusDesert","tfFocusJungle","tfFocusHell"};
 	IIcon[] icons = new IIcon[subNames.length];
 
 	public BlockWGMetalDevice()
@@ -124,7 +124,7 @@ public class BlockWGMetalDevice extends BlockContainer implements ITerraformFocu
 		switch(metadata)
 		{
 		case 0:
-			return new TileEntityTelescope();
+			return new TileEntityBrewery();
 		case 1:
 			return new TileEntityTerraformer();
 		case 2:

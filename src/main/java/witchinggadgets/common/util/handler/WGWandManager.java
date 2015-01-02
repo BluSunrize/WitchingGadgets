@@ -531,6 +531,7 @@ public class WGWandManager implements IWandTriggerManager
 						byte pos = (byte)( (yy*9)+((zz+1)*3)+(xx+1) );
 						tile.position = pos;
 						tile.facing = ForgeDirection.getOrientation(f);
+						tile.markDirty();
 					}
 
 
@@ -541,7 +542,7 @@ public class WGWandManager implements IWandTriggerManager
 
 			Utilities.consumeVisFromWand(itemstack, player, new AspectList().add(Aspect.FIRE, 50).add(Aspect.EARTH, 50).add(Aspect.ENTROPY, 50), true);
 			Thaumcraft.addStickyWarpToPlayer(player, 3);
-			//			return true;
+			return true;
 		}
 		return false;
 	}
