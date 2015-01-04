@@ -59,7 +59,6 @@ import witchinggadgets.common.blocks.tiles.MultipartEssentiaTube;
 import witchinggadgets.common.blocks.tiles.MultipartEssentiaTube_Filtered;
 import witchinggadgets.common.blocks.tiles.MultipartEssentiaTube_Valve;
 import witchinggadgets.common.items.ItemMaterials;
-import witchinggadgets.common.items.baubles.ItemCloak;
 import witchinggadgets.common.items.baubles.ItemMagicalBaubles;
 import witchinggadgets.common.items.tools.ItemBag;
 import witchinggadgets.common.util.Lib;
@@ -140,9 +139,9 @@ public class EventHandler
 	@SubscribeEvent
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
-		ItemStack cloak = Utilities.getActiveMagicalCloak(event.entityPlayer);
-		if(cloak!=null && cloak.hasTagCompound() && cloak.getTagCompound().getBoolean("isSpectral"))
-			event.setCanceled(true);
+		for(ItemStack cloak : Utilities.getActiveMagicalCloak(event.entityPlayer))
+			if(cloak!=null && cloak.hasTagCompound() && cloak.getTagCompound().getBoolean("isSpectral"))
+				event.setCanceled(true);
 
 		if(event.entityPlayer.getCurrentEquippedItem()!=null && Block.getBlockFromItem(event.entityPlayer.getCurrentEquippedItem().getItem()) == ConfigBlocks.blockTube && event.entityPlayer.getCurrentEquippedItem().getItemDamage()!=7 && event.entityPlayer.getCurrentEquippedItem().getItemDamage()!=2)
 			if(event.action==PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK && event.world.getTileEntity(event.x,event.y,event.z) instanceof TileMultipart)
@@ -162,16 +161,16 @@ public class EventHandler
 	@SubscribeEvent
 	public void onPlayerInteractWithEntity(EntityInteractEvent event)
 	{
-		ItemStack cloak = Utilities.getActiveMagicalCloak(event.entityPlayer);
-		if(cloak!=null && cloak.hasTagCompound() && cloak.getTagCompound().getBoolean("isSpectral"))
-			event.setCanceled(true);
+		for(ItemStack cloak : Utilities.getActiveMagicalCloak(event.entityPlayer))
+			if(cloak!=null && cloak.hasTagCompound() && cloak.getTagCompound().getBoolean("isSpectral"))
+				event.setCanceled(true);
 	}
 	@SubscribeEvent
 	public void onPlayerAttackEntity(AttackEntityEvent event)
 	{
-		ItemStack cloak = Utilities.getActiveMagicalCloak(event.entityPlayer);
-		if(cloak!=null && cloak.hasTagCompound() && cloak.getTagCompound().getBoolean("isSpectral"))
-			event.setCanceled(true);
+		for(ItemStack cloak : Utilities.getActiveMagicalCloak(event.entityPlayer))
+			if(cloak!=null && cloak.hasTagCompound() && cloak.getTagCompound().getBoolean("isSpectral"))
+				event.setCanceled(true);
 	}
 
 	@SubscribeEvent

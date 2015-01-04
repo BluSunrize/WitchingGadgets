@@ -37,6 +37,7 @@ import travellersgear.api.ITravellersGear;
 import witchinggadgets.WitchingGadgets;
 import witchinggadgets.client.ClientUtilities;
 import witchinggadgets.client.render.ModelCloak;
+import witchinggadgets.common.WGContent;
 import witchinggadgets.common.WGModCompat;
 import witchinggadgets.common.util.Lib;
 import witchinggadgets.common.util.Utilities;
@@ -302,7 +303,7 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, 
 	{
 		if(stack.getItemDamage()<subNames.length)
 			if(subNames[stack.getItemDamage()].equals("storage") && !player.worldObj.isRemote)
-				player.openGui(WitchingGadgets.instance, 4, player.worldObj, MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posY), MathHelper.floor_double(player.posZ));
+				player.openGui(WitchingGadgets.instance, this.equals(WGContent.ItemKama)?5:4, player.worldObj, MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posY), MathHelper.floor_double(player.posZ));
 			else if(subNames[stack.getItemDamage()].equals("raven") && !player.worldObj.isRemote)
 			{
 				if(!stack.hasTagCompound())

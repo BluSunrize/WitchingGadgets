@@ -1,23 +1,12 @@
 package witchinggadgets.common.items.baubles;
 
-import java.util.List;
-
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.boss.IBossDisplayData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
-import thaumcraft.api.aspects.Aspect;
-import thaumcraft.api.aspects.AspectList;
-import witchinggadgets.WitchingGadgets;
 import witchinggadgets.client.render.ModelKama;
-import witchinggadgets.common.util.Utilities;
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import cpw.mods.fml.relauncher.Side;
@@ -116,47 +105,14 @@ public class ItemKama extends ItemCloak implements IBauble
 	{
 	}
 
-	
-	
 	@Override
-	public boolean canActivate(EntityPlayer player, ItemStack stack, boolean isInHand)
-	{
-		return !isInHand;
-	}
-
-	@Override
-	public void activate(EntityPlayer player, ItemStack stack)
-	{
-		if(stack.getItemDamage()<subNames.length)
-			if(subNames[stack.getItemDamage()].equals("storage") && !player.worldObj.isRemote)
-				player.openGui(WitchingGadgets.instance, 4, player.worldObj, MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posY), MathHelper.floor_double(player.posZ));
-			else if(subNames[stack.getItemDamage()].equals("raven") && !player.worldObj.isRemote)
-			{
-				if(!stack.hasTagCompound())
-					stack.setTagCompound(new NBTTagCompound());
-				stack.getTagCompound().setBoolean("noGlide", !stack.getTagCompound().getBoolean("noGlide"));
-			}
-			else if(subNames[stack.getItemDamage()].equals("spectral") && !player.worldObj.isRemote && Utilities.consumeVisFromInventoryWithoutDiscount(player, new AspectList().add(Aspect.AIR,1)))
-			{
-				if(!stack.hasTagCompound())
-					stack.setTagCompound(new NBTTagCompound());
-				stack.getTagCompound().setBoolean("isSpectral", !stack.getTagCompound().getBoolean("isSpectral"));
-				if(stack.getTagCompound().getBoolean("isSpectral"))
-				{
-					for(EntityCreature e : (List<EntityCreature>)player.worldObj.getEntitiesWithinAABB(EntityCreature.class, AxisAlignedBB.getBoundingBox(player.posX-16,player.posY-16,player.posZ-16, player.posX+16,player.posY+16,player.posZ+16)))
-						if(e!=null && !(e instanceof IBossDisplayData) && player.equals(e.getAttackTarget()))
-							e.setAttackTarget(null);
-				}
-			}
-	}
-
-	@Override
-	public boolean canEquip(ItemStack stack, EntityLivingBase living)
+	public boolean canEquip(ItemStack arg0, EntityLivingBase arg1)
 	{
 		return true;
 	}
+
 	@Override
-	public boolean canUnequip(ItemStack stack, EntityLivingBase living)
+	public boolean canUnequip(ItemStack arg0, EntityLivingBase arg1)
 	{
 		return true;
 	}

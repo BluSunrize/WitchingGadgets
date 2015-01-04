@@ -3,6 +3,7 @@ package witchinggadgets.client.gui;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
@@ -14,9 +15,9 @@ public class GuiCloakBag extends GuiContainer{
 
 	InventoryPlayer test;
 
-	public GuiCloakBag(InventoryPlayer inventoryPlayer, World world, int x, int y, int z)
+	public GuiCloakBag(InventoryPlayer inventoryPlayer, World world, ItemStack cloak)
 	{
-		super(new ContainerCloak(inventoryPlayer, world, x, y, z));
+		super(new ContainerCloak(inventoryPlayer, world, cloak));
 		test = inventoryPlayer;
 		this.xSize = 176;
 		this.ySize = 166;

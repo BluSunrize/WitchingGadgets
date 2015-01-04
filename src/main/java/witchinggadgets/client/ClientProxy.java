@@ -12,6 +12,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import thaumcraft.client.fx.ParticleEngine;
 import thaumcraft.client.fx.particles.FXEssentiaTrail;
 import thaumcraft.client.fx.particles.FXWisp;
+import travellersgear.api.TravellersGearAPI;
 import witchinggadgets.client.fx.EntityFXSweat;
 import witchinggadgets.client.gui.GuiBag;
 import witchinggadgets.client.gui.GuiCloakBag;
@@ -19,7 +20,6 @@ import witchinggadgets.client.gui.GuiCuttingTable;
 import witchinggadgets.client.gui.GuiLoom;
 import witchinggadgets.client.gui.GuiMagicalTileLock;
 import witchinggadgets.client.gui.GuiPrimordialGlove;
-import witchinggadgets.client.gui.GuiRavenCloak;
 import witchinggadgets.client.gui.GuiSpinningWheel;
 import witchinggadgets.client.gui.GuiVoidBag;
 import witchinggadgets.client.render.BlockRenderMetalDevice;
@@ -61,6 +61,7 @@ import witchinggadgets.common.blocks.tiles.TileEntityTerraformer;
 import witchinggadgets.common.blocks.tiles.TileEntityWallMirror;
 import witchinggadgets.common.items.EntityItemReforming;
 import witchinggadgets.common.util.WGKeyHandler;
+import baubles.api.BaublesApi;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -131,8 +132,7 @@ public class ClientProxy extends CommonProxy
 		if(ID == 1)return new GuiLoom(player.inventory, (TileEntityLoom)tile);
 
 		if(ID == 3)return new GuiBag(player.inventory, world);
-		if(ID == 4)return new GuiCloakBag(player.inventory, world, x, y, z);
-		if(ID == 5)return new GuiRavenCloak(player, world, x, y, z);
+		if(ID==4||ID==5)return new GuiCloakBag(player.inventory, world, ID==4?TravellersGearAPI.getExtendedInventory(player)[0]:BaublesApi.getBaubles(player).getStackInSlot(3) );
 
 		if(ID == 7)return new GuiPrimordialGlove(player.inventory, world, x, y, z);
 

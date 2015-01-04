@@ -24,7 +24,6 @@ import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent.SetArmorModel;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.oredict.OreDictionary;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -79,6 +78,8 @@ public class ClientEventHandler
 		}
 		if(playerModel != null)
 		{
+			//			System.out.println("hi.");
+			playerModel.bipedLeftLeg.rotateAngleX = (float) Math.toRadians(70f);
 			//			playerModel.bipedBody.showModel = true;
 			//			playerModel.bipedLeftLeg.showModel = true;
 			//			playerModel.bipedRightLeg.showModel = true;
@@ -362,8 +363,9 @@ public class ClientEventHandler
 			if(event.entityPlayer.equals(Minecraft.getMinecraft().thePlayer) || !unveiling )
 				event.result=-2;
 		}
-		if(Utilities.getActiveMagicalCloak(event.entityPlayer)!=null && Utilities.getActiveMagicalCloak(event.entityPlayer).hasTagCompound() && Utilities.getActiveMagicalCloak(event.entityPlayer).getTagCompound().getBoolean("isSpectral"))
-			event.result=-2;
+		for(ItemStack cloak : Utilities.getActiveMagicalCloak(event.entityPlayer))
+			if(cloak!=null && cloak.hasTagCompound() && cloak.getTagCompound().getBoolean("isSpectral"))
+				event.result=-2;
 	}
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
@@ -375,8 +377,9 @@ public class ClientEventHandler
 			if(event.entityPlayer.equals(Minecraft.getMinecraft().thePlayer) || !unveiling )
 				event.shouldRender=false;
 		}
-		if(Utilities.getActiveMagicalCloak(event.entityPlayer)!=null && Utilities.getActiveMagicalCloak(event.entityPlayer).hasTagCompound() && Utilities.getActiveMagicalCloak(event.entityPlayer).getTagCompound().getBoolean("isSpectral"))
-			event.shouldRender=false;
+		for(ItemStack cloak : Utilities.getActiveMagicalCloak(event.entityPlayer))
+			if(cloak!=null && cloak.hasTagCompound() && cloak.getTagCompound().getBoolean("isSpectral"))
+				event.shouldRender=false;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -420,21 +423,22 @@ public class ClientEventHandler
 		{
 			EntityPlayer pl = Minecraft.getMinecraft().thePlayer.worldObj.getPlayerEntityByName(event.entity.getCommandSenderName());
 			if(pl!=null)
-				if(Utilities.getActiveMagicalCloak(pl)!=null && Utilities.getActiveMagicalCloak(pl).hasTagCompound() && Utilities.getActiveMagicalCloak(pl).getTagCompound().getBoolean("isSpectral"))
-				{
-					GL11.glEnable(3042);
-					boolean goggles = Minecraft.getMinecraft().thePlayer.getEquipmentInSlot(4)!=null && (Minecraft.getMinecraft().thePlayer.getEquipmentInSlot(4).getItem() instanceof IRevealer || Minecraft.getMinecraft().thePlayer.getEquipmentInSlot(4).getItem() instanceof IGoggles);
-					boolean unveiling = EnchantmentHelper.getEnchantmentLevel(WGContent.enc_unveiling.effectId, Minecraft.getMinecraft().thePlayer.getEquipmentInSlot(4))>0;
+				for(ItemStack cloak : Utilities.getActiveMagicalCloak(pl))
+					if(cloak!=null && cloak.hasTagCompound() && cloak.getTagCompound().getBoolean("isSpectral"))
+					{
+						GL11.glEnable(3042);
+						boolean goggles = Minecraft.getMinecraft().thePlayer.getEquipmentInSlot(4)!=null && (Minecraft.getMinecraft().thePlayer.getEquipmentInSlot(4).getItem() instanceof IRevealer || Minecraft.getMinecraft().thePlayer.getEquipmentInSlot(4).getItem() instanceof IGoggles);
+						boolean unveiling = EnchantmentHelper.getEnchantmentLevel(WGContent.enc_unveiling.effectId, Minecraft.getMinecraft().thePlayer.getEquipmentInSlot(4))>0;
 
-					if(event.entity.equals(Minecraft.getMinecraft().thePlayer))
-						GL11.glColor4f(.5f,.5f,.5f,spectralAlpha);
-					else if(unveiling)
-						GL11.glColor4f(1,1,1,.75f);
-					else if(goggles)
-						GL11.glColor4f(.25f,.25f,.25f,spectralAlpha);
-					else
-						GL11.glColor4f(1,1,1, 0);
-				}
+						if(event.entity.equals(Minecraft.getMinecraft().thePlayer))
+							GL11.glColor4f(.5f,.5f,.5f,spectralAlpha);
+						else if(unveiling)
+							GL11.glColor4f(1,1,1,.75f);
+						else if(goggles)
+							GL11.glColor4f(.25f,.25f,.25f,spectralAlpha);
+						else
+							GL11.glColor4f(1,1,1, 0);
+					}
 		}
 	}
 	@SideOnly(Side.CLIENT)
@@ -445,11 +449,12 @@ public class ClientEventHandler
 		{
 			EntityPlayer pl = Minecraft.getMinecraft().thePlayer.worldObj.getPlayerEntityByName(event.entity.getCommandSenderName());
 			if(pl!=null)
-				if(Utilities.getActiveMagicalCloak(pl)!=null && Utilities.getActiveMagicalCloak(pl).hasTagCompound() && Utilities.getActiveMagicalCloak(pl).getTagCompound().getBoolean("isSpectral"))
-				{
-					GL11.glDisable(3042);
-					GL11.glColor4f(1,1,1,1);
-				}
+				for(ItemStack cloak : Utilities.getActiveMagicalCloak(pl))
+					if(cloak!=null && cloak.hasTagCompound() && cloak.getTagCompound().getBoolean("isSpectral"))
+					{
+						GL11.glDisable(3042);
+						GL11.glColor4f(1,1,1,1);
+					}
 		}
 	}
 	@SideOnly(Side.CLIENT)
@@ -460,15 +465,16 @@ public class ClientEventHandler
 		{
 			EntityPlayer pl = Minecraft.getMinecraft().thePlayer.worldObj.getPlayerEntityByName(event.entity.getCommandSenderName());
 			if(pl!=null)
-				if(Utilities.getActiveMagicalCloak(pl)!=null && Utilities.getActiveMagicalCloak(pl).hasTagCompound() && Utilities.getActiveMagicalCloak(pl).getTagCompound().getBoolean("isSpectral"))
-				{
-					boolean unveiling = EnchantmentHelper.getEnchantmentLevel(WGContent.enc_unveiling.effectId, Minecraft.getMinecraft().thePlayer.getEquipmentInSlot(4))>0;
-					if(!unveiling)
+				for(ItemStack cloak : Utilities.getActiveMagicalCloak(pl))
+					if(cloak!=null && cloak.hasTagCompound() && cloak.getTagCompound().getBoolean("isSpectral"))
 					{
-						
-						event.setCanceled(true);
+						boolean unveiling = EnchantmentHelper.getEnchantmentLevel(WGContent.enc_unveiling.effectId, Minecraft.getMinecraft().thePlayer.getEquipmentInSlot(4))>0;
+						if(!unveiling)
+						{
+
+							event.setCanceled(true);
+						}
 					}
-				}
 		}
 	}
 }

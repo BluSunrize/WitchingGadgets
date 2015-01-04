@@ -114,9 +114,6 @@ public class WGPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Abst
     
     public void registerPackets()
     {
-        registerPacket(PacketUseCloak.class);
-        registerPacket(PacketSetMigratePos.class);
-        registerPacket(PacketRequestMigrate.class);
         registerPacket(PacketPrimordialGlove.class);
         registerPacket(PacketTileUpdate.class);
         registerPacket(PacketClientNotifier.class);

@@ -42,7 +42,6 @@ import witchinggadgets.common.items.ItemClusters;
 import witchinggadgets.common.items.baubles.ItemCloak;
 import witchinggadgets.common.util.Utilities;
 import witchinggadgets.common.util.recipe.InfernalBlastfurnaceRecipe;
-import witchinggadgets.common.util.recipe.KamaRecipe;
 import witchinggadgets.common.util.recipe.PhotoDevelopingRecipe;
 import witchinggadgets.common.util.recipe.SpinningRecipe;
 import witchinggadgets.common.util.registry.MetalFluidData;

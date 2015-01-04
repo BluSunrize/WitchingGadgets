@@ -4,6 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import travellersgear.api.TravellersGearAPI;
 import witchinggadgets.common.blocks.tiles.TileEntityCuttingTable;
 import witchinggadgets.common.blocks.tiles.TileEntityLoom;
 import witchinggadgets.common.blocks.tiles.TileEntitySpinningWheel;
@@ -14,6 +15,7 @@ import witchinggadgets.common.gui.ContainerLoom;
 import witchinggadgets.common.gui.ContainerPrimordialGlove;
 import witchinggadgets.common.gui.ContainerSpinningWheel;
 import witchinggadgets.common.gui.ContainerVoidBag;
+import baubles.api.BaublesApi;
 import cpw.mods.fml.common.network.IGuiHandler;
 
 public class CommonProxy implements IGuiHandler
@@ -32,7 +34,7 @@ public class CommonProxy implements IGuiHandler
 		if(ID == 1)return new ContainerLoom(player.inventory, (TileEntityLoom)tile);
 		
 		if(ID == 3)return new ContainerBag(player.inventory, world);
-		if(ID == 4)return new ContainerCloak(player.inventory, world, x, y, z);
+		if(ID==4||ID==5)return new ContainerCloak(player.inventory, world, ID==4?TravellersGearAPI.getExtendedInventory(player)[0]:BaublesApi.getBaubles(player).getStackInSlot(3) );
 
 		if(ID == 7)return new ContainerPrimordialGlove(player.inventory, world, x, y, z);
 		//System.out.println("...or just skip it...");

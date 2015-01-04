@@ -18,19 +18,11 @@ public class ContainerCloak extends Container
 	EntityPlayer player = null;
 	private int pouchSlotAmount = 27;
 
-	public ContainerCloak(InventoryPlayer iinventory, World world, int x, int y, int z)
+	public ContainerCloak(InventoryPlayer iinventory, World world, ItemStack cloak)
 	{
 		this.worldObj = world;
 		this.player = iinventory.player;
-
-//		if(TravellersGearAPI.getExtendedInventory(player)[0]!=null &&Cloak.storage.equals(ItemCloak.getCloakFromStack(TravellersGearAPI.getExtendedInventory(player)[0]) ))
-//		{
-//			this.cloak = TravellersGearAPI.getExtendedInventory(player)[0];
-//			travGear = true;
-//		}
-//		else
-//			this.cloak = iinventory.armorItemInSlot(2);
-		this.cloak = Utilities.getActiveMagicalCloak(player);
+		this.cloak = cloak;
 
 		for (int a = 0; a < pouchSlotAmount; a++)
 			this.addSlotToContainer(new Slot(this.input, a, 8 + a % 9 * 18, 9 + a/9 * 18));
