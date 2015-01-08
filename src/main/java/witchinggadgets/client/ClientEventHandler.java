@@ -399,11 +399,6 @@ public class ClientEventHandler
 	@SubscribeEvent
 	public void initializeIcons(TextureStitchEvent.Post event)
 	{
-		if(event.map.getTextureType()==0 && WGContent.moltenFzDarkIronFluid!=null)
-		{
-			WGContent.moltenFzDarkIronFluid.setIcons(WGContent.BlockDarkIronFluid.getIcon(0, 0));
-			WGContent.moltenFzDarkIronFluid.setIcons(WGContent.BlockDarkIronFluid.getIcon(0, 0));
-		}
 		if(Minecraft.getMinecraft().thePlayer != null)
 		{
 			if(ThaumcraftApiHelper.isResearchComplete(Minecraft.getMinecraft().thePlayer.getCommandSenderName(), "WGELDRITCHBASE"))

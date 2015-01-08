@@ -17,7 +17,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
-import witchinggadgets.client.ClientUtilities;
+import witchinggadgets.common.blocks.tiles.TileEntityEssentiaPump;
 import witchinggadgets.common.blocks.tiles.TileEntityTerraformFocus;
 import witchinggadgets.common.blocks.tiles.TileEntityTerraformer;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
@@ -35,19 +35,10 @@ public class BlockRenderMetalDevice implements ISimpleBlockRenderingHandler
 		try{
 			if(metadata==0)
 			{
-				GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
-				GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-				renderer.setRenderBounds(.4375,0,0, .5625,1,1);
-				ClientUtilities.drawStandardBlock(block, metadata, renderer);
-				GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+				GL11.glTranslatef(-.5f, -.5F, -.5f);
+				TileEntityRendererDispatcher.instance.renderTileEntityAt(new TileEntityEssentiaPump(), 0.0D, 0.0D, 0.0D, 0.0F);
 			}
-		}catch(Exception e)
-		{
-			//			e.printStackTrace();
-			Tessellator.instance.draw();
-		}
-		try{
-			if(metadata==1)
+			else if(metadata==1)
 			{
 				GL11.glTranslatef(-.5f, -.5F, -.5f);
 				TileEntityRendererDispatcher.instance.renderTileEntityAt(new TileEntityTerraformer(), 0.0D, 0.0D, 0.0D, 0.0F);
@@ -71,24 +62,7 @@ public class BlockRenderMetalDevice implements ISimpleBlockRenderingHandler
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer)
 	{
-		int meta = world.getBlockMetadata(x, y, z);
-		if(meta == 0)
-		{
-			try{
-				return renderPane(world, block, x, y, z, renderer);
-			}catch(Exception e)
-			{
-				e.printStackTrace();
-				return false;
-			}
-		}
-//		else if(meta!=1)
-//		{
-//			renderer.setRenderBounds(0,0,0, 1,1,1);
-//			return renderer.renderStandardBlock(block, x, y, z);
-//		}
 		return false;
-		//		return true;
 	}
 
 	@Override

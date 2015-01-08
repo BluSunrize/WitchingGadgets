@@ -105,7 +105,7 @@ public class BagColourizationRecipe implements IRecipe
 			itembag.modifyColorOnItemStack(itemstack, ItemBag.getDefaultBagColour(itemstack.getItemDamage()));
 			return itemstack;
 		}
-		
+
 		if(itembag == null)
 			return null;
 

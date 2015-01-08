@@ -1,11 +1,15 @@
 package witchinggadgets.common.util.handler;
 
+import java.lang.reflect.Method;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import thaumcraft.common.Thaumcraft;
+import thaumcraft.common.config.ConfigItems;
+import thaumcraft.common.items.armor.ItemBootsTraveller;
 import thaumcraft.common.lib.potions.PotionWarpWard;
 import witchinggadgets.WitchingGadgets;
 import witchinggadgets.common.WGConfig;
@@ -13,6 +17,7 @@ import witchinggadgets.common.WGModCompat;
 import witchinggadgets.common.blocks.tiles.TileEntitySaunaStove;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.relauncher.Side;
 
 public class PlayerTickHandler
 {
@@ -20,6 +25,53 @@ public class PlayerTickHandler
 	public void playerTick(TickEvent.PlayerTickEvent event)
 	{
 		EntityPlayer player = event.player;
+		if(event.side == Side.SERVER)
+		{
+			try{
+				for(Method m :ItemBootsTraveller.class.getDeclaredMethods())
+				{
+					if(m.getName() == "test")
+						System.out.println(m.invoke(ConfigItems.itemBootsTraveller));
+				}
+				
+			}catch(Exception e)
+			{
+				
+			}
+			
+			
+//			Item replaceBoots = new ItemBootsTraveller(ThaumcraftApi.armorMatSpecial, 4, 3)
+//			{
+//				@Override
+//				public boolean getIsRepairable(ItemStack stack1, ItemStack stack2)
+//				{
+//					return stack2.isItemEqual(new ItemStack(Items.leather)) ? true : super.getIsRepairable(stack1, stack2);
+//				}
+//			}.setUnlocalizedName("BootsTraveller");
+//			try {
+////				GameRegistry.addSubstitutionAlias("Thaumcraft:BootsTraveller", GameRegistry.Type.ITEM, replaceBoots);
+//				GameRegistry.activateSubstitution();
+//			} catch (ExistingSubstitutionException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			System.out.println("wut wut");
+//			Item i = GameRegistry.findItem("Thaumcraft", "BootsTraveller");
+//			Item i = GameData.getItemRegistry().getObject("Thaumcraft:BootsTraveler");
+//			System.out.println(i);
+//			ConfigItems.itemBootsTraveller = new ItemBootsTraveller(ThaumcraftApi.armorMatSpecial, 4, 3)
+//			{
+//				@Override
+//				public boolean getIsRepairable(ItemStack stack1, ItemStack stack2)
+//				{
+//					System.out.println("wut wut");
+//					return stack2.isItemEqual(new ItemStack(Items.leather)) ? true : super.getIsRepairable(stack1, stack2);
+//				}
+//			}.setUnlocalizedName("BootsTraveller");
+//			
+		}
+		
+		
 		if(player != null && event.phase.equals(TickEvent.Phase.START))
 		{
 			World world = player.worldObj;

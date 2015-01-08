@@ -1,13 +1,17 @@
-Translations:
-Yulife - de_DE.lang
+Localization credit
+----
+* Yulife - de_DE.lang
 
 
-Code:
-SlimeKnights/Tinkers Construct - Packet system
+Code credit
+----
+* SlimeKnights/Tinkers Construct - Packet system
+* OndraSter - Concept and execution of a core mod
 
-Others:
-Damien Hazard - Idea and Textures of the Infernal Blastfurnace
-Lorc at game-icons.net - Icons, licensed under CC BY 3.0 http://creativecommons.org/licenses/by/3.0/
+Other credit
+----
+* Damien Hazard - Idea and Textures of the Infernal Blastfurnace
+* Lorc at game-icons.net - Icons, licensed under CC BY 3.0 http://creativecommons.org/licenses/by/3.0/
 
 
 

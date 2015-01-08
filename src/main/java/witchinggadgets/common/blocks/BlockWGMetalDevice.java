@@ -15,14 +15,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.util.ForgeDirection;
 import thaumcraft.api.aspects.Aspect;
 import witchinggadgets.WitchingGadgets;
 import witchinggadgets.api.ITerraformFocus;
 import witchinggadgets.client.render.BlockRenderMetalDevice;
-import witchinggadgets.common.blocks.tiles.TileEntityBrewery;
+import witchinggadgets.common.blocks.tiles.TileEntityEssentiaPump;
 import witchinggadgets.common.blocks.tiles.TileEntityTerraformFocus;
 import witchinggadgets.common.blocks.tiles.TileEntityTerraformer;
 import cpw.mods.fml.relauncher.Side;
@@ -30,7 +32,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockWGMetalDevice extends BlockContainer implements ITerraformFocus
 {
-	public static String[] subNames = {"brewery","terraformer","tfFocusPlains","tfFocusColdTaiga","tfFocusDesert","tfFocusJungle","tfFocusHell"};
+	public static String[] subNames = {"essentiaPump","terraformer","tfFocusPlains","tfFocusColdTaiga","tfFocusDesert","tfFocusJungle","tfFocusHell"};
 	IIcon[] icons = new IIcon[subNames.length];
 
 	public BlockWGMetalDevice()
@@ -124,7 +126,7 @@ public class BlockWGMetalDevice extends BlockContainer implements ITerraformFocu
 		switch(metadata)
 		{
 		case 0:
-			return new TileEntityBrewery();
+			return new TileEntityEssentiaPump();
 		case 1:
 			return new TileEntityTerraformer();
 		case 2:
@@ -146,9 +148,11 @@ public class BlockWGMetalDevice extends BlockContainer implements ITerraformFocu
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack stack)
 	{
-		//		int playerViewQuarter = MathHelper.floor_double(entityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
-		//		int meta = world.getBlockMetadata(x, y, z);
-		//		int f = playerViewQuarter==0 ? 2:playerViewQuarter==1 ? 5:playerViewQuarter==2 ? 3: 4;
+		int playerViewQuarter = MathHelper.floor_double(entityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+		int meta = world.getBlockMetadata(x, y, z);
+		int f = playerViewQuarter==0 ? 2:playerViewQuarter==1 ? 5:playerViewQuarter==2 ? 3: 4;
+		if(meta == 0)
+			((TileEntityEssentiaPump)world.getTileEntity(x,y,z)).facing = ForgeDirection.getOrientation(f);
 	}
 
 	@Override

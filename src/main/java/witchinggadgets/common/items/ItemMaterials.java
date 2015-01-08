@@ -2,17 +2,22 @@ package witchinggadgets.common.items;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ChatStyle;
@@ -20,10 +25,10 @@ import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.input.Keyboard;
 
@@ -31,16 +36,23 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.crafting.IInfusionStabiliser;
 import thaumcraft.api.nodes.INode;
+import thaumcraft.api.nodes.NodeModifier;
+import thaumcraft.api.nodes.NodeType;
 import thaumcraft.api.research.ScanResult;
+import thaumcraft.common.Thaumcraft;
+import thaumcraft.common.config.Config;
 import thaumcraft.common.lib.crafting.ThaumcraftCraftingManager;
 import thaumcraft.common.lib.network.PacketHandler;
 import thaumcraft.common.lib.network.playerdata.PacketScannedToServer;
 import thaumcraft.common.lib.research.ResearchManager;
 import thaumcraft.common.lib.research.ScanManager;
+import thaumcraft.common.lib.world.ThaumcraftWorldGenerator;
+import thaumcraft.common.lib.world.biomes.BiomeHandler;
 import thaumcraft.common.tiles.TileInfusionMatrix;
 import thaumcraft.common.tiles.TilePedestal;
 import thaumcraft.common.tiles.TileTable;
 import witchinggadgets.WitchingGadgets;
+import witchinggadgets.client.ClientUtilities;
 import witchinggadgets.common.WGContent;
 import witchinggadgets.common.blocks.tiles.TileEntityCuttingTable;
 import witchinggadgets.common.util.Lib;
@@ -56,7 +68,7 @@ public class ItemMaterials extends Item
 	private final static String[] subNames = {
 		"threadSimple", "threadGold", "threadThaumium", "clothSpace", "clothGolden", "clothBewitched",
 		"wolfPelt", "calculator", "cuttingTools", "photoPlate", "developedPhoto",
-		"bucketFZDarkIron","primordialShard","gemstoneDust"
+		"guidingString","primordialShard","gemstoneDust", "brokenTestItem"
 	};
 	public IIcon[] icon = new IIcon[subNames.length];
 
@@ -67,6 +79,60 @@ public class ItemMaterials extends Item
 		setCreativeTab(WitchingGadgets.tabWG);
 		setHasSubtypes(true);
 	}
+	@Override
+	public int getItemStackLimit(ItemStack stack)
+	{
+		if(stack.getItemDamage()==7||stack.getItemDamage()==8||stack.getItemDamage()==10||stack.getItemDamage()==11)
+			return 1;
+		return super.getItemStackLimit(stack);
+	}
+
+	HashMap<String,Object> guidingLights = new HashMap();
+	@Override
+	public void onUpdate(ItemStack stack, World world, Entity entity, int useTicks, boolean equipped)
+	{
+		if(stack.getItemDamage()==11 && stack.hasTagCompound())
+		{
+			NBTTagList positionList = stack.getTagCompound().getTagList("pos", 10);
+
+			if(world.isRemote && equipped && positionList.tagCount()>1)
+			{
+				for(int i=1; i<positionList.tagCount(); i++)
+				{
+					NBTTagCompound last = positionList.getCompoundTagAt(i-1);
+					NBTTagCompound pp = positionList.getCompoundTagAt(i);
+					double[] pos = {pp.getDouble("x"),pp.getDouble("y"),pp.getDouble("z")};
+					String ident = Math.floor(pos[0])+","+Math.floor(pos[1])+","+Math.floor(pos[2]);
+					guidingLights.put(ident, Thaumcraft.proxy.beamPower(world, pos[0],pos[1]+1,pos[2], last.getDouble("x"),last.getDouble("y")+1,last.getDouble("z"), 1,1,.5f, true, guidingLights.get(ident)));
+				}
+				if(stack.getTagCompound().getBoolean("active") && entity instanceof EntityPlayer)
+				{
+					NBTTagCompound last = positionList.getCompoundTagAt(positionList.tagCount()-1);
+					double[] hand = ClientUtilities.getPlayerHandPos((EntityPlayer) entity, true);
+					guidingLights.put("player", Thaumcraft.proxy.beamPower(world, hand[0],hand[1],hand[2], last.getDouble("x"),last.getDouble("y")+1,last.getDouble("z"), 1,1,.5f, true, guidingLights.get("player")));
+				}
+			}
+
+			int playerViewEigth = MathHelper.floor_double(entity.rotationYaw * 8.0F / 360.0F + 0.5D) & 7;
+
+			if(positionList.tagCount()>0 && stack.getTagCompound().getBoolean("active"))
+			{
+				NBTTagCompound last = positionList.getCompoundTagAt(positionList.tagCount()-1);
+				double dist = Math.abs(last.getDouble("x")-entity.posX)+Math.abs(last.getDouble("z")-entity.posZ)+Math.abs(last.getDouble("z")-entity.posZ);
+				if(last.getInteger("facing")!=playerViewEigth && dist>1)
+				{
+					NBTTagCompound newPos = new NBTTagCompound();
+					newPos.setDouble("x", entity.posX);
+					newPos.setDouble("y", entity.posY);
+					newPos.setDouble("z", entity.posZ);
+					newPos.setInteger("facing", playerViewEigth);
+					positionList.appendTag(newPos);
+					stack.getTagCompound().setTag("pos", positionList);
+				}
+			}
+		}
+	}
+
 
 	@Override
 	public int getColorFromItemStack(ItemStack stack, int par2)
@@ -85,9 +151,21 @@ public class ItemMaterials extends Item
 
 	@SideOnly(Side.CLIENT)
 	@Override
+	public boolean hasEffect(ItemStack stack, int pass)
+	{
+		if(stack.getItemDamage()==11 && stack.hasTagCompound())
+			return stack.getTagCompound().getBoolean("active");
+		return super.hasEffect(stack, pass);
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4)
 	{
 		try{
+			if(stack.getItemDamage()==11 && stack.hasTagCompound() && stack.getTagCompound().getBoolean("active"))
+				list.add(Lib.DESCRIPTION+"active");
+
 			if(stack.getItemDamage()==9||stack.getItemDamage()==10)
 			{
 				if(!stack.hasTagCompound())
@@ -160,14 +238,6 @@ public class ItemMaterials extends Item
 		iconPhotoOverlay = iconRegister.registerIcon("witchinggadgets:mat_"+subNames[10]+"_overlay");
 	}
 
-	@Override
-	public ItemStack getContainerItem(ItemStack itemStack)
-	{
-		if(itemStack.getItemDamage() == 16)
-			return new ItemStack(Items.bucket);
-		return null;
-	}
-
 	@SideOnly(Side.CLIENT)
 	public IIcon getIconFromDamage(int metadata)
 	{
@@ -197,22 +267,14 @@ public class ItemMaterials extends Item
 	@Override
 	public String getUnlocalizedName(ItemStack itemstack)
 	{
-		return getUnlocalizedName() + "." + subNames[itemstack.getItemDamage()];
+		return getUnlocalizedName() + "." + subNames[Math.min(itemstack.getItemDamage(),subNames.length-1)];
 	}
 
 	@Override
 	public void getSubItems(Item item, CreativeTabs tab, List itemList)
 	{
 		for(int i=0;i<subNames.length;i++)
-		{
-			if(i==11)
-			{
-				if(WGContent.BlockDarkIronFluid!=null)
-					itemList.add(new ItemStack(item,1,i));
-			}
-			else
-				itemList.add(new ItemStack(item,1,i));
-		}
+			itemList.add(new ItemStack(item,1,i));
 	}
 
 	@Override
@@ -343,6 +405,134 @@ public class ItemMaterials extends Item
 			}
 			return true;
 		}
+		if(stack.getItemDamage()==14)
+		{
+			NodeType nt = NodeType.HUNGRY;
+			Random random = world.rand;
+			BiomeGenBase bg = world.getBiomeGenForCoords(x, z);
+			int baura = BiomeHandler.getBiomeAura(bg);
+			if(nt!=NodeType.PURE && bg.biomeID==ThaumcraftWorldGenerator.biomeTaint.biomeID)
+			{
+				baura = (int)(baura * 1.5F);
+				if (random.nextBoolean())
+				{
+					nt = NodeType.TAINTED;
+					baura = (int)(baura * 1.5F);
+				}
+			}
+			int value = random.nextInt(baura / 2) + baura / 2;
+
+			Aspect ra = BiomeHandler.getRandomBiomeTag(bg.biomeID, random);
+			AspectList al = new AspectList();
+			if (ra != null)
+				al.add(ra, 2);
+			else
+			{
+				Aspect aa = Aspect.getCompoundAspects().get(random.nextInt(Aspect.getCompoundAspects().size()));
+				al.add(aa, 1);
+				aa = Aspect.getPrimalAspects().get(random.nextInt(Aspect.getPrimalAspects().size()));
+				al.add(aa, 1);
+			}
+			for (int a = 0; a < 3; a++)
+				if (random.nextBoolean())
+					if (random.nextInt(Config.specialNodeRarity) == 0)
+					{
+						Aspect aa = Aspect.getCompoundAspects().get(random.nextInt(Aspect.getCompoundAspects().size()));
+						al.merge(aa, 1);
+					}
+					else
+					{
+						Aspect aa = Aspect.getPrimalAspects().get(random.nextInt(Aspect.getPrimalAspects().size()));
+						al.merge(aa, 1);
+					}
+			if(nt == NodeType.HUNGRY)
+			{
+				al.merge(Aspect.HUNGER, 2);
+				if (random.nextBoolean())
+					al.merge(Aspect.GREED, 1);
+			}
+			else if (nt == NodeType.PURE)
+			{
+				if (random.nextBoolean())
+					al.merge(Aspect.LIFE, 2);
+				else
+					al.merge(Aspect.ORDER, 2);
+			}
+			else if (nt == NodeType.DARK)
+			{
+				if (random.nextBoolean())
+					al.merge(Aspect.DEATH, 1);
+				if (random.nextBoolean())
+					al.merge(Aspect.UNDEAD, 1);
+				if (random.nextBoolean())
+					al.merge(Aspect.ENTROPY, 1);
+				if (random.nextBoolean())
+					al.merge(Aspect.DARKNESS, 1);
+			}
+			int water = 0;
+			int lava = 0;
+			int stone = 0;
+			int foliage = 0;
+			try
+			{
+				for (int xx = -5; xx <= 5; xx++)
+					for (int yy = -5; yy <= 5; yy++)
+						for (int zz = -5; zz <= 5; zz++)
+						{
+							try
+							{
+								Block bi = world.getBlock(x + xx, y + yy, z + zz);
+								if (bi.getMaterial() == Material.water)
+									water++;
+								else if (bi.getMaterial() == Material.lava)
+									lava++;
+								else if (bi == Blocks.stone)
+									stone++;
+								if (bi.isFoliage(world, x + xx, y + yy, z + zz))
+									foliage++;
+							}
+							catch (Exception e) {}
+						}
+			}
+			catch (Exception e) {}
+			if (water > 100)
+				al.merge(Aspect.WATER, 1);
+			if (lava > 100)
+			{
+				al.merge(Aspect.FIRE, 1);
+				al.merge(Aspect.EARTH, 1);
+			}
+			if (stone > 500)
+				al.merge(Aspect.EARTH, 1);
+			if (foliage > 100)
+				al.merge(Aspect.PLANT, 1);
+
+			int[] spread = new int[al.size()];
+			float total = 0.0F;
+			for (int a = 0; a < spread.length; a++)
+			{
+				if (al.getAmount(al.getAspectsSorted()[a]) == 2)
+					spread[a] = (50 + random.nextInt(25));
+				else
+					spread[a] = (25 + random.nextInt(50));
+
+				total += spread[a];
+			}
+			for (int a = 0; a < spread.length; a++)
+				al.merge(al.getAspectsSorted()[a], (int)(spread[a] / total * value));
+//
+//			System.out.println("generating Node");
+			if(!world.isRemote)
+			{
+				ForgeDirection fd = ForgeDirection.getOrientation(side);
+				x += fd.offsetX;
+				y += fd.offsetY;
+				z += fd.offsetZ;
+				
+//				ThaumcraftWorldGenerator.createRandomNodeAt(world, x, y, z, world.rand, false, false, false);
+				ThaumcraftWorldGenerator.createNodeAt(world, x, y, z, nt, null, al);
+			}
+		}
 		return false;
 	}
 	@Override
@@ -361,48 +551,29 @@ public class ItemMaterials extends Item
 				}
 			}
 		}
-		if(stack.getItemDamage() == 11 && WGContent.BlockDarkIronFluid!=null)
+		if(stack.getItemDamage() == 11)
 		{
-			MovingObjectPosition position = this.getMovingObjectPositionFromPlayer(world, player, false);
-			if (position == null)
-				return stack;
-			if (position.typeOfHit == MovingObjectType.BLOCK)
+			if(!stack.hasTagCompound())
+				stack.setTagCompound(new NBTTagCompound());
+
+			NBTTagList positionList = stack.getTagCompound().getTagList("pos", 10);
+			int playerViewEigth = MathHelper.floor_double(player.rotationYaw * 8.0F / 360.0F + 0.5D) & 7;
+
+			if(player.isSneaking())
 			{
-				int hitX = position.blockX;
-				int hitY = position.blockY;
-				int hitZ = position.blockZ;
-
-				if (!world.canMineBlock(player, hitX, hitY, hitZ))
-					return stack;
-
-				switch(position.sideHit)
-				{
-				case 0:
-					--hitY;
-					break;
-				case 1:
-					++hitY;
-					break;
-				case 2:
-					--hitZ;
-					break;
-				case 3:
-					++hitZ;
-					break;
-				case 4:
-					--hitX;
-					break;
-				case 5:
-					++hitX;
-					break;
-				}
-
-				if (!player.canPlayerEdit(hitX, hitY, hitZ, position.sideHit, stack)
-						||(!world.isAirBlock(hitX, hitY, hitZ) && world.getBlock(hitX, hitY, hitZ).getMaterial().isSolid()))
-					return stack;
-
-				world.setBlock(hitX, hitY, hitZ, WGContent.BlockDarkIronFluid, 7, 3);
-				return new ItemStack(Items.bucket);
+				stack.getTagCompound().removeTag("pos");
+				stack.getTagCompound().setBoolean("active",false);
+			}
+			else
+			{
+				stack.getTagCompound().setBoolean("active",!stack.getTagCompound().getBoolean("active"));
+				NBTTagCompound newPos = new NBTTagCompound();
+				newPos.setDouble("x", player.posX);
+				newPos.setDouble("y", player.posY);
+				newPos.setDouble("z", player.posZ);
+				newPos.setInteger("facing", playerViewEigth);
+				positionList.appendTag(newPos);
+				stack.getTagCompound().setTag("pos", positionList);
 			}
 		}
 		return stack;

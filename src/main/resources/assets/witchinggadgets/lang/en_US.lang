@@ -18,6 +18,7 @@ tile.WG_WoodenDevice.armorStand.name=Armor Stand
 tile.WG_WoodenDevice.cuttingTable.name=Cutting Table
 tile.WG_WoodenDevice.saunaStove.name=Thaumic Sauna Stove
 
+tile.WG_MetalDevice.essentiaPump.name=Essentia Pump
 tile.WG_MetalDevice.terraformer.name=Arcane Terrestrial Reformer
 tile.WG_MetalDevice.tfFocusPlains.name=Terrestrial Focus: Plains
 tile.WG_MetalDevice.tfFocusColdTaiga.name=Terrestrial Focus: Cold Taiga
@@ -48,7 +49,7 @@ item.WG_Material.clusterCobalt.name=Cobalt Cluster
 item.WG_Material.clusterArdite.name=Ardite Cluster
 item.WG_Material.clusterNickel.name=Nickel Cluster
 item.WG_Material.clusterFZDarkIron.name=Dark Iron Cluster
-item.WG_Material.bucketFZDarkIron.name=Molten Dark Iron Bucket
+item.WG_Material.guidingString.name=Guiding Thread
 item.WG_Material.primordialShard.name=Primordial Shard
 item.WG_Material.gemstoneDust.name=Gemstone Dust
 
@@ -159,6 +160,8 @@ wg.desc.gearSlot.bauble.AMULET=Equipped in the §aAmulet§7 slot
 
 wg.desc.filteredItems=Accepted Items:
 
+wg.desc.active=Active
+
 wg.gui.search=Search
 wg.chat.nodeContents.primal=Primal Aspects within this node: §eAer: %1$s§f, §2Terra: %2$s§f, §cIgnis: %3$s§f, §3Aqua: %4$s§f, §7Ordo: %5$s§f, §8Perditio: %6$s
 wg.chat.infusionWarning.pedestalHeight=Infusion pedestal at %1$s, %2$s, %3$s must not be higher than the Infusion Matrix
@@ -236,6 +239,10 @@ witchinggadgets_research_name.CALCULATOR=Arcane Abacus
 witchinggadgets_research_text.CALCULATOR=[WG] 3-4 = Warp?
 witchinggadgets_research_page.CALCULATOR.1=As a skilled thaumaturge, close to achieving eldritch knowledge, you are an expert on chaos. ...It might also stem from your lack of mathematical knowledge. But who would bother themselves with sciences of the common man when there are enchantments that do it for you?<BR>The Arcane Abacus will take some of the mundane mathematics off your hands. Use it on a Node that contains compound aspects and it will calculate it to primal values. Use it on an Infusion Matrix to check the stability value and point out misplaced stabilizers.
 witchinggadgets_research_page.CALCULATOR.2=§oThe highest infusion instability known to man *cough*Thaumic Tinkerer*cough* is 15. Stabilizing your altar beyond that is pointless.
+#
+witchinggadgets_research_name.LABYRINTHSTRING=Guiding Thread
+witchinggadgets_research_text.LABYRINTHSTRING=[WG] Ariadne would be proud
+witchinggadgets_research_page.LABYRINTHSTRING.1=Mazes and labyrinths once were a favourable way of warding secrets against intruders. The real danger of course, is not finding your way back out.<BR>In order to help with that, you have designed the Guiding Thread, an item that leaves a trail of light as you progress through dark and windy place. Rightclick to activate or deactivate it. While active, it will remember every turn you make. The light is only visible while you hold it though. Sneak+click to wipe it's memory.
 
 witchinggadgets_research_page.ENCHFABRIC.r1=<IMG>witchinggadgets:textures/gui/research/weavingRecipes2.png:0:0:255:255:0.5</IMG>
 #
@@ -363,8 +370,10 @@ witchinggadgets_research_name.TERRAFORMFOCUS_HELL=Terrestrial Focus: Hell
 witchinggadgets_research_text.TERRAFORMFOCUS_HELL=[WG] Screw the Nether
 witchinggadgets_research_page.TERRAFORMFOCUS_HELL.1=Let's be honest. Even those driven mad by the warp in their head don't want to live in a place of lava and brimstone.<BR>...<BR>What?! You do?! Well suit yourself. Supply the focus with Tenebrae essentia and enjoy hell on earth.
 
-
-
+#MIRRORPUMP
+witchinggadgets_research_name.MIRRORPUMP=Essentia Pump
+witchinggadgets_research_text.MIRRORPUMP=[WG] Suck it up!
+witchinggadgets_research_page.MIRRORPUMP.1=Essentia Mirrors may allow the Infusion Altar to pull essentia over long distances, but most other devices are unable to utilize them. In order to save yourself a lot of tubing, you have invented the Essentia Pump. When it is attached to a tube system, it will recognize the current suction of the system and draw the matching aspect from nearby mirrors.
 
 
 

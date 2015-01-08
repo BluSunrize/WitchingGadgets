@@ -35,6 +35,7 @@ import witchinggadgets.client.render.ItemRenderScanCamera;
 import witchinggadgets.client.render.ItemRenderWallMirror;
 import witchinggadgets.client.render.TileRenderCobbleGen;
 import witchinggadgets.client.render.TileRenderCuttingTable;
+import witchinggadgets.client.render.TileRenderEssentiaPump;
 import witchinggadgets.client.render.TileRenderLoom;
 import witchinggadgets.client.render.TileRenderMagicalTileLock;
 import witchinggadgets.client.render.TileRenderMirrorPortal;
@@ -49,6 +50,7 @@ import witchinggadgets.common.CommonProxy;
 import witchinggadgets.common.WGContent;
 import witchinggadgets.common.blocks.tiles.TileEntityCobbleGen;
 import witchinggadgets.common.blocks.tiles.TileEntityCuttingTable;
+import witchinggadgets.common.blocks.tiles.TileEntityEssentiaPump;
 import witchinggadgets.common.blocks.tiles.TileEntityLoom;
 import witchinggadgets.common.blocks.tiles.TileEntityMagicalTileLock;
 import witchinggadgets.common.blocks.tiles.TileEntityMirrorPortal;
@@ -94,6 +96,7 @@ public class ClientProxy extends CommonProxy
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySaunaStove.class, new TileRenderSaunaStove());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTerraformer.class, new TileRenderTerraformer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTerraformFocus.class, new TileRenderTerraformFocus());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEssentiaPump.class, new TileRenderEssentiaPump());
 
 		eliteArmorModel = ClientUtilities.bindModel("witchinggadgets","models/EliteRunicArmor.obj");
 		cameraModel = ClientUtilities.bindModel("witchinggadgets","models/ScanCamera.obj");

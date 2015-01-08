@@ -1,5 +1,6 @@
 package witchinggadgets.common;
 
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.UUID;
 
@@ -21,18 +22,20 @@ import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+
+import org.apache.logging.log4j.Level;
+
 import thaumcraft.api.ItemApi;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.config.ConfigItems;
+import thaumcraft.common.items.armor.ItemBootsTraveller;
 import witchinggadgets.WitchingGadgets;
-import witchinggadgets.common.blocks.BlockFluidDarkIron;
 import witchinggadgets.common.blocks.BlockMirrorPortal;
 import witchinggadgets.common.blocks.BlockModifiedAiry;
 import witchinggadgets.common.blocks.BlockRoseVines;
@@ -46,7 +49,7 @@ import witchinggadgets.common.blocks.ItemBlockStoneDevice;
 import witchinggadgets.common.blocks.ItemBlockWoodenDevice;
 import witchinggadgets.common.blocks.tiles.TileEntityAgeingStone;
 import witchinggadgets.common.blocks.tiles.TileEntityBlastfurnace;
-import witchinggadgets.common.blocks.tiles.TileEntityBrewery;
+import witchinggadgets.common.blocks.tiles.TileEntityEssentiaPump;
 import witchinggadgets.common.blocks.tiles.TileEntityCobbleGen;
 import witchinggadgets.common.blocks.tiles.TileEntityCuttingTable;
 import witchinggadgets.common.blocks.tiles.TileEntityEtherealWall;
@@ -93,7 +96,10 @@ import witchinggadgets.common.util.recipe.InfernalBlastfurnaceRecipe;
 import witchinggadgets.common.util.recipe.RobeColourizationRecipe;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.EntityRegistry;
+import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
+import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 
 public class WGContent
 {
@@ -107,7 +113,6 @@ public class WGContent
 	public static Block BlockRoseVine;
 	public static Block BlockVapourizer;
 	public static Block BlockCustomAiry;
-	public static Block BlockDarkIronFluid;
 	public static Block BlockMPVisRelay;
 
 	public static Item ItemMaterial;
@@ -135,9 +140,6 @@ public class WGContent
 	public static Item ItemMagicalBaubles;
 	public static Item ItemScanCamera;
 	public static Item ItemRelic;
-
-	public static Fluid moltenFzDarkIronFluid;
-
 
 	public static Potion pot_knockbackRes;
 	public static Enchantment enc_gemstonePotency;
@@ -231,25 +233,6 @@ public class WGContent
 
 		BlockCustomAiry = new BlockModifiedAiry().setBlockName("WG_CustomAir");
 		GameRegistry.registerBlock(BlockCustomAiry, BlockCustomAiry.getLocalizedName());
-
-		//		BlockMPVisRelay = new BlockMPVisRelay().setBlockName("WG_MPVisRelay");
-		//		GameRegistry.registerBlock(BlockMPVisRelay, ItemBlockMPVisRelay.class, BlockMPVisRelay.getLocalizedName());
-
-		//		if(OreDictionary.getOres("oreFzDarkIron")!=null && !OreDictionary.getOres("oreFzDarkIron").isEmpty())
-		if(Loader.isModLoaded("TConstruct"))
-		{
-			moltenFzDarkIronFluid = new Fluid("fzdarkiron.molten");
-			if (!FluidRegistry.registerFluid(moltenFzDarkIronFluid))
-				moltenFzDarkIronFluid = FluidRegistry.getFluid("fzdarkiron.molten");
-			BlockDarkIronFluid = new BlockFluidDarkIron(moltenFzDarkIronFluid).setBlockName("metal.molten.fzdarkiron");
-			GameRegistry.registerBlock(BlockDarkIronFluid, "metal.molten.fzdarkiron");
-			moltenFzDarkIronFluid.setBlock(BlockDarkIronFluid).setDensity(3000).setViscosity(6000).setTemperature(1300);
-			FluidContainerRegistry.registerFluidContainer(new FluidContainerData(new FluidStack(moltenFzDarkIronFluid, 1000), new ItemStack(ItemMaterial, 1, 16), new ItemStack(Items.bucket)));
-		}
-		//		BlockVapourizer = new BlockEssentiaVapourizer(WGConfig.BlockVapourizerID).setUnlocalizedName("WG_Vapourizer");
-		//		GameRegistry.registerBlock(BlockVapourizer, BlockVapourizer.getLocalizedName());
-		//GameRegistry.registerBlock(BlockTotem, ItemBlockTotem.class, BlockTotem.getLocalizedName());
-
 	}
 	private static void initializeBlocks()
 	{
@@ -274,7 +257,7 @@ public class WGContent
 		registerTile(TileEntityCuttingTable.class);
 		registerTile(TileEntitySaunaStove.class);
 		//METAL
-		registerTile(TileEntityBrewery.class);
+		registerTile(TileEntityEssentiaPump.class);
 		registerTile(TileEntityTerraformer.class);
 		registerTile(TileEntityTerraformFocus.class);
 
@@ -407,9 +390,74 @@ public class WGContent
 	private static void postInitThaumcraft()
 	{
 		//Add repair for boots
-		//if(WGConfig.allowBootsRepair)
-		//	ThaumcraftApi.armorMatSpecial.customCraftingMaterial = Items.leather;
+		if(WGConfig.allowBootsRepair)
+		{
+			WitchingGadgets.logger.log(Level.INFO, "Tryign to inject new Boots of the traveller");
 			
+			try{
+//				Map<String,Integer> dataList = ;
+//	            for (int i = 0; i < modList.tagCount(); i++)
+//	            {
+//	                NBTTagCompound itemTag = modList.getCompoundTagAt(i);
+//	                String modId = itemTag.getString("ModId");
+//	                String itemType = itemTag.getString("ItemType");
+//	                int itemId = itemTag.getInteger("ItemId");
+//	                int ordinal = itemTag.getInteger("ordinal");
+//	                String forcedModId = itemTag.hasKey("ForcedModId") ? itemTag.getString("ForcedModId") : null;
+//	                String forcedName = itemTag.hasKey("ForcedName") ? itemTag.getString("ForcedName") : null;
+//	                if (forcedName == null)
+//	                {
+//	                    FMLLog.warning("Found unlabelled item in world save, this may cause problems. The item type %s:%d will not be present", itemType, ordinal);
+//	                }
+//	                else
+//	                {
+//	                    // all entries are Items, blocks were only saved through their ItemBlock
+//	                    String itemLabel = String.format("%c%s:%s", '\u0002', forcedModId != null ? forcedModId : modId, forcedName);
+//	                    dataList.put(itemLabel, itemId);
+//	                }
+//	            }
+				
+//				Item replaceBoots = new ItemBootsTraveller(ThaumcraftApi.armorMatSpecial, 4, 3)
+//				{
+//					@Override
+//					public boolean getIsRepairable(ItemStack stack1, ItemStack stack2)
+//					{
+//						return stack2.isItemEqual(new ItemStack(Items.leather)) ? true : super.getIsRepairable(stack1, stack2);
+//					}
+//				}.setUnlocalizedName("BootsTraveller");
+//				String ident = "Thaumcraft:BootsTraveller";
+//				GameRegistry.addSubstitutionAlias(ident, GameRegistry.Type.ITEM, replaceBoots);
+//
+//				Method m = ReflectionHelper.findMethod(FMLControlledNamespacedRegistry.class, GameData.getItemRegistry(), new String[]{"activateSubstitution"}, String.class);
+//				m.invoke(GameData.getItemRegistry(), ident);
+				
+				
+//				Set<String> itemSubstitutions = new HashSet<String>();
+//				itemSubstitutions.add("Thaumcraft:BootsTraveller");
+//	            List<String> failedElements = GameData.injectWorldIDMap(new HashMap<String,Integer>(),ImmutableSet.<Integer>of(), new HashMap<String,String>(),new HashMap<String,String>(), ImmutableSet.<String>of(),itemSubstitutions, false, false);
+				
+//	            for(String f : failedElements)
+//	            {
+//	            	System.out.println("failed: "+f);
+//	            }
+			}catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+			
+//			ConfigItems.itemBootsTraveller = new ItemBootsTraveller(ThaumcraftApi.armorMatSpecial, 4, 3)
+//			{
+//				@Override
+//				public boolean getIsRepairable(ItemStack stack1, ItemStack stack2)
+//				{
+//					System.out.println("wut wut");
+//					return stack2.isItemEqual(new ItemStack(Items.leather)) ? true : super.getIsRepairable(stack1, stack2);
+//				}
+//			}.setUnlocalizedName("BootsTraveller");
+			//GameRegistry.registerItem(ConfigItems.itemBootsTraveller, "BootsTraveller", "Thaumcraft");
+		}
+		//	ThaumcraftApi.armorMatSpecial.customCraftingMaterial = Items.leather;
+
 		//Add aspects where needed
 		AspectList addAspects = new AspectList().add(Aspect.TREE, 4).add(Aspect.CLOTH, 2).add(Aspect.MECHANISM, 2).add(Aspect.AIR, 2);
 		ThaumcraftApi.registerObjectTag(new ItemStack(BlockWoodenDevice,1,1),addAspects);
@@ -431,7 +479,7 @@ public class WGContent
 		ThaumcraftApi.registerObjectTag("gemTopaz", new AspectList().add(Aspect.CRYSTAL, 2).add(Aspect.GREED, 2));
 		ThaumcraftApi.registerObjectTag("gemTanzanite", new AspectList().add(Aspect.CRYSTAL, 2).add(Aspect.GREED, 2));
 		ThaumcraftApi.registerObjectTag("gemMalachite", new AspectList().add(Aspect.CRYSTAL, 2).add(Aspect.GREED, 2));
-		
+
 		//Botania
 		addOreAspects("Manasteel", new AspectList().add(Aspect.MAGIC, 1), false);
 		addOreAspects("Terrasteel", new AspectList().add(Aspect.EARTH, 1).add(Aspect.MAGIC, 1), false);

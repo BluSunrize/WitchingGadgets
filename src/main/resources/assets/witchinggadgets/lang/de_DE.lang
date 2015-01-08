@@ -10,12 +10,15 @@ tile.WG_StoneDevice.obsidianDecoration2.name=Obsidian Rune
 tile.WG_StoneDevice.sarcophagus.name=Sarkophag
 tile.WG_StoneDevice.timeStone.name=Reifungsstein
 tile.WG_StoneDevice.blastFurnace.name=H�llischer Hochofen
+
 tile.WG_WoodenDevice.spinningWheel.name=Spinnrad
 tile.WG_WoodenDevice.loom.name=Webstuhl
 tile.WG_WoodenDevice.cobbleGen.name=Arkaner Stein Extrudierer
 tile.WG_WoodenDevice.armorStand.name=R�stungsst�nder
 tile.WG_WoodenDevice.cuttingTable.name=Schneidetisch
 tile.WG_WoodenDevice.saunaStove.name=Arkaner Sauna Ofen
+
+tile.WG_MetalDevice.essentiaPump.name=Essentia Pumpe
 tile.WG_MetalDevice.terraformer.name=Arkaner Terrestrischer Erneuerer
 tile.WG_MetalDevice.tfFocusPlains.name=Terrestrischer Fokus: Ebene
 tile.WG_MetalDevice.tfFocusColdTaiga.name=Terrestrischer Fokus: Verschneite Taiga
@@ -44,13 +47,14 @@ item.WG_Material.clusterCobalt.name=Nativer Kobaltklumpen
 item.WG_Material.clusterArdite.name=Nativer Arditklumpen
 item.WG_Material.clusterNickel.name=Nativer Nickelklumpen
 item.WG_Material.clusterFZDarkIron.name=Nativer Dunkeleisenklumpen
-item.WG_Material.bucketFZDarkIron.name=Eimer mit geschmolzenem Dunkeleisen
+item.WG_Material.guidingString.name=Wegzeigendes Garn
 item.WG_Material.primordialShard.name=Urspr�ngliche Scherbe
 item.WG_Material.gemstoneDust.name=Edelsteinstaub
+
 item.WG_Cluster.name=Nativer Klumpen
-item.WG_Bag.normal.name=Tasche der Kniffe
-item.WG_Bag.void.name=Bag Tasche der Leerenverbindung
-item.WG_Bag.ender.name=Tasche der Enderverbindung
+item.WG_Bag.normal.name=Trick-Beutel
+item.WG_Bag.void.name=Bag Beutel der Leerenverbindung
+item.WG_Bag.ender.name=Beutel der Enderverbindung
 item.WG_ThaumiumShears.name=Thaumium-Schere
 item.WG_MagicFood.sweetwart.name=S��warze
 item.WG_MagicFood.nethercake.name=Netherkuchen
@@ -78,7 +82,7 @@ item.WG_EliteArmorChest.DEMONIC_1.name=K�rass des Asraels
 item.WG_EliteArmorLegs.DEMONIC_2.name=Beinschienen der Lycaner
 item.WG_EliteArmorBoots.DEMONIC_3.name=Klauen des Behemoths
 
-item.WG_InfusedGem.name=Infused Gem Infudierter Edelstein
+item.WG_InfusedGem.name=Infudierter Edelstein
 item.WG_InfusedGem.innert.name=Inaktiver Edelstein
 
 item.WG_PrimordialGlove.name=Urspr�nglicher Panzerhandschuh
@@ -96,7 +100,7 @@ item.WG_Baubles.titleCrimsonCult.name=Title: Crimson Cult Titel: Karmesinkult
 wg.title.crimsonKnight=Karmesin Ritter
 wg.title.crimsonPraetor=Karmesin Pr�tor
 
-item.WG_ScanCamera.name=Thaumic Iconograph Box
+item.WG_ScanCamera.name=Thaumischer Ikonograph
 item.WG_CrystalFlask.name=Kristallkapsel
 
 # -- Creative --
@@ -111,37 +115,37 @@ enchantment.wg.stealth=Tarnung
 enchantment.wg.backstab=Hinterh�ltiges Stechen
 #
 # -- Random bits of text --
-wg.chat.notyourbag=§7This bag belongs to§r %1$s! §7You are not allowed to open it.§r
-wg.chat.bagunlocked=§7The bag was unlocked, others can now open it.§r
-wg.chat.baglocked=§7The bag was locked, no one but you can open it.§r
+wg.chat.notyourbag=§7Dieser Beutel geh�rt§r %1$s! §7Du darfst ihn nicht �ffnen!§r
+wg.chat.bagunlocked=§7Der Beutel wurde entriegelt, andere k�nnen ihn nun �ffnen.§r
+wg.chat.baglocked=§7Der Beutel wurde vertriegelt, andere k�nnen ihn nicht �ffnen.§r
 
-wg.desc.noGlide=Gliding disabled
+wg.desc.noGlide=Gleiten abgeschaltet
 
-wg.gui.visSize=Vis Capacity
-wg.gui.shiftForAspectList=§7Hold §aShift§7 for a list of Aspects§r
-wg.gui.activeGem=Active Gem
-wg.gui.passiveGem=Passive Gem
-wg.chat.gem.shatter=Your Infused Gem shattered!
+wg.gui.visSize=Vis Kapazit�t
+wg.gui.shiftForAspectList=§aShift§7 halten f�r eine Liste der Aspekte§r
+wg.gui.activeGem=Activer Stein
+wg.gui.passiveGem=Passiver Stein
+wg.chat.gem.shatter=Dein Infudierter Stein ist zersplittert!
 wg.desc.gemcut.POINT=Point Cut
 wg.desc.gemcut.TABLE=Table Cut
 wg.desc.gemcut.STEP=Step Cut
 wg.desc.gemcut.ROSE=Rose Cut
 wg.desc.gemcut.OVAL=Oval Cut
-wg.desc.gemaffinity=Natural Affinities:
-wg.desc.gemaversion=Natural Aversions:
+wg.desc.gemaffinity=Nat�rliche Affinit�ten:
+wg.desc.gemaversion=Nat�rliche Aversionen:
 
-wg.desc.ctrlForAspectList=§7Hold §aCtrl§7 for a list of Aspects§r
+wg.desc.ctrlForAspectList=§aCtrl§7 halten f�r eine Liste der Aspekte§r
 wg.desc.scanCompleted=Scan Completed
 
-wg.desc.gearSlot.tg.0=Equipped in the §aCloak§7 slot
-wg.desc.gearSlot.tg.1=Equipped in the §aPauldron§7 slot
-wg.desc.gearSlot.tg.2=Equipped in the §aVambrace§7 slot
-wg.desc.gearSlot.tg.3=Equipped in the §aTitle§7 slot
-wg.desc.gearSlot.bauble.RING=Equipped in the §aRing§7 slot
-wg.desc.gearSlot.bauble.BELT=Equipped in the §aBelt§7 slot
-wg.desc.gearSlot.bauble.AMULET=Equipped in the §aAmulet§7 slot
+wg.desc.gearSlot.tg.0=Im §aUmhangs§7 Slot ausr�sten
+wg.desc.gearSlot.tg.1=Im §aSchulterpanzer§7 Slot ausr�sten
+wg.desc.gearSlot.tg.2=Im §aArmschienen§7 Slot ausr�sten
+wg.desc.gearSlot.tg.3=Im §aTitel§7 Slot ausr�sten
+wg.desc.gearSlot.bauble.RING=Im §aRing§7 Slot ausr�sten
+wg.desc.gearSlot.bauble.BELT=Im §aG�rtel§7 Slot ausr�sten
+wg.desc.gearSlot.bauble.AMULET=Im §aAmulet§7 Slot ausr�sten
 
-wg.desc.filteredItems=Accepted Items:
+wg.desc.filteredItems=Zugelassene Gegenst�nde:
 
 wg.gui.search=Search
 wg.chat.nodeContents.primal=Primal Aspects within this node: §eAer: %1$s§f, §2Terra: %2$s§f, §cIgnis: %3$s§f, §3Aqua: %4$s§f, §7Ordo: %5$s§f, §8Perditio: %6$s
