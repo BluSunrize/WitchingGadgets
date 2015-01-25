@@ -17,6 +17,7 @@ tile.WG_WoodenDevice.cobbleGen.name=Thaumic Stone Extruder
 tile.WG_WoodenDevice.armorStand.name=Armor Stand
 tile.WG_WoodenDevice.cuttingTable.name=Cutting Table
 tile.WG_WoodenDevice.saunaStove.name=Thaumic Sauna Stove
+tile.WG_WoodenDevice.labelLibrary.name=Aspect Library
 
 tile.WG_MetalDevice.essentiaPump.name=Essentia Pump
 tile.WG_MetalDevice.terraformer.name=Arcane Terrestrial Reformer
@@ -25,6 +26,7 @@ tile.WG_MetalDevice.tfFocusColdTaiga.name=Terrestrial Focus: Cold Taiga
 tile.WG_MetalDevice.tfFocusDesert.name=Terrestrial Focus: Desert
 tile.WG_MetalDevice.tfFocusJungle.name=Terrestrial Focus: Jungle
 tile.WG_MetalDevice.tfFocusHell.name=Terrestrial Focus: Hell
+tile.WG_MetalDevice.voidmetalBlock.name=Void metal Block
 
 tile.WG_RoseVine.name=Rose Vines
 tile.WG_CustomAir.name=Glimmer of Light
@@ -50,7 +52,7 @@ item.WG_Material.clusterArdite.name=Ardite Cluster
 item.WG_Material.clusterNickel.name=Nickel Cluster
 item.WG_Material.clusterFZDarkIron.name=Dark Iron Cluster
 item.WG_Material.guidingString.name=Guiding Thread
-item.WG_Material.primordialShard.name=Primordial Shard
+item.WG_Material.powerlessPearl.name=Powerless Pearl
 item.WG_Material.gemstoneDust.name=Gemstone Dust
 
 item.WG_Cluster.name=Cluster
@@ -96,6 +98,11 @@ item.WG_PrimordialGlove.name=Primordial Gauntlet
 item.WG_PrimordialHammer.name=Primordial Warhammer
 item.WG_PrimordialAxe.name=Primordial Greataxe
 item.WG_PrimordialSword.name=Primordial Claymore
+
+item.WG_PrimordialHelm.name=Primordial Helm
+item.WG_PrimordialChest.name=Primordial Cuirass
+item.WG_PrimordialLegs.name=Primordial Greaves
+item.WG_PrimordialBoots.name=Primordial Boots
 
 item.WG_Baubles.ring_primordial.name=Primordial Ring
 item.WG_Baubles.ring_lifeProtection.name=Ring of Life Protection
@@ -170,8 +177,11 @@ wg.chat.infusionWarning.noPartnerItem=Pedestal at %1$s, %2$s, %3$s should have a
 wg.chat.infusionWarning.noPartnerPedestal=Pedestal at %1$s, %2$s, %3$s lacks a symmetrical partner
 wg.chat.infusionWarning.noPartnerStabilizer=Stabilizer at %1$s, %2$s, %3$s lacks a symmetrical partner
 wg.chat.infusionInfo.stabilityTotal=Total Stability booster: %1$s
-				
+wg.chat.infusionWarning.essentiaMod=This Infusion Enchantment will consume %1$s times the amount of essentia displayed in the Thaumonomicon.
+		
 wg.potionKnockbackRes=Knockback Res.
+wg.potionDissolve=Dissolving
+wg.potionCinderCoat=Cinder Coat
 
 # -- Research --
 # Formatting:
@@ -190,7 +200,6 @@ wg.potionKnockbackRes=Knockback Res.
 #  witchinggadgets_research_page.KEY.NUMBER=Research text on page of number NUMBER
 #
 tc.research_category.WITCHGADG=Witching Gadgets
-witchinggadgets_research_page.TESTPAGE=ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0 1 2 3 4 5 6 7 8 9 10 :;,./\()
 #
 witchinggadgets_research_name.VORPALBLADE=Vorpal Blade
 witchinggadgets_research_text.VORPALBLADE=SNICKER-SNACK!
@@ -201,6 +210,14 @@ witchinggadgets_research_text.WALLMIRROR=[WG] The most magical of all!
 witchinggadgets_research_page.WALLMIRROR.1=Further delving into the magic of the mirrors has lead you to the discovery of a safe haven within the void between worlds.<BR>While this location is brimming with magic, otherwise it appears to be void of anything. It has no visible layer of flooring, yet somehow you can stand there.<BR>This space seems to be an excellent way of traveling. Since it is vast and empty as well, it should be easy to store any of your belongings in this void-between-worlds
 witchinggadgets_research_page.WALLMIRROR.2=§lAccess:§r<BR>Place the mirror wherever you like. When you'd like to open the portal, simply right-click it. The dimension accessed through it is the same from any mirror, but portals out of it are only created where it is entered. This means that you can only leave where another Mirror has been placed in the Overworld.<BR><BR>§lNavigation:§r<BR>An invisible floor will spawn in a 5x5 below you wherever you walk. These blocks can be replaced with normal blocks by right-clicking them, allowing you to build there. Jump to ascend, the floor will follow you. Holding the sneak key will make you descend.
 #
+#WGPOTIONS
+witchinggadgets_research_name.WGPOTIONS=Status Effects
+witchinggadgets_research_text.WGPOTIONS=[WG] Milk is not always an option! 
+witchinggadgets_research_page.WGPOTIONS.1=When delving into the arcane, you may come about certain afflictions. This is a list of the known ones:<BR><IMG>witchinggadgets:textures/gui/potioneffects.png:18:198:18:18:1</IMG>§nKnockback resistance:§r  Grants the afflicted a chance to resist knockback, with a chance of 33% per level.<IMG>witchinggadgets:textures/gui/potioneffects.png:36:198:18:18:1</IMG>§nDissolving:§r  The afflicted is covered in a fluid akin to 'Liquid Death', damaging them over time. If they succumb to it, they drop crystalized aspects.
+witchinggadgets_research_page.WGPOTIONS.2=<IMG>witchinggadgets:textures/gui/potioneffects.png:54:198:18:18:1</IMG>§nCinder Coat:§r  The afflicted is coated in magical cinder, which heightens the potency of flames. All fire damage is multiplied based on the strength of the effect.
+
+
+
 witchinggadgets_research_name.ETHEREALWALL=Ethereal Wall
 witchinggadgets_research_text.ETHEREALWALL=[WG] Hidden in plain sight
 witchinggadgets_research_page.ETHEREALWALL.1=Refining the enchantments on arcane stone just a bit more has led to an interesting discovery. Simply applying a redstone signal to this new type of stone will make it §onon-corporeal§r, allowing you to pass through it.<BR>This also affects any other Etheral Wall connected to the powered block.<BR>Furthermore, you can disguise this stone to the appearance of most common blocks. Simply click it with a block in hand it and this one will take its texture. Sneak and click it with an empty hand to remove the disguise.
@@ -243,6 +260,10 @@ witchinggadgets_research_page.CALCULATOR.2=§oThe highest infusion instability k
 witchinggadgets_research_name.LABYRINTHSTRING=Guiding Thread
 witchinggadgets_research_text.LABYRINTHSTRING=[WG] Ariadne would be proud
 witchinggadgets_research_page.LABYRINTHSTRING.1=Mazes and labyrinths once were a favourable way of warding secrets against intruders. The real danger of course, is not finding your way back out.<BR>In order to help with that, you have designed the Guiding Thread, an item that leaves a trail of light as you progress through dark and windy place. Rightclick to activate or deactivate it. While active, it will remember every turn you make. The light is only visible while you hold it though. Sneak+click to wipe it's memory.
+#
+witchinggadgets_research_name.LABELLIB=Aspect Library
+witchinggadgets_research_text.LABELLIB=[WG] Indexing made easy!
+witchinggadgets_research_page.LABELLIB.1=While managing and archiving the different kinds of essentia you deal with, you have found that labeling them is quite tedious work. In order to no longer bottle up essentia and rub it against a label to get the the right colour, you've designed the aspect library. It is a block that remembers every aspect you have discovered so far and applies it to labels. Simply place a label within it and select an aspect, and it will attune it accordingly.
 
 witchinggadgets_research_page.ENCHFABRIC.r1=<IMG>witchinggadgets:textures/gui/research/weavingRecipes2.png:0:0:255:255:0.5</IMG>
 #
@@ -303,9 +324,9 @@ witchinggadgets_research_name.ROSEVINE=Rose Vines
 witchinggadgets_research_text.ROSEVINE=[WG] Pointy!
 witchinggadgets_research_page.ROSEVINE.1=These thorny plants are the first results of a Thaumaturge delving into Herbology. While not very decorative, their sharp thorns and quick growth makes them ideal for setting up a natural security perimeter for any §mcastle§r base with §ma sleeping beauty§r treasure inside to safeguard. Spreading vines can be harvested with Shears.
 #
-witchinggadgets_research_name.VITALIZEDIRT=Vitalize Dirt
-witchinggadgets_research_text.VITALIZEDIRT=[WG] Grass grows, spores fly
-witchinggadgets_research_page.VITALIZEDIRT.1=One of the most basic alchemic procedures is that of putting some life back into a cubic meter of dirt, turning it into grass or mycellium, depending on the thaumic aspects used. Adding Perdito will drain it of it's life even further, creating sand. Any hobby-mage can do this.
+witchinggadgets_research_name.ALCHEMICALTRANSMOGRIFY=Alchemical Transmogrification
+witchinggadgets_research_text.ALCHEMICALTRANSMOGRIFY=[WG] Grass grows, spores fly
+witchinggadgets_research_page.ALCHEMICALTRANSMOGRIFY.1=Expanding your wide array of alchemical processes, these transmutations can be used to revitalize dirt, pulverize cobblestone, or purify gravel.
 #
 witchinggadgets_research_name.PURECINNABAR=Cinnabar Purification
 witchinggadgets_research_text.PURECINNABAR=[WG] Purification of cinnabar into native clusters
@@ -448,6 +469,55 @@ witchinggadgets_research_name.PRIMORDIALGLOVE=Primordial Gauntlet
 witchinggadgets_research_text.PRIMORDIALGLOVE=[WG] Other items sold seperately
 witchinggadgets_research_page.PRIMORDIALGLOVE.1=The knowledge of the Primordial Pearl let you decipher some of the eldritch scribbles you dealt with before. They contained plans for an armorset designed to channel the energies of the void through gemstones. Sadly, only sketches of the gauntlet were decipherable.<BR>This gauntlet features an inbuilt §5Node Transducer§0, and when its claws close upon a node, it will never let it go again, unless it is replaced by another.<BR>The five sockets on this device will accept infused gems, and their power can be channeled through it, while their recharge speed is based on the aspects of the contained node.
 witchinggadgets_research_page.PRIMORDIALGLOVE.2=It should be noted that the sockets will stabilize the gems inside them, so they will never break upon use, but simply recharge.<BR>To select the active gem, the same keybinding as for switching wand foci is used. Sneak while pressign that key to open the inventory in order to add or remove gems.<BR>The pearl is not consumed during the crafting process.
+
+#PRIMORDIALGEARSET
+witchinggadgets_research_name.PRIMORDIALGEARSET=Primal Revelation
+witchinggadgets_research_text.PRIMORDIALGEARSET=[WG] War on the Eldritch!
+witchinggadgets_research_page.PRIMORDIALGEARSET.1=Like a flash of lightning, the scribbles unrecognizeable before now seem crystal clear. You have restored the pages on Primordial Smithing, the art of highenergetic infusion. With it you shall create pieces of gear that surpass your current by lengths. It's designs indicate clearly that these items were not meant for travelling Thaumaturges. This is preparation for the unavoidable conflict with the creatures of the Void. And what's best to combat them than the metal created with their knowledge?<BR>You shall mold items from full blocks of Void metal, items of raw primal power, to protect and arm you.
+witchinggadgets_research_page.PRIMORDIALGEARSET.2=But that's not all! The runes and sockets on said gear will be the perfect for imbuing processes, stengthening their potential even further. Each piece is infused with elemental abilities, increasing their potential immensly! 
+
+#PRIMORDIALWEAPONRY
+witchinggadgets_research_name.PRIMORDIALWEAPONRY=Primordial Weaponry
+witchinggadgets_research_text.PRIMORDIALWEAPONRY=[WG] Mobile primal launch platform
+witchinggadgets_research_page.PRIMORDIALWEAPONRY.1=Designed only to slay creatures of evil, the Primordial Weapons have surpassed any magical weapon you may have crafted before. Not only do all carry a unique innert ability, each is tuneable to a primal affinity, granting it further effects. And don't be scared by their massive apearance, for their wielder does not feel their weight, unlike the target upon which they are swung.
+witchinggadgets_research_page.PRIMORDIALWEAPONRY.2=The Primordial Claymore seems to assist you in aiming your strikes. The blade commonly hits your foe's neck, resulting in decapitation.<BR>The Primordial Warhammer uses its immense weight to literally squash your foes. This results in double damage done to slimes and a chance of heavy concussions among all others. It also breaks blocks in a 3x3 when digging. <BR>The Primordial Greataxe cleaves through foliage like a hot knife through butter, but splits apart armor just aswell. The damage of the weapon increases based on the armor of the enemy, and the armor itself suffers from increased damage aswell. 
+witchinggadgets_research_page.PRIMORDIALWEAPONRY.3=§l§n     Primal Affinities:     §r<BR>§nAer:§r The weapon hits multiple enemies instead of one.                  §nTerra:§r Upon blocking with the weapon, you get a resistance debuff, which stacks up to level 3.              §nIgnis:§r Strikes set the target alight, and coats it in cinder to increase all fire damage dealt to it.       §nAqua:§r The target will be coated in dissolving fluid, damaging it over time. Afflicted targets will drop crystallized essence.            §nOrdo:§r The experience value of slaying foes is increased immensely, making them drop far more exp orbs.  §nPerditio:§r Attacks leave the target weakened and famished.
+
+#PRIMORDIALCLAYMORE
+witchinggadgets_research_name.PRIMORDIALCLAYMORE=Primordial Claymore
+witchinggadgets_research_text.PRIMORDIALCLAYMORE=[WG] Off with their heads!
+witchinggadgets_research_page.PRIMORDIALCLAYMORE.1=The Primordial Claymore exists solely to combat and slay creatures of evil. Its weight is tremendous, yet somehow, the user does not feel it. Unlike the victim at which it is swung. Its blade seems to aid you in aiming for your foes neck, resulting in quite frequent decapitations.
+#PRIMORDIALHAMMER
+witchinggadgets_research_name.PRIMORDIALHAMMER=Primordial Warhammer
+witchinggadgets_research_text.PRIMORDIALHAMMER=[WG] Squish
+witchinggadgets_research_page.PRIMORDIALHAMMER.1=The Primordial Warmhammer. Not only is its hammerhead enormous, it seems to be radiating at an even larger scale, breaking blocks in a 3x3 area infront of you.<BR>The effect on slime-like creatures is devestating, doubling the damage and splattering them everywhere.
+#PRIMORDIALGREATAXE
+witchinggadgets_research_name.PRIMORDIALGREATAXE=Primordial Greataxe
+witchinggadgets_research_text.PRIMORDIALGREATAXE=[WG] Cleave them apart
+witchinggadgets_research_page.PRIMORDIALGREATAXE.1=The Primordial Greataxe cleaves through foilage and wood like a hot knife through butter. But it's sharp edges cut through much more than wood.
+
+witchinggadgets_research_name.PRIMORDIALARMOR=Primordial Armor
+witchinggadgets_research_text.PRIMORDIALARMOR=[WG] Bipedal tank
+witchinggadgets_research_page.PRIMORDIALARMOR.1=Primordial Armor perfects the protection against your foes. It will block quite a lot of damage on its own, but it is also receptive for runic enchancements, allowing you to strengthen it even further. In addition to that, it has different effects based on its primal affinity, which you can switch in the active ability menu. §o(Default Hotkey: R)§r<BR>Just like Fortress Armor, it can also be outfitted with Goggles of Revealing and the respective faceplates.
+witchinggadgets_research_page.PRIMORDIALARMOR.2=§l§n     Primal Affinities:     §r<BR>§nAer:§r Any projectile shot at you is caught by a gust of air and propelled right back at the shooter. §nIgnis:§r bla bla fire aura bla bla?     §nTerra:§r Increased protection against attacks that would normally penetrate your armor.                        §nAqua:§r The armor will cure minor maladies afflicting the user. This works on poison, blindness, withering and nausea, but not on warp effects. §nOrdo:§r blablabla Healing? blablabla §nPerditio:§r Most hits on the user are avenged by striking the attacker with blindness and slowness, leaving them open for retaliation strikes. 
+#witchinggadgets_research_name.PRIMORDIALHELMET=Primordial Helm
+#witchinggadgets_research_text.PRIMORDIALHELMET=[WG] 
+#witchinggadgets_research_page.PRIMORDIALHELMET.1=
+#witchinggadgets_research_name.PRIMORDIALCUIRASS=Primordial Cuirass
+#witchinggadgets_research_text.PRIMORDIALCUIRASS=[WG] 
+#witchinggadgets_research_page.PRIMORDIALCUIRASS.1=
+#witchinggadgets_research_name.PRIMORDIALGREAVES=Primordial Greaves
+#witchinggadgets_research_text.PRIMORDIALGREAVES=[WG] 
+#witchinggadgets_research_page.PRIMORDIALGREAVES.1=
+#witchinggadgets_research_name.PRIMORDIALBOOTS=Primordial Boots
+#witchinggadgets_research_text.PRIMORDIALBOOTS=[WG] 
+#witchinggadgets_research_page.PRIMORDIALBOOTS.1=
+
+#EMPOWERPEARL
+witchinggadgets_research_name.EMPOWERPEARL=Pearl Revitalization
+witchinggadgets_research_text.EMPOWERPEARL=[WG] 120 bpm
+witchinggadgets_research_page.EMPOWERPEARL.1=The power that once pulsed through Primordial Pearl is gone. Well, not gone, just infused into a different item. But not all hope is lost! The pearl itself still exists, you just have to empower it once more, by infusing it...
+
 
 #VOIDBAG
 witchinggadgets_research_name.VOIDBAG=Voidlinked Bag

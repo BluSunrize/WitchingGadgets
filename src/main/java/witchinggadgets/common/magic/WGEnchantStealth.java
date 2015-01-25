@@ -9,7 +9,7 @@ public class WGEnchantStealth extends Enchantment
 {
 	public WGEnchantStealth(int id)
 	{
-		super(id, 0, EnumEnchantmentType.armor_feet);
+		super(id, 0, EnumEnchantmentType.armor);
 		this.setName("wg.stealth");
 	}
 
@@ -33,7 +33,8 @@ public class WGEnchantStealth extends Enchantment
 	@Override
 	public boolean canApply(ItemStack stack)
 	{
-		return stack!=null&&stack.getItem() instanceof ItemArmor&&((ItemArmor)stack.getItem()).armorType==2 || super.canApply(stack);
+		boolean b = stack!=null && stack.getItem() instanceof ItemArmor && ( ((ItemArmor)stack.getItem()).armorType==2||((ItemArmor)stack.getItem()).armorType==3 );
+		return b;
 	}
 
 	@Override

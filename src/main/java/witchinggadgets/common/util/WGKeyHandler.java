@@ -6,10 +6,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraftforge.common.ForgeHooks;
 import travellersgear.api.TravellersGearAPI;
-import witchinggadgets.WitchingGadgets;
 import witchinggadgets.common.WGContent;
 import witchinggadgets.common.items.tools.ItemPrimordialGlove;
 import witchinggadgets.common.util.network.PacketPrimordialGlove;
+import witchinggadgets.common.util.network.WGPacketPipeline;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -80,7 +80,7 @@ public class WGKeyHandler
 			if(thaumcraftFKey!=null && thaumcraftFKey.getIsKeyPressed() && !keyDown[1])
 			{
 				if(player.isSneaking() && player.getCurrentEquippedItem()!=null && player.getCurrentEquippedItem().getItem() instanceof ItemPrimordialGlove)
-					WitchingGadgets.packetPipeline.sendToServer(new PacketPrimordialGlove(Minecraft.getMinecraft().thePlayer, (byte)1, 0));
+					WGPacketPipeline.INSTANCE.sendToServer(new PacketPrimordialGlove(Minecraft.getMinecraft().thePlayer, (byte)1, 0));
 				if(gemLock)
 				{
 					gemLock=false;

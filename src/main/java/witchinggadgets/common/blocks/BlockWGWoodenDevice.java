@@ -30,6 +30,7 @@ import witchinggadgets.WitchingGadgets;
 import witchinggadgets.client.render.BlockRenderWoodenDevice;
 import witchinggadgets.common.blocks.tiles.TileEntityCobbleGen;
 import witchinggadgets.common.blocks.tiles.TileEntityCuttingTable;
+import witchinggadgets.common.blocks.tiles.TileEntityLabelLibrary;
 import witchinggadgets.common.blocks.tiles.TileEntitySaunaStove;
 import witchinggadgets.common.blocks.tiles.TileEntitySnowGen;
 import witchinggadgets.common.blocks.tiles.TileEntitySpinningWheel;
@@ -38,7 +39,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockWGWoodenDevice extends BlockContainer implements IWandable
 {
-	public static String[] subNames = {"spinningWheel","snowGen","cobbleGen","cuttingTable","saunaStove"};
+	public static String[] subNames = {"spinningWheel","snowGen","cobbleGen","cuttingTable","saunaStove","labelLibrary"};
 	IIcon[] icons = new IIcon[subNames.length];
 	IIcon saunaTop;
 
@@ -117,7 +118,7 @@ public class BlockWGWoodenDevice extends BlockContainer implements IWandable
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int idk, float what, float these, float are)
 	{
 		int meta = world.getBlockMetadata(x, y, z);
-		if(meta == 0)
+		if(meta==0)
 		{
 			TileEntitySpinningWheel tile = (TileEntitySpinningWheel)world.getTileEntity(x,y,z);
 			if (tile == null || player.isSneaking())
@@ -125,7 +126,7 @@ public class BlockWGWoodenDevice extends BlockContainer implements IWandable
 			player.openGui(WitchingGadgets.instance, 0, world, x, y, z);
 			return true;
 		}
-		if(meta == 3)
+		if(meta==3)
 		{
 			if(!player.isSneaking())
 			{
@@ -133,7 +134,7 @@ public class BlockWGWoodenDevice extends BlockContainer implements IWandable
 				return true;
 			}
 		}
-		if(meta == 4)
+		if(meta==4)
 		{
 			FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(player.inventory.getCurrentItem());
 			if (fs != null)
@@ -159,6 +160,12 @@ public class BlockWGWoodenDevice extends BlockContainer implements IWandable
 					world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "game.neutral.swim", 0.33F, 1.0F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.3F);
 				}
 			}
+		}
+		if(meta==5 && !player.isSneaking())
+		{
+			if(!world.isRemote)
+				player.openGui(WitchingGadgets.instance, 8, world, x, y, z);
+			return true;
 		}
 		return false;
 	}
@@ -225,6 +232,8 @@ public class BlockWGWoodenDevice extends BlockContainer implements IWandable
 			TileEntitySaunaStove tile = (TileEntitySaunaStove)world.getTileEntity(x,y,z);
 			tile.prepareAreaCheck();
 		}
+		else if(meta == 5)
+			((TileEntityLabelLibrary)world.getTileEntity(x,y,z)).facing = f;
 	}
 
 
@@ -259,6 +268,8 @@ public class BlockWGWoodenDevice extends BlockContainer implements IWandable
 			return new TileEntityCuttingTable();
 		case 4:
 			return new TileEntitySaunaStove();
+		case 5:
+			return new TileEntityLabelLibrary();
 			//		case 4:
 			//			return new TileEntityThaumicApplicator();
 		}
@@ -315,6 +326,38 @@ public class BlockWGWoodenDevice extends BlockContainer implements IWandable
 		if(world.getTileEntity(x,y,z) instanceof TileEntityCuttingTable)
 		{
 			TileEntityCuttingTable tile = (TileEntityCuttingTable)world.getTileEntity(x,y,z);
+
+			for(int i=0;i<tile.getSizeInventory();i++)
+			{
+				ItemStack stack = tile.getStackInSlot(i);
+				if (stack != null)
+				{
+					float f = world.rand.nextFloat() * 0.8F + 0.1F;
+					float f1 = world.rand.nextFloat() * 0.8F + 0.1F;
+					EntityItem entityitem;
+					for (float f2 = world.rand.nextFloat() * 0.8F + 0.1F; stack.stackSize > 0; world.spawnEntityInWorld(entityitem))
+					{
+						int k1 = world.rand.nextInt(21) + 10;
+						if (k1 > stack.stackSize)
+							k1 = stack.stackSize;
+						stack.stackSize -= k1;
+						entityitem = new EntityItem(world, x + f, y + f1, z + f2, new ItemStack(stack.getItem(), k1, stack.getItemDamage()));
+						float f3 = 0.05F;
+						entityitem.motionX = (float)world.rand.nextGaussian() * f3;
+						entityitem.motionY = (float)world.rand.nextGaussian() * f3 + 0.2F;
+						entityitem.motionZ = (float)world.rand.nextGaussian() * f3;
+
+						if (stack.hasTagCompound())
+						{
+							entityitem.getEntityItem().setTagCompound((NBTTagCompound)stack.getTagCompound().copy());
+						}
+					}
+				}
+			}
+		}
+		if(world.getTileEntity(x,y,z) instanceof TileEntityLabelLibrary)
+		{
+			TileEntityLabelLibrary tile = (TileEntityLabelLibrary)world.getTileEntity(x,y,z);
 
 			for(int i=0;i<tile.getSizeInventory();i++)
 			{

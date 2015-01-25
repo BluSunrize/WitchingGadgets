@@ -13,10 +13,12 @@ import thaumcraft.client.fx.ParticleEngine;
 import thaumcraft.client.fx.particles.FXEssentiaTrail;
 import thaumcraft.client.fx.particles.FXWisp;
 import travellersgear.api.TravellersGearAPI;
+import witchinggadgets.asm.pouch.GuiPatchedFocusPouch;
 import witchinggadgets.client.fx.EntityFXSweat;
 import witchinggadgets.client.gui.GuiBag;
 import witchinggadgets.client.gui.GuiCloakBag;
 import witchinggadgets.client.gui.GuiCuttingTable;
+import witchinggadgets.client.gui.GuiLabelLibrary;
 import witchinggadgets.client.gui.GuiLoom;
 import witchinggadgets.client.gui.GuiMagicalTileLock;
 import witchinggadgets.client.gui.GuiPrimordialGlove;
@@ -36,6 +38,7 @@ import witchinggadgets.client.render.ItemRenderWallMirror;
 import witchinggadgets.client.render.TileRenderCobbleGen;
 import witchinggadgets.client.render.TileRenderCuttingTable;
 import witchinggadgets.client.render.TileRenderEssentiaPump;
+import witchinggadgets.client.render.TileRenderLabelLibrary;
 import witchinggadgets.client.render.TileRenderLoom;
 import witchinggadgets.client.render.TileRenderMagicalTileLock;
 import witchinggadgets.client.render.TileRenderMirrorPortal;
@@ -51,6 +54,7 @@ import witchinggadgets.common.WGContent;
 import witchinggadgets.common.blocks.tiles.TileEntityCobbleGen;
 import witchinggadgets.common.blocks.tiles.TileEntityCuttingTable;
 import witchinggadgets.common.blocks.tiles.TileEntityEssentiaPump;
+import witchinggadgets.common.blocks.tiles.TileEntityLabelLibrary;
 import witchinggadgets.common.blocks.tiles.TileEntityLoom;
 import witchinggadgets.common.blocks.tiles.TileEntityMagicalTileLock;
 import witchinggadgets.common.blocks.tiles.TileEntityMirrorPortal;
@@ -93,6 +97,7 @@ public class ClientProxy extends CommonProxy
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMagicalTileLock.class, new TileRenderMagicalTileLock());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySarcophagus.class, new TileRenderSarcophagus());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCuttingTable.class, new TileRenderCuttingTable());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLabelLibrary.class, new TileRenderLabelLibrary());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySaunaStove.class, new TileRenderSaunaStove());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTerraformer.class, new TileRenderTerraformer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTerraformFocus.class, new TileRenderTerraformFocus());
@@ -136,8 +141,12 @@ public class ClientProxy extends CommonProxy
 
 		if(ID == 3)return new GuiBag(player.inventory, world);
 		if(ID==4||ID==5)return new GuiCloakBag(player.inventory, world, ID==4?TravellersGearAPI.getExtendedInventory(player)[0]:BaublesApi.getBaubles(player).getStackInSlot(3) );
+		
+		if(ID == 6)return new GuiPatchedFocusPouch(player.inventory, world, x, y, z);
 
 		if(ID == 7)return new GuiPrimordialGlove(player.inventory, world, x, y, z);
+		
+		if(ID == 8)return new GuiLabelLibrary(player.inventory, (TileEntityLabelLibrary)tile);
 
 		if(ID == 9)return new GuiCuttingTable(player.inventory, (TileEntityCuttingTable)tile);
 

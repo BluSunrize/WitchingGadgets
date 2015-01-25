@@ -4,12 +4,11 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,27 +26,21 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.input.Keyboard;
 
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.crafting.IInfusionStabiliser;
+import thaumcraft.api.crafting.InfusionEnchantmentRecipe;
 import thaumcraft.api.nodes.INode;
-import thaumcraft.api.nodes.NodeModifier;
-import thaumcraft.api.nodes.NodeType;
 import thaumcraft.api.research.ScanResult;
 import thaumcraft.common.Thaumcraft;
-import thaumcraft.common.config.Config;
 import thaumcraft.common.lib.crafting.ThaumcraftCraftingManager;
 import thaumcraft.common.lib.network.PacketHandler;
 import thaumcraft.common.lib.network.playerdata.PacketScannedToServer;
 import thaumcraft.common.lib.research.ResearchManager;
 import thaumcraft.common.lib.research.ScanManager;
-import thaumcraft.common.lib.world.ThaumcraftWorldGenerator;
-import thaumcraft.common.lib.world.biomes.BiomeHandler;
 import thaumcraft.common.tiles.TileInfusionMatrix;
 import thaumcraft.common.tiles.TilePedestal;
 import thaumcraft.common.tiles.TileTable;
@@ -68,7 +61,7 @@ public class ItemMaterials extends Item
 	private final static String[] subNames = {
 		"threadSimple", "threadGold", "threadThaumium", "clothSpace", "clothGolden", "clothBewitched",
 		"wolfPelt", "calculator", "cuttingTools", "photoPlate", "developedPhoto",
-		"guidingString","primordialShard","gemstoneDust", "brokenTestItem"
+		"guidingString","powerlessPearl","gemstoneDust"
 	};
 	public IIcon[] icon = new IIcon[subNames.length];
 
@@ -293,8 +286,8 @@ public class ItemMaterials extends Item
 				ArrayList<ChunkCoordinates> stabilizers = new ArrayList();
 				ArrayList<ChunkCoordinates> pedestals = new ArrayList();
 				ArrayList<Object[]> warnings = new ArrayList();
-				//				try
-				//				{
+				ArrayList<ItemStack> components = new ArrayList();
+				
 				for(int xx=-12; xx<=12; xx++)
 					for(int zz=-12; zz<=12; zz++)
 					{
@@ -342,6 +335,7 @@ public class ItemMaterials extends Item
 						{
 							symmetry += 1;
 							items = true;
+							components.add(((TilePedestal)te).getStackInSlot(0));
 						}
 					}
 					int xx = targetX + dx;
@@ -379,13 +373,27 @@ public class ItemMaterials extends Item
 				}
 				symmetry = ((int)(symmetry + sym));
 				player.addChatMessage(new ChatComponentTranslation(Lib.CHAT+"infusionInfo.stabilityTotal",(symmetry*-1)).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.DARK_PURPLE)) );
+
+				ItemStack central = null;
+				TileEntity te = world.getTileEntity(targetX,targetY-2,targetZ);
+				if(te instanceof TilePedestal)
+					if(((TilePedestal)te).getStackInSlot(0) != null)
+						central = ((TilePedestal)te).getStackInSlot(0).copy();
+
+				InfusionEnchantmentRecipe enchRecipe = ThaumcraftCraftingManager.findMatchingInfusionEnchantmentRecipe(components, central, player);
+				if(enchRecipe!=null)
+				{
+					float essmod = 1+enchRecipe.getEssentiaMod(central)-EnchantmentHelper.getEnchantmentLevel(enchRecipe.enchantment.effectId, central);
+					if(essmod>1)
+						player.addChatMessage(new ChatComponentTranslation(Lib.CHAT+"infusionInfo.essentiaMod",essmod).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.GREEN)) );
+				}
+				
+				
 				for(Object[] warning : warnings)
 				{
 					String w = Lib.CHAT+"infusionWarning."+warning[0];
 					player.addChatMessage(new ChatComponentTranslation(w,warning[1],warning[2],warning[3]).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.DARK_GRAY)) );
 				}
-				//				}
-				//				catch (Exception e) {}
 				return true;
 			}
 		}
@@ -404,134 +412,6 @@ public class ItemMaterials extends Item
 				((TileEntityCuttingTable)world.getTileEntity(x, y, z)).facing = f;
 			}
 			return true;
-		}
-		if(stack.getItemDamage()==14)
-		{
-			NodeType nt = NodeType.HUNGRY;
-			Random random = world.rand;
-			BiomeGenBase bg = world.getBiomeGenForCoords(x, z);
-			int baura = BiomeHandler.getBiomeAura(bg);
-			if(nt!=NodeType.PURE && bg.biomeID==ThaumcraftWorldGenerator.biomeTaint.biomeID)
-			{
-				baura = (int)(baura * 1.5F);
-				if (random.nextBoolean())
-				{
-					nt = NodeType.TAINTED;
-					baura = (int)(baura * 1.5F);
-				}
-			}
-			int value = random.nextInt(baura / 2) + baura / 2;
-
-			Aspect ra = BiomeHandler.getRandomBiomeTag(bg.biomeID, random);
-			AspectList al = new AspectList();
-			if (ra != null)
-				al.add(ra, 2);
-			else
-			{
-				Aspect aa = Aspect.getCompoundAspects().get(random.nextInt(Aspect.getCompoundAspects().size()));
-				al.add(aa, 1);
-				aa = Aspect.getPrimalAspects().get(random.nextInt(Aspect.getPrimalAspects().size()));
-				al.add(aa, 1);
-			}
-			for (int a = 0; a < 3; a++)
-				if (random.nextBoolean())
-					if (random.nextInt(Config.specialNodeRarity) == 0)
-					{
-						Aspect aa = Aspect.getCompoundAspects().get(random.nextInt(Aspect.getCompoundAspects().size()));
-						al.merge(aa, 1);
-					}
-					else
-					{
-						Aspect aa = Aspect.getPrimalAspects().get(random.nextInt(Aspect.getPrimalAspects().size()));
-						al.merge(aa, 1);
-					}
-			if(nt == NodeType.HUNGRY)
-			{
-				al.merge(Aspect.HUNGER, 2);
-				if (random.nextBoolean())
-					al.merge(Aspect.GREED, 1);
-			}
-			else if (nt == NodeType.PURE)
-			{
-				if (random.nextBoolean())
-					al.merge(Aspect.LIFE, 2);
-				else
-					al.merge(Aspect.ORDER, 2);
-			}
-			else if (nt == NodeType.DARK)
-			{
-				if (random.nextBoolean())
-					al.merge(Aspect.DEATH, 1);
-				if (random.nextBoolean())
-					al.merge(Aspect.UNDEAD, 1);
-				if (random.nextBoolean())
-					al.merge(Aspect.ENTROPY, 1);
-				if (random.nextBoolean())
-					al.merge(Aspect.DARKNESS, 1);
-			}
-			int water = 0;
-			int lava = 0;
-			int stone = 0;
-			int foliage = 0;
-			try
-			{
-				for (int xx = -5; xx <= 5; xx++)
-					for (int yy = -5; yy <= 5; yy++)
-						for (int zz = -5; zz <= 5; zz++)
-						{
-							try
-							{
-								Block bi = world.getBlock(x + xx, y + yy, z + zz);
-								if (bi.getMaterial() == Material.water)
-									water++;
-								else if (bi.getMaterial() == Material.lava)
-									lava++;
-								else if (bi == Blocks.stone)
-									stone++;
-								if (bi.isFoliage(world, x + xx, y + yy, z + zz))
-									foliage++;
-							}
-							catch (Exception e) {}
-						}
-			}
-			catch (Exception e) {}
-			if (water > 100)
-				al.merge(Aspect.WATER, 1);
-			if (lava > 100)
-			{
-				al.merge(Aspect.FIRE, 1);
-				al.merge(Aspect.EARTH, 1);
-			}
-			if (stone > 500)
-				al.merge(Aspect.EARTH, 1);
-			if (foliage > 100)
-				al.merge(Aspect.PLANT, 1);
-
-			int[] spread = new int[al.size()];
-			float total = 0.0F;
-			for (int a = 0; a < spread.length; a++)
-			{
-				if (al.getAmount(al.getAspectsSorted()[a]) == 2)
-					spread[a] = (50 + random.nextInt(25));
-				else
-					spread[a] = (25 + random.nextInt(50));
-
-				total += spread[a];
-			}
-			for (int a = 0; a < spread.length; a++)
-				al.merge(al.getAspectsSorted()[a], (int)(spread[a] / total * value));
-//
-//			System.out.println("generating Node");
-			if(!world.isRemote)
-			{
-				ForgeDirection fd = ForgeDirection.getOrientation(side);
-				x += fd.offsetX;
-				y += fd.offsetY;
-				z += fd.offsetZ;
-				
-//				ThaumcraftWorldGenerator.createRandomNodeAt(world, x, y, z, world.rand, false, false, false);
-				ThaumcraftWorldGenerator.createNodeAt(world, x, y, z, nt, null, al);
-			}
 		}
 		return false;
 	}

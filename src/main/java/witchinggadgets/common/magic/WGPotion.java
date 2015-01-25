@@ -4,6 +4,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
+import thaumcraft.api.damagesource.DamageSourceThaumcraft;
+import witchinggadgets.common.WGContent;
 
 public class WGPotion extends Potion
 {
@@ -35,5 +37,7 @@ public class WGPotion extends Potion
 	@Override
 	public void performEffect(EntityLivingBase living, int amplifier)
 	{
+		if(this.equals(WGContent.pot_dissolve))
+			living.attackEntityFrom(DamageSourceThaumcraft.dissolve, 1);
 	}
 }

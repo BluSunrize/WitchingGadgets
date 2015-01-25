@@ -56,6 +56,11 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, 
 		this.setHasSubtypes(true);
 		this.setCreativeTab(WitchingGadgets.tabWG);
 	}
+	@Override
+	public boolean isItemTool(ItemStack stack)
+    {
+        return stack.stackSize == 1;
+    }
 
 	@Override
 	public void registerIcons(IIconRegister iconRegister)
@@ -219,10 +224,6 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, 
 	{
 		if(stack.hasTagCompound() && stack.getTagCompound().getBoolean("noGlide"))
 			list.add(StatCollector.translateToLocal(Lib.DESCRIPTION+"noGlide"));
-
-		for(ItemStack ss : this.getStoredItems(stack))
-			if(ss!=null)
-				list.add(ss.getDisplayName());
 	}
 
 	@Override
@@ -239,7 +240,6 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, 
 				if(player.ticksExisted%100==0)
 					if(!Utilities.consumeVisFromInventoryWithoutDiscount(player, new AspectList().add(Aspect.AIR,1)))
 						stack.getTagCompound().setBoolean("isSpectral",false);
-
 			if(subNames[stack.getItemDamage()].equals("raven"))
 			{
 				if(!player.onGround)
@@ -252,6 +252,8 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, 
 					}
 					else if(player.motionY<0 && (!stack.hasTagCompound()||!stack.getTagCompound().getBoolean("noGlide")))
 					{
+						System.out.println("can Glide in "+player.worldObj);
+						
 						float mod = player.isSneaking()?.1f:.05f;
 						player.motionY *= player.isSneaking()?.75:.5;
 						double x = Math.cos(Math.toRadians(player.rotationYawHead + 90)) * mod;
@@ -304,11 +306,13 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, 
 		if(stack.getItemDamage()<subNames.length)
 			if(subNames[stack.getItemDamage()].equals("storage") && !player.worldObj.isRemote)
 				player.openGui(WitchingGadgets.instance, this.equals(WGContent.ItemKama)?5:4, player.worldObj, MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posY), MathHelper.floor_double(player.posZ));
-			else if(subNames[stack.getItemDamage()].equals("raven") && !player.worldObj.isRemote)
+			else if(subNames[stack.getItemDamage()].equals("raven"))
 			{
 				if(!stack.hasTagCompound())
 					stack.setTagCompound(new NBTTagCompound());
 				stack.getTagCompound().setBoolean("noGlide", !stack.getTagCompound().getBoolean("noGlide"));
+
+				System.out.println("Activating, "+player.worldObj+"  "+stack.getTagCompound().getBoolean("noGlide"));
 			}
 			else if(subNames[stack.getItemDamage()].equals("spectral") && !player.worldObj.isRemote && Utilities.consumeVisFromInventoryWithoutDiscount(player, new AspectList().add(Aspect.AIR,1)))
 			{

@@ -44,7 +44,6 @@ public class WitchingGadgets
 	public WGWandManager wgWandManager = new WGWandManager();
 
 	public static CreativeTabs tabWG = new WGCreativeTab(CreativeTabs.getNextID(), "witchinggadgets");
-	public static final WGPacketPipeline packetPipeline = new WGPacketPipeline();
 	public static final Logger logger = LogManager.getLogger("WitchingGadgets");
 	public EventHandler eventHandler;
 
@@ -87,7 +86,7 @@ public class WitchingGadgets
 	public void init(FMLInitializationEvent event)
 	{
 		proxy.registerRenders();
-		packetPipeline.initialise();
+		WGPacketPipeline.INSTANCE.initialise();
 
 		WGContent.init();
 
@@ -116,6 +115,6 @@ public class WitchingGadgets
 		//WGModCompat.addTags();
 		//((BiomeGenMirror)BiomeMirror).resetSpawnLists();
 		WGContent.postInit();
-		packetPipeline.postInitialise();
+		WGPacketPipeline.INSTANCE.postInitialise();
 	}
 }

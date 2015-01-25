@@ -1,6 +1,5 @@
 package witchinggadgets.common;
 
-import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.UUID;
 
@@ -25,16 +24,13 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-
-import org.apache.logging.log4j.Level;
-
 import thaumcraft.api.ItemApi;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.config.ConfigItems;
-import thaumcraft.common.items.armor.ItemBootsTraveller;
 import witchinggadgets.WitchingGadgets;
 import witchinggadgets.common.blocks.BlockMirrorPortal;
 import witchinggadgets.common.blocks.BlockModifiedAiry;
@@ -49,10 +45,11 @@ import witchinggadgets.common.blocks.ItemBlockStoneDevice;
 import witchinggadgets.common.blocks.ItemBlockWoodenDevice;
 import witchinggadgets.common.blocks.tiles.TileEntityAgeingStone;
 import witchinggadgets.common.blocks.tiles.TileEntityBlastfurnace;
-import witchinggadgets.common.blocks.tiles.TileEntityEssentiaPump;
 import witchinggadgets.common.blocks.tiles.TileEntityCobbleGen;
 import witchinggadgets.common.blocks.tiles.TileEntityCuttingTable;
+import witchinggadgets.common.blocks.tiles.TileEntityEssentiaPump;
 import witchinggadgets.common.blocks.tiles.TileEntityEtherealWall;
+import witchinggadgets.common.blocks.tiles.TileEntityLabelLibrary;
 import witchinggadgets.common.blocks.tiles.TileEntityMagicalTileLock;
 import witchinggadgets.common.blocks.tiles.TileEntityMirrorPortal;
 import witchinggadgets.common.blocks.tiles.TileEntitySarcophagus;
@@ -72,6 +69,7 @@ import witchinggadgets.common.items.ItemMagicFood;
 import witchinggadgets.common.items.ItemMaterials;
 import witchinggadgets.common.items.ItemThaumiumShears;
 import witchinggadgets.common.items.armor.ItemAdvancedRobes;
+import witchinggadgets.common.items.armor.ItemPrimordialArmor;
 import witchinggadgets.common.items.baubles.ItemCloak;
 import witchinggadgets.common.items.baubles.ItemKama;
 import witchinggadgets.common.items.baubles.ItemMagicalBaubles;
@@ -96,10 +94,7 @@ import witchinggadgets.common.util.recipe.InfernalBlastfurnaceRecipe;
 import witchinggadgets.common.util.recipe.RobeColourizationRecipe;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.EntityRegistry;
-import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
-import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.ReflectionHelper;
 
 public class WGContent
 {
@@ -136,12 +131,20 @@ public class WGContent
 	public static Item ItemPrimordialHammer;
 	public static Item ItemPrimordialAxe;
 	public static Item ItemPrimordialSword;
+	
+	public static Item ItemPrimordialHelm;
+	public static Item ItemPrimordialChest;
+	public static Item ItemPrimordialLegs;
+	public static Item ItemPrimordialBoots;
+	
 	public static Item ItemInfusedGem;
 	public static Item ItemMagicalBaubles;
 	public static Item ItemScanCamera;
 	public static Item ItemRelic;
 
 	public static Potion pot_knockbackRes;
+	public static Potion pot_dissolve;
+	public static Potion pot_cinderCoat;
 	public static Enchantment enc_gemstonePotency;
 	public static Enchantment enc_gemstoneBrittle;
 	public static Enchantment enc_invisibleGear;
@@ -174,7 +177,14 @@ public class WGContent
 		int id = Utilities.getNextPotionId(32);
 		if(id >= 0)
 			pot_knockbackRes = new WGPotion(id, false, 0x6e6e6e, 0, false, 1).setPotionName("wg.potionKnockbackRes").func_111184_a(SharedMonsterAttributes.knockbackResistance, s, 0.34D, 0);
+		id = Utilities.getNextPotionId(id);
+		if(id >= 0)
+			pot_dissolve = new WGPotion(id, true, 0x450b45, 40, true, 2).setPotionName("wg.potionDissolve");
+		id = Utilities.getNextPotionId(id);
+		if(id >= 0)
+			pot_cinderCoat = new WGPotion(id, true, 0x8f3f1f, 0, false, 3).setPotionName("wg.potionCinderCoat");
 
+		
 		int eid = Utilities.getNextEnchantmentId(64);
 		if(eid >= 0)
 		{
@@ -233,6 +243,8 @@ public class WGContent
 
 		BlockCustomAiry = new BlockModifiedAiry().setBlockName("WG_CustomAir");
 		GameRegistry.registerBlock(BlockCustomAiry, BlockCustomAiry.getLocalizedName());
+
+		OreDictionary.registerOre("blockVoid", new ItemStack(BlockMetalDevice,1,7));
 	}
 	private static void initializeBlocks()
 	{
@@ -256,6 +268,7 @@ public class WGContent
 		registerTile(TileEntityCobbleGen.class);
 		registerTile(TileEntityCuttingTable.class);
 		registerTile(TileEntitySaunaStove.class);
+		registerTile(TileEntityLabelLibrary.class);
 		//METAL
 		registerTile(TileEntityEssentiaPump.class);
 		registerTile(TileEntityTerraformer.class);
@@ -327,6 +340,15 @@ public class WGContent
 		ItemPrimordialSword = new ItemPrimordialSword(primordialTool).setUnlocalizedName("WG_PrimordialSword");
 		GameRegistry.registerItem(ItemPrimordialSword, ItemPrimordialSword.getUnlocalizedName());
 
+		ItemPrimordialHelm = new ItemPrimordialArmor(primordialArmor, 4, 0).setUnlocalizedName("WG_PrimordialHelm");
+		GameRegistry.registerItem(ItemPrimordialHelm, ItemPrimordialHelm.getUnlocalizedName());
+		ItemPrimordialChest = new ItemPrimordialArmor(primordialArmor, 4, 1).setUnlocalizedName("WG_PrimordialChest");
+		GameRegistry.registerItem(ItemPrimordialChest, ItemPrimordialChest.getUnlocalizedName());
+		ItemPrimordialLegs = new ItemPrimordialArmor(primordialArmor, 4, 2).setUnlocalizedName("WG_PrimordialLegs");
+		GameRegistry.registerItem(ItemPrimordialLegs, ItemPrimordialLegs.getUnlocalizedName());
+		ItemPrimordialBoots = new ItemPrimordialArmor(primordialArmor, 4, 3).setUnlocalizedName("WG_PrimordialBoots");
+		GameRegistry.registerItem(ItemPrimordialBoots, ItemPrimordialBoots.getUnlocalizedName());
+
 		ItemCrystalCapsule = new ItemCrystalCapsule().setUnlocalizedName("WG_CrystalFlask");
 		GameRegistry.registerItem(ItemCrystalCapsule, ItemCrystalCapsule.getUnlocalizedName());
 		ItemCluster = new ItemClusters().setUnlocalizedName("WG_Cluster");
@@ -334,7 +356,6 @@ public class WGContent
 
 		//ItemMagicBed = new ItemMagicBed(WGConfig.ItemMagicBedID).setUnlocalizedName("WG_MagicBed");
 		//GameRegistry.registerItem(ItemMagicBed, ItemMagicBed.getUnlocalizedName());
-		OreDictionary.registerOre("gemPrimordial", new ItemStack(ItemMaterial,1,12));
 		OreDictionary.registerOre("crystalNetherQuartz", new ItemStack(Items.quartz));
 		OreDictionary.registerOre("scribingTools", new ItemStack(ConfigItems.itemInkwell,1,OreDictionary.WILDCARD_VALUE));
 
@@ -346,15 +367,20 @@ public class WGContent
 		WGResearch.recipeList.put("THAUMIUMSHEARS", GameRegistry.addShapedRecipe(new ItemStack(ItemThaumiumShears), " t", "t ", 't', ItemApi.getItem("itemResource", 2)));
 
 		BlockDispenser.dispenseBehaviorRegistry.putObject(ItemCrystalCapsule, new ItemCrystalCapsule.CapsuleDispenserBehaviour());	    
+
 		GameRegistry.addRecipe(new RobeColourizationRecipe());
 		GameRegistry.addRecipe(new CloakColourizationRecipe());
 		GameRegistry.addRecipe(new BagColourizationRecipe());
+		RecipeSorter.register("WitchingGadgets:advrobedye", RobeColourizationRecipe.class, RecipeSorter.Category.SHAPELESS, "after:forge:shapelessore");
+		RecipeSorter.register("WitchingGadgets:cloakdye", CloakColourizationRecipe.class, RecipeSorter.Category.SHAPELESS, "after:forge:shapelessore");
+		RecipeSorter.register("WitchingGadgets:bagdye", BagColourizationRecipe.class, RecipeSorter.Category.SHAPELESS, "after:forge:shapelessore");
+
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockMetalDevice,1,7), "vvv","vvv","vvv", 'v',"ingotVoid"));
 
 		GameRegistry.addShapelessRecipe(new ItemStack(ItemMagicFoodstuffs,1,0), Items.nether_wart,Items.sugar);
 		GameRegistry.addShapedRecipe(new ItemStack(ItemMagicFoodstuffs,1,1), "nnn","www", 'n',new ItemStack(ItemMagicFoodstuffs,1,0), 'w', Items.wheat);
 
 		GameRegistry.addRecipe( new ShapedOreRecipe(new ItemStack(ItemMaterial,1,8), "qfi","sss", 'q',"gemQuartz", 'f',Items.flint, 'i',"ingotIron", 's',"stickWood"));
-		GameRegistry.addShapedRecipe(new ItemStack(ItemMaterial,8,12), " f ","fnf"," f ", 'n',Items.nether_star, 'f',Items.flint);
 
 		EntityRegistry.registerModEntity(EntityItemReforming.class, "reformingItem", 0, WitchingGadgets.instance, 64, 1, true);
 
@@ -389,89 +415,56 @@ public class WGContent
 
 	private static void postInitThaumcraft()
 	{
-		//Add repair for boots
-		if(WGConfig.allowBootsRepair)
-		{
-			WitchingGadgets.logger.log(Level.INFO, "Tryign to inject new Boots of the traveller");
-			
-			try{
-//				Map<String,Integer> dataList = ;
-//	            for (int i = 0; i < modList.tagCount(); i++)
-//	            {
-//	                NBTTagCompound itemTag = modList.getCompoundTagAt(i);
-//	                String modId = itemTag.getString("ModId");
-//	                String itemType = itemTag.getString("ItemType");
-//	                int itemId = itemTag.getInteger("ItemId");
-//	                int ordinal = itemTag.getInteger("ordinal");
-//	                String forcedModId = itemTag.hasKey("ForcedModId") ? itemTag.getString("ForcedModId") : null;
-//	                String forcedName = itemTag.hasKey("ForcedName") ? itemTag.getString("ForcedName") : null;
-//	                if (forcedName == null)
-//	                {
-//	                    FMLLog.warning("Found unlabelled item in world save, this may cause problems. The item type %s:%d will not be present", itemType, ordinal);
-//	                }
-//	                else
-//	                {
-//	                    // all entries are Items, blocks were only saved through their ItemBlock
-//	                    String itemLabel = String.format("%c%s:%s", '\u0002', forcedModId != null ? forcedModId : modId, forcedName);
-//	                    dataList.put(itemLabel, itemId);
-//	                }
-//	            }
-				
-//				Item replaceBoots = new ItemBootsTraveller(ThaumcraftApi.armorMatSpecial, 4, 3)
-//				{
-//					@Override
-//					public boolean getIsRepairable(ItemStack stack1, ItemStack stack2)
-//					{
-//						return stack2.isItemEqual(new ItemStack(Items.leather)) ? true : super.getIsRepairable(stack1, stack2);
-//					}
-//				}.setUnlocalizedName("BootsTraveller");
-//				String ident = "Thaumcraft:BootsTraveller";
-//				GameRegistry.addSubstitutionAlias(ident, GameRegistry.Type.ITEM, replaceBoots);
-//
-//				Method m = ReflectionHelper.findMethod(FMLControlledNamespacedRegistry.class, GameData.getItemRegistry(), new String[]{"activateSubstitution"}, String.class);
-//				m.invoke(GameData.getItemRegistry(), ident);
-				
-				
-//				Set<String> itemSubstitutions = new HashSet<String>();
-//				itemSubstitutions.add("Thaumcraft:BootsTraveller");
-//	            List<String> failedElements = GameData.injectWorldIDMap(new HashMap<String,Integer>(),ImmutableSet.<Integer>of(), new HashMap<String,String>(),new HashMap<String,String>(), ImmutableSet.<String>of(),itemSubstitutions, false, false);
-				
-//	            for(String f : failedElements)
-//	            {
-//	            	System.out.println("failed: "+f);
-//	            }
-			}catch(Exception e)
-			{
-				e.printStackTrace();
-			}
-			
-//			ConfigItems.itemBootsTraveller = new ItemBootsTraveller(ThaumcraftApi.armorMatSpecial, 4, 3)
-//			{
-//				@Override
-//				public boolean getIsRepairable(ItemStack stack1, ItemStack stack2)
-//				{
-//					System.out.println("wut wut");
-//					return stack2.isItemEqual(new ItemStack(Items.leather)) ? true : super.getIsRepairable(stack1, stack2);
-//				}
-//			}.setUnlocalizedName("BootsTraveller");
-			//GameRegistry.registerItem(ConfigItems.itemBootsTraveller, "BootsTraveller", "Thaumcraft");
-		}
-		//	ThaumcraftApi.armorMatSpecial.customCraftingMaterial = Items.leather;
-
 		//Add aspects where needed
 		AspectList addAspects = new AspectList().add(Aspect.TREE, 4).add(Aspect.CLOTH, 2).add(Aspect.MECHANISM, 2).add(Aspect.AIR, 2);
 		ThaumcraftApi.registerObjectTag(new ItemStack(BlockWoodenDevice,1,1),addAspects);
+		addAspects = new AspectList().add(Aspect.TREE, 2).add(Aspect.CRYSTAL, 2).add(Aspect.CRAFT, 2);
+		ThaumcraftApi.registerObjectTag(new ItemStack(BlockWoodenDevice,1,3),addAspects);
 
-		addAspects = new AspectList().add(Aspect.PLANT,6).add(Aspect.ENTROPY, 4).add(Aspect.MAGIC, 4).add(Aspect.LIFE, 2);
+		addAspects = new AspectList().add(Aspect.MECHANISM,1).add(Aspect.EARTH,2);
+		ThaumcraftApi.registerObjectTag(new ItemStack(BlockStoneDevice,1,0),addAspects);
+		addAspects = new AspectList().add(Aspect.MECHANISM,3).add(Aspect.ELDRITCH,2);
+		ThaumcraftApi.registerObjectTag(new ItemStack(BlockStoneDevice,1,1),addAspects);
+		addAspects = new AspectList().add(Aspect.EARTH,1).add(Aspect.ELDRITCH,2).add(Aspect.DARKNESS,2);
+		ThaumcraftApi.registerObjectTag(new ItemStack(BlockStoneDevice,1,2),addAspects);
+		ThaumcraftApi.registerObjectTag(new ItemStack(BlockStoneDevice,1,3),addAspects);
+		ThaumcraftApi.registerObjectTag(new ItemStack(BlockStoneDevice,1,4),addAspects);
+		ThaumcraftApi.registerObjectTag(new ItemStack(BlockStoneDevice,1,5),addAspects);
+		addAspects = new AspectList().add(Aspect.VOID,2).add(Aspect.ELDRITCH,1).add(Aspect.DARKNESS,2);
+		ThaumcraftApi.registerObjectTag(new ItemStack(BlockStoneDevice,1,6),addAspects);
+
+		addAspects = new AspectList().add(Aspect.PLANT,6).add(Aspect.ENTROPY,4).add(Aspect.MAGIC,4).add(Aspect.LIFE, 2);
 		ThaumcraftApi.registerObjectTag(new ItemStack(BlockRoseVine,1, 32767),addAspects);
 
-		addAspects = new AspectList().add(Aspect.FIRE,5).add(Aspect.EARTH,5).add(Aspect.METAL,3).add(Aspect.EXCHANGE,2).add(Aspect.POISON,1);
-		ThaumcraftApi.registerObjectTag(new ItemStack(ConfigItems.itemResource,1,10),addAspects);
+		addAspects = new AspectList().add(Aspect.CLOTH,1);
+		ThaumcraftApi.registerObjectTag(new ItemStack(ItemMaterial,1,0),addAspects);
+		addAspects = new AspectList().add(Aspect.CLOTH,1).add(Aspect.GREED,1);
+		ThaumcraftApi.registerObjectTag(new ItemStack(ItemMaterial,1,1),addAspects);
+		addAspects = new AspectList().add(Aspect.CLOTH,1).add(Aspect.METAL,1).add(Aspect.MAGIC,1);
+		ThaumcraftApi.registerObjectTag(new ItemStack(ItemMaterial,1,2),addAspects);
+
+		addAspects = new AspectList().add(Aspect.CLOTH,3).add(Aspect.VOID,3);
+		ThaumcraftApi.registerObjectTag(new ItemStack(ItemMaterial,1,3),addAspects);
+		addAspects = new AspectList().add(Aspect.CLOTH,3).add(Aspect.GREED,3);
+		ThaumcraftApi.registerObjectTag(new ItemStack(ItemMaterial,1,4),addAspects);
+		addAspects = new AspectList().add(Aspect.CLOTH,3).add(Aspect.MAGIC,2).add(Aspect.TAINT,1);
+		ThaumcraftApi.registerObjectTag(new ItemStack(ItemMaterial,1,5),addAspects);
+
+		addAspects = new AspectList().add(Aspect.CLOTH,2).add(Aspect.BEAST,3);
+		ThaumcraftApi.registerObjectTag(new ItemStack(ItemMaterial,1,6),addAspects);
 
 		addAspects = new AspectList().add(Aspect.CRYSTAL,5).add(Aspect.SENSES,3).add(Aspect.EXCHANGE,2).add(Aspect.POISON,1);
 		ThaumcraftApi.registerObjectTag(new ItemStack(ItemMaterial,1,9),addAspects);
 		addAspects = new AspectList().add(Aspect.AIR,2).add(Aspect.WATER,2).add(Aspect.ORDER,2).add(Aspect.SENSES,2).add(Aspect.MIND,2);
 		ThaumcraftApi.registerObjectTag(new ItemStack(ItemMaterial,1,10),addAspects);
+		
+		addAspects = new AspectList().add(Aspect.CRYSTAL,4).add(Aspect.VOID,4);
+		ThaumcraftApi.registerObjectTag(new ItemStack(ItemMaterial,1,12),addAspects);
+
+		addAspects = new AspectList().add(Aspect.FIRE,1).add(Aspect.HUNGER,1);
+		ThaumcraftApi.registerObjectTag(new ItemStack(ItemMagicFoodstuffs,1,0),addAspects);
+		addAspects = new AspectList().add(Aspect.MIND,3).add(Aspect.HUNGER,2).add(Aspect.FLESH,2);
+		ThaumcraftApi.registerObjectTag(new ItemStack(ItemMagicFoodstuffs,1,2),addAspects);
 
 		//Biomes o' Plenty
 		ThaumcraftApi.registerObjectTag("gemAmber", new AspectList().add(Aspect.TRAP, 2).add(Aspect.CRYSTAL, 2));
@@ -484,7 +477,42 @@ public class WGContent
 		addOreAspects("Manasteel", new AspectList().add(Aspect.MAGIC, 1), false);
 		addOreAspects("Terrasteel", new AspectList().add(Aspect.EARTH, 1).add(Aspect.MAGIC, 1), false);
 		addOreAspects("ElvenElementium", new AspectList().add(Aspect.AURA, 1).add(Aspect.MAGIC, 2), true);
-
+		ThaumcraftApi.registerObjectTag("livingstone", new AspectList().add(Aspect.EARTH,4).add(Aspect.LIFE,2));
+		ThaumcraftApi.registerObjectTag("livingwood", new AspectList().add(Aspect.TREE,4).add(Aspect.LIFE,2));
+		ThaumcraftApi.registerObjectTag("dreamwood", new AspectList().add(Aspect.MAGIC,1).add(Aspect.TREE,4).add(Aspect.AURA,2));
+		ThaumcraftApi.registerObjectTag("manaPearl", new AspectList().add(Aspect.MAGIC,6).add(Aspect.ELDRITCH,4).add(Aspect.TRAVEL,4));
+		ThaumcraftApi.registerObjectTag("manaDiamond", new AspectList().add(Aspect.MAGIC,4).add(Aspect.CRYSTAL,4).add(Aspect.GREED,4));
+		ThaumcraftApi.registerObjectTag("eternalLifeEssence", new AspectList().add(Aspect.MAGIC,4).add(Aspect.AURA,4));
+		ThaumcraftApi.registerObjectTag("eternalLifeEssence", new AspectList().add(Aspect.MAGIC,8).add(Aspect.AURA,8).add(Aspect.LIFE,8));
+		ThaumcraftApi.registerObjectTag("elvenPixieDust", new AspectList().add(Aspect.MAGIC,6).add(Aspect.AURA,4).add(Aspect.ELDRITCH,4));
+		ThaumcraftApi.registerObjectTag("elvenDragonstone", new AspectList().add(Aspect.MAGIC,6).add(Aspect.AURA,4).add(Aspect.CRYSTAL,6));
+		ThaumcraftApi.registerObjectTag("shardPrismarine", new AspectList().add(Aspect.MAGIC,2).add(Aspect.WATER,4).add(Aspect.CRYSTAL,2));
+		String[] colours = {"White","Orange","Magenta","LightBlue","Yellow","Lime","Pink","Gray",
+				"LightGray","Cyan","Purple","Blue","Brown","Green","Red","Black"};
+		for(String c : colours)
+		{
+			ThaumcraftApi.registerObjectTag("mysticFlower"+c, new AspectList().add(Aspect.SENSES,2).add(Aspect.PLANT,2));
+			ThaumcraftApi.registerObjectTag("petal"+c, new AspectList().add(Aspect.SENSES,1).add(Aspect.PLANT,1));
+			ThaumcraftApi.registerObjectTag("manaPetal"+c, new AspectList().add(Aspect.MAGIC,1).add(Aspect.SENSES,1).add(Aspect.PLANT,1));
+		}
+		ThaumcraftApi.registerObjectTag("rune"+"Water"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.WATER,6));
+		ThaumcraftApi.registerObjectTag("rune"+"Fire"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.FIRE,6));
+		ThaumcraftApi.registerObjectTag("rune"+"Earth"+"B", new AspectList().add(Aspect.EARTH,8).add(Aspect.METAL,2));
+		ThaumcraftApi.registerObjectTag("rune"+"Air"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.AIR,6));
+		ThaumcraftApi.registerObjectTag("rune"+"Spring"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.WATER,3).add(Aspect.FIRE,3).add(Aspect.PLANT, 3));
+		ThaumcraftApi.registerObjectTag("rune"+"Summer"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.EARTH,3).add(Aspect.AIR,3).add(Aspect.ENTROPY, 3));
+		ThaumcraftApi.registerObjectTag("rune"+"Autumn"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.FIRE,3).add(Aspect.AIR,3).add(Aspect.PLANT, 3));
+		ThaumcraftApi.registerObjectTag("rune"+"Winter"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.WATER,3).add(Aspect.EARTH,3).add(Aspect.COLD, 3));
+		ThaumcraftApi.registerObjectTag("rune"+"Mana"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,8).add(Aspect.MAGIC,6));
+		
+		ThaumcraftApi.registerObjectTag("rune"+"Lust"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.CRYSTAL,4).add(Aspect.AIR,6).add(Aspect.EARTH,3).add(Aspect.getAspect("luxuria"),4));
+		ThaumcraftApi.registerObjectTag("rune"+"Gluttony"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.CRYSTAL,4).add(Aspect.FIRE,3).add(Aspect.EARTH,3).add(Aspect.WATER,3).add(Aspect.getAspect("gula"),4));
+		ThaumcraftApi.registerObjectTag("rune"+"Greed"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.CRYSTAL,4).add(Aspect.WATER,6).add(Aspect.FIRE,3).add(Aspect.GREED,4));
+		ThaumcraftApi.registerObjectTag("rune"+"Sloth"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.CRYSTAL,4).add(Aspect.AIR,6).add(Aspect.FIRE,3).add(Aspect.getAspect("desidia"),4));
+		ThaumcraftApi.registerObjectTag("rune"+"Wrath"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.CRYSTAL,4).add(Aspect.EARTH,6).add(Aspect.WATER,3).add(Aspect.getAspect("ira"),4));
+		ThaumcraftApi.registerObjectTag("rune"+"Envy"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.CRYSTAL,4).add(Aspect.WATER,6).add(Aspect.EARTH,3).add(Aspect.getAspect("invidia"),4));
+		ThaumcraftApi.registerObjectTag("rune"+"Pride"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.CRYSTAL,4).add(Aspect.EARTH,3).add(Aspect.AIR,3).add(Aspect.FIRE,3).add(Aspect.getAspect("superbia"),4));
+		
 		//Tcon
 		addOreAspects("Aluminum", new AspectList().add(Aspect.AIR, 1), false);
 		addOreAspects("Aluminium", new AspectList().add(Aspect.AIR, 1), false);

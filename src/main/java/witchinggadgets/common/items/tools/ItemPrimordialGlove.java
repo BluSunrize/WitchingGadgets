@@ -27,7 +27,7 @@ import thaumcraft.common.lib.research.ResearchManager;
 import thaumcraft.common.tiles.TileJarNode;
 import witchinggadgets.WitchingGadgets;
 import witchinggadgets.api.IInfusedGem;
-import witchinggadgets.api.IPrimordial;
+import witchinggadgets.api.IPrimordialCrafting;
 import witchinggadgets.common.WGContent;
 import witchinggadgets.common.gui.ContainerPrimordialGlove;
 import witchinggadgets.common.gui.InventoryPrimordialGlove;
@@ -35,7 +35,7 @@ import witchinggadgets.common.items.ItemInfusedGem;
 
 import com.google.common.collect.Multimap;
 
-public class ItemPrimordialGlove extends Item implements IPrimordial
+public class ItemPrimordialGlove extends Item implements IPrimordialCrafting
 {
 
 	public ItemPrimordialGlove()

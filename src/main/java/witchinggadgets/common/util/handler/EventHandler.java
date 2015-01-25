@@ -8,8 +8,10 @@ import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.boss.IBossDisplayData;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityEnderman;
@@ -27,8 +29,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
-import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
@@ -41,7 +42,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.config.ConfigBlocks;
-import thaumcraft.common.config.ConfigItems;
 import thaumcraft.common.entities.EntitySpecialItem;
 import thaumcraft.common.entities.monster.EntityCultistKnight;
 import thaumcraft.common.entities.monster.boss.EntityCultistLeader;
@@ -51,8 +51,7 @@ import thaumcraft.common.lib.research.ResearchManager;
 import thaumcraft.common.lib.utils.InventoryUtils;
 import thaumcraft.common.tiles.TileInfusionMatrix;
 import travellersgear.api.TravellersGearAPI;
-import witchinggadgets.WitchingGadgets;
-import witchinggadgets.api.IPrimordial;
+import witchinggadgets.api.IPrimordialCrafting;
 import witchinggadgets.common.WGContent;
 import witchinggadgets.common.blocks.tiles.MultipartEssentiaBuffer;
 import witchinggadgets.common.blocks.tiles.MultipartEssentiaTube;
@@ -60,14 +59,17 @@ import witchinggadgets.common.blocks.tiles.MultipartEssentiaTube_Filtered;
 import witchinggadgets.common.blocks.tiles.MultipartEssentiaTube_Valve;
 import witchinggadgets.common.items.ItemMaterials;
 import witchinggadgets.common.items.baubles.ItemMagicalBaubles;
+import witchinggadgets.common.items.tools.IPrimordialGear;
 import witchinggadgets.common.items.tools.ItemBag;
 import witchinggadgets.common.util.Lib;
 import witchinggadgets.common.util.Utilities;
 import witchinggadgets.common.util.network.PacketClientNotifier;
+import witchinggadgets.common.util.network.WGPacketPipeline;
 import codechicken.lib.vec.BlockCoord;
 import codechicken.multipart.TMultiPart;
 import codechicken.multipart.TileMultipart;
 import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -77,23 +79,25 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public class EventHandler
 {
-	@SubscribeEvent
-	public void onEntityConstructing(EntityConstructing event)
-	{
-	}
-	@SubscribeEvent
-	public void onEntityJoinWorld(EntityJoinWorldEvent event)
-	{
-	}
-
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void entityHurt(LivingHurtEvent event)
 	{
+		if(event.source.isFireDamage() && event.entityLiving.getActivePotionEffect(WGContent.pot_cinderCoat)!=null)
+			event.ammount *= 2+ event.entityLiving.getActivePotionEffect(WGContent.pot_cinderCoat).getAmplifier();
+
 		if(event.source.getSourceOfDamage() instanceof EntityPlayer && ((EntityPlayer)event.source.getSourceOfDamage()).getCurrentEquippedItem()!=null)
 		{
 			EntityPlayer player = (EntityPlayer)event.source.getSourceOfDamage();
 			if(player.getCurrentEquippedItem().getItem().equals(WGContent.ItemPrimordialHammer) && (event.entityLiving instanceof EntitySlime || event.entityLiving.getClass().getName().endsWith("BlueSlime")) )
 				event.ammount *= 2;
+			if(player.getCurrentEquippedItem().getItem().equals(WGContent.ItemPrimordialAxe) && !event.source.isUnblockable())
+			{
+				float mod = 1;
+				for(int i=1; i<=4; i++)
+					if(event.entityLiving.getEquipmentInSlot(i)!=null)
+						mod +=.5f;
+				event.ammount*=mod;
+			}
 
 			if(EnchantmentHelper.getEnchantmentLevel(WGContent.enc_backstab.effectId,player.getCurrentEquippedItem())>0 )
 			{
@@ -257,6 +261,26 @@ public class EventHandler
 			}
 		}
 	}
+	@SubscribeEvent
+	public void onLivingDies(LivingDeathEvent event)
+	{
+		if(event.source!=null && event.source.getSourceOfDamage() instanceof EntityPlayer && event.entityLiving instanceof EntityLiving && !event.entityLiving.worldObj.isRemote && event.entityLiving.worldObj.getGameRules().getGameRuleBooleanValue("doMobLoot"))
+		{
+			EntityPlayer player = (EntityPlayer)event.source.getSourceOfDamage();
+			
+			if(player.getCurrentEquippedItem()!=null && player.getCurrentEquippedItem().getItem() instanceof IPrimordialGear && ((IPrimordialGear)player.getCurrentEquippedItem().getItem()).getAbility(player.getCurrentEquippedItem())==4)
+			{
+				int baseValue = ObfuscationReflectionHelper.getPrivateValue(EntityLiving.class, (EntityLiving)event.entityLiving, "experienceValue");
+				int xp = 4 * baseValue;
+				while (xp > 0)
+				{
+					int i = EntityXPOrb.getXPSplit(xp);
+					xp -= i;
+					event.entityLiving.worldObj.spawnEntityInWorld(new EntityXPOrb(event.entityLiving.worldObj, event.entityLiving.posX, event.entityLiving.posY, event.entityLiving.posZ, i));
+				}
+			}
+		}
+	}
 
 	@SubscribeEvent
 	public void onItemPickup(EntityItemPickupEvent event)
@@ -317,9 +341,9 @@ public class EventHandler
 				}
 			}
 		}
-		if(output.getItem() instanceof IPrimordial && !event.player.worldObj.isRemote)
+		if(output.getItem() instanceof IPrimordialCrafting && !event.player.worldObj.isRemote)
 		{
-			if(((IPrimordial)output.getItem()).getReturnedPearls(output)>0)
+			if(((IPrimordialCrafting)output.getItem()).getReturnedPearls(output)>0)
 			{
 				double iX = event.player.posX;
 				double iY = event.player.posY+1;
@@ -333,7 +357,7 @@ public class EventHandler
 								iY = event.player.posY+yy-.5;
 								iZ = event.player.posZ+zz;
 							}
-				EntitySpecialItem entityitem = new EntitySpecialItem(event.player.worldObj, iX, iY, iZ, new ItemStack(ConfigItems.itemEldritchObject, ((IPrimordial)output.getItem()).getReturnedPearls(output) ,3));
+				EntitySpecialItem entityitem = new EntitySpecialItem(event.player.worldObj, iX, iY, iZ, new ItemStack(WGContent.ItemMaterial, ((IPrimordialCrafting)output.getItem()).getReturnedPearls(output), 12));
 				entityitem.setVelocity(0,0,0);
 				event.player.worldObj.spawnEntityInWorld(entityitem);
 			}
@@ -343,6 +367,6 @@ public class EventHandler
 	@SubscribeEvent
 	public void playerLogin(PlayerLoggedInEvent event)
 	{
-		WitchingGadgets.packetPipeline.sendTo(new PacketClientNotifier(0), (EntityPlayerMP) event.player);
+		WGPacketPipeline.INSTANCE.sendTo(new PacketClientNotifier(0), (EntityPlayerMP) event.player);
 	}
 }

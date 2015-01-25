@@ -24,6 +24,7 @@ import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent.SetArmorModel;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.oredict.OreDictionary;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -36,7 +37,6 @@ import thaumcraft.api.research.ResearchCategories;
 import thaumcraft.client.gui.GuiResearchBrowser;
 import thaumcraft.common.Thaumcraft;
 import travellersgear.api.RenderTravellersGearEvent;
-import witchinggadgets.WitchingGadgets;
 import witchinggadgets.common.WGContent;
 import witchinggadgets.common.WGResearch;
 import witchinggadgets.common.blocks.tiles.TileEntitySaunaStove;
@@ -47,6 +47,7 @@ import witchinggadgets.common.util.Utilities;
 import witchinggadgets.common.util.WGKeyHandler;
 import witchinggadgets.common.util.handler.InfusedGemHandler;
 import witchinggadgets.common.util.network.PacketPrimordialGlove;
+import witchinggadgets.common.util.network.WGPacketPipeline;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -79,7 +80,6 @@ public class ClientEventHandler
 		if(playerModel != null)
 		{
 			//			System.out.println("hi.");
-			playerModel.bipedLeftLeg.rotateAngleX = (float) Math.toRadians(70f);
 			//			playerModel.bipedBody.showModel = true;
 			//			playerModel.bipedLeftLeg.showModel = true;
 			//			playerModel.bipedRightLeg.showModel = true;
@@ -132,9 +132,9 @@ public class ClientEventHandler
 		if(Block.getBlockFromItem(event.itemStack.getItem())!=null)
 			for(Class intf : Block.getBlockFromItem(event.itemStack.getItem()).getClass().getInterfaces())
 				if(intf.getCanonicalName().endsWith("InfusionStabiliser"))
-					event.toolTip.add("Works as  Infusion Stabilizer");
-		//for(int o: OreDictionary.getOreIDs(event.itemStack))
-		//	event.toolTip.add(OreDictionary.getOreName(o));
+					event.toolTip.add("Works as Infusion Stabilizer");
+		//		for(int o: OreDictionary.getOreIDs(event.itemStack))
+		//			event.toolTip.add(OreDictionary.getOreName(o));
 
 		if(event.itemStack.getTagCompound()!=null && event.itemStack.getTagCompound().hasKey("AdvancedTooltipInfo"))
 		{
@@ -201,7 +201,7 @@ public class ClientEventHandler
 			double angle = (mx<0?180:0)+Math.abs((mx<0?-180:0)+ (my<0?90:0)+Math.abs((my<0?-90:0)+Math.abs(Math.toDegrees(Math.acos(cx))-90)));
 			int sel = angle>288?0: angle<72?1: 2+(int)((288-angle)/72);
 			//System.out.println("Selected: "+sel);
-			WitchingGadgets.packetPipeline.sendToServer(new PacketPrimordialGlove(player, (byte)0, sel));
+			WGPacketPipeline.INSTANCE.sendToServer(new PacketPrimordialGlove(player, (byte)0, sel));
 		}
 		//		if(thaumSearchField!=null)
 		//		{

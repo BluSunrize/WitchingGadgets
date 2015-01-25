@@ -30,7 +30,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemMagicalBaubles extends Item implements IBauble, ITravellersGear
 {
 	//String[] subNames = {"ringSocketed_gold","ringSocketed_thaumium","ringSocketed_silver"};
-	String[] subNames = {"shouldersDoublejump","shouldersKnockback","vambraceStrength","vambraceHaste","titleCrimsonCult"};
+	public static String[] subNames = {"shouldersDoublejump","shouldersKnockback","vambraceStrength","vambraceHaste","titleCrimsonCult"};
 	IIcon[] icons = new IIcon[subNames.length];
 	IIcon[] ringGems = new IIcon[ItemInfusedGem.GemCut.values().length];
 
@@ -41,7 +41,12 @@ public class ItemMagicalBaubles extends Item implements IBauble, ITravellersGear
 		setCreativeTab(WitchingGadgets.tabWG);
 		setHasSubtypes(true);
 	}
-
+	@Override
+	public boolean isItemTool(ItemStack stack)
+    {
+        return stack.stackSize == 1;
+    }
+	
 	@Override
 	public int getColorFromItemStack(ItemStack stack, int pass)
 	{
@@ -93,7 +98,7 @@ public class ItemMagicalBaubles extends Item implements IBauble, ITravellersGear
 	@Override
 	public int getRenderPasses(int meta)
 	{
-		return this.subNames[meta].contains("Socketed")?2:1;
+		return subNames[meta].contains("Socketed")?2:1;
 	}
 	@SideOnly(Side.CLIENT)
 	public IIcon getIconFromDamage(int metadata)
@@ -154,18 +159,18 @@ public class ItemMagicalBaubles extends Item implements IBauble, ITravellersGear
 	@Override
 	public boolean canUnequip(ItemStack stack, EntityLivingBase living)
 	{
-		return !this.subNames[stack.getItemDamage()].contains("binding");
+		return !subNames[stack.getItemDamage()].contains("binding");
 	}
 
 	@Override
 	public BaubleType getBaubleType(ItemStack stack)
 	{
-		return this.subNames[stack.getItemDamage()].startsWith("ring")?BaubleType.RING : this.subNames[stack.getItemDamage()].startsWith("belt")?BaubleType.BELT : this.subNames[stack.getItemDamage()].startsWith("necklace")?BaubleType.AMULET : null;
+		return subNames[stack.getItemDamage()].startsWith("ring")?BaubleType.RING : subNames[stack.getItemDamage()].startsWith("belt")?BaubleType.BELT : ItemMagicalBaubles.subNames[stack.getItemDamage()].startsWith("necklace")?BaubleType.AMULET : null;
 	}
 	@Override
 	public int getSlot(ItemStack stack)
 	{
-		return this.subNames[stack.getItemDamage()].startsWith("cloak")?0: this.subNames[stack.getItemDamage()].startsWith("shoulders")?1: this.subNames[stack.getItemDamage()].startsWith("vambrace")?2: this.subNames[stack.getItemDamage()].startsWith("title")?3: -1;
+		return subNames[stack.getItemDamage()].startsWith("cloak")?0: subNames[stack.getItemDamage()].startsWith("shoulders")?1: ItemMagicalBaubles.subNames[stack.getItemDamage()].startsWith("vambrace")?2: ItemMagicalBaubles.subNames[stack.getItemDamage()].startsWith("title")?3: -1;
 	}
 
 

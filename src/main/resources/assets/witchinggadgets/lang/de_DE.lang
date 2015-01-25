@@ -284,9 +284,9 @@ witchinggadgets_research_name.ROSEVINE=Rose Vines
 witchinggadgets_research_text.ROSEVINE=[WG] Pointy!
 witchinggadgets_research_page.ROSEVINE.1=These thorny plants are the first results of a Thaumaturge delving into Herbology. While not very decorative, their sharp thorns and quick growth makes them ideal for setting up a natural security perimeter for any §mcastle§r base with §ma sleeping beauty§r treasure inside to safeguard. Spreading vines can be harvested with Shears.
 #
-witchinggadgets_research_name.VITALIZEDIRT=Vitalize Dirt
-witchinggadgets_research_text.VITALIZEDIRT=[WG] Grass grows, spores fly
-witchinggadgets_research_page.VITALIZEDIRT.1=One of the most basic alchemic procedures is that of putting some life back into a cubic meter of dirt, turning it into grass or mycellium, depending on the thaumic aspects used. Adding Perdito will drain it of it's life even further, creating sand. Any hobby-mage can do this.
+witchinggadgets_research_name.ALCHEMICALTRANSMOGRIFY=Alchemical Transmogrification
+witchinggadgets_research_text.ALCHEMICALTRANSMOGRIFY=[WG] Grass grows, spores fly
+witchinggadgets_research_page.ALCHEMICALTRANSMOGRIFY.1=Expanding your wide array of alchemical processes, these transmutations can be used to revitalize dirt, pulverize cobblestone, or purify gravel.
 #
 witchinggadgets_research_name.PURECINNABAR=Cinnabar Purification
 witchinggadgets_research_text.PURECINNABAR=[WG] Purification of cinnabar into native clusters

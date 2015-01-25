@@ -2,7 +2,7 @@ package witchinggadgets.api;
 
 import net.minecraft.item.ItemStack;
 
-public interface IPrimordial
+public interface IPrimordialCrafting
 {
 	/**
 	 * @return the amount of Primordial Pearls refunded upon crafting

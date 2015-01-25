@@ -14,6 +14,7 @@ import thaumcraft.common.config.ConfigBlocks;
 import witchinggadgets.client.ClientUtilities;
 import witchinggadgets.common.blocks.tiles.TileEntityCobbleGen;
 import witchinggadgets.common.blocks.tiles.TileEntityCuttingTable;
+import witchinggadgets.common.blocks.tiles.TileEntityLabelLibrary;
 import witchinggadgets.common.blocks.tiles.TileEntitySpinningWheel;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -62,6 +63,10 @@ public class BlockRenderWoodenDevice implements ISimpleBlockRenderingHandler
 				renderer.setRenderBounds(.8125, .75, .1875, 1, 1, .8125);
 				ClientUtilities.drawStandardBlock(block, metadata, renderer);
 
+			}
+			if(metadata == 5)
+			{
+				TileEntityRendererDispatcher.instance.renderTileEntityAt(new TileEntityLabelLibrary(), 0.0D, 0.0D, 0.0D, 0.0F);
 			}
 		}catch(Exception e)
 		{

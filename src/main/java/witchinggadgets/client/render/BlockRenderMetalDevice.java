@@ -17,6 +17,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
+import thaumcraft.client.renderers.block.BlockRenderer;
+import witchinggadgets.client.ClientUtilities;
 import witchinggadgets.common.blocks.tiles.TileEntityEssentiaPump;
 import witchinggadgets.common.blocks.tiles.TileEntityTerraformFocus;
 import witchinggadgets.common.blocks.tiles.TileEntityTerraformer;
@@ -31,37 +33,52 @@ public class BlockRenderMetalDevice implements ISimpleBlockRenderingHandler
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer)
 	{
-		GL11.glPushMatrix();
-		try{
-			if(metadata==0)
-			{
-				GL11.glTranslatef(-.5f, -.5F, -.5f);
-				TileEntityRendererDispatcher.instance.renderTileEntityAt(new TileEntityEssentiaPump(), 0.0D, 0.0D, 0.0D, 0.0F);
-			}
-			else if(metadata==1)
-			{
-				GL11.glTranslatef(-.5f, -.5F, -.5f);
-				TileEntityRendererDispatcher.instance.renderTileEntityAt(new TileEntityTerraformer(), 0.0D, 0.0D, 0.0D, 0.0F);
-			}
-			else if(metadata>=2&&metadata<=6)
-			{
-				GL11.glTranslatef(-.5f, -.5F, -.5f);
-				TileEntityTerraformFocus tetf = new TileEntityTerraformFocus();
-				tetf.blockType = block;
-				tetf.blockMetadata = metadata;
-				TileEntityRendererDispatcher.instance.renderTileEntityAt(tetf, 0.0D, 0.0D, 0.0D, 0.0F);
-			}
-		}catch(Exception e)
+		if(metadata==7)
 		{
-			e.printStackTrace();
+			block.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+			renderer.setRenderBoundsFromBlock(block);
+			BlockRenderer.drawFaces(renderer, block, block.getIcon(0, metadata), true);
 		}
-		GL11.glEnable(32826);
-		GL11.glPopMatrix();
+		else
+		{
+			GL11.glPushMatrix();
+			try{
+				if(metadata==0)
+				{
+					GL11.glTranslatef(-.5f, -.5F, -.5f);
+					TileEntityRendererDispatcher.instance.renderTileEntityAt(new TileEntityEssentiaPump(), 0.0D, 0.0D, 0.0D, 0.0F);
+				}
+				else if(metadata==1)
+				{
+					GL11.glTranslatef(-.5f, -.5F, -.5f);
+					TileEntityRendererDispatcher.instance.renderTileEntityAt(new TileEntityTerraformer(), 0.0D, 0.0D, 0.0D, 0.0F);
+				}
+				else if(metadata>=2&&metadata<=6)
+				{
+					GL11.glTranslatef(-.5f, -.5F, -.5f);
+					TileEntityTerraformFocus tetf = new TileEntityTerraformFocus();
+					tetf.blockType = block;
+					tetf.blockMetadata = metadata;
+					TileEntityRendererDispatcher.instance.renderTileEntityAt(tetf, 0.0D, 0.0D, 0.0D, 0.0F);
+				}
+			}catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+			GL11.glEnable(32826);
+			GL11.glPopMatrix();
+		}
 	}
 
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer)
 	{
+		if(world.getBlockMetadata(x, y, z)==7)
+		{
+			block.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+			renderer.setRenderBoundsFromBlock(block);
+			return renderer.renderStandardBlock(block, x, y, z);
+		}
 		return false;
 	}
 

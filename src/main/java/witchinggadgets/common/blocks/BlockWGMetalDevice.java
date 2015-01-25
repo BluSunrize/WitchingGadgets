@@ -32,7 +32,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockWGMetalDevice extends BlockContainer implements ITerraformFocus
 {
-	public static String[] subNames = {"essentiaPump","terraformer","tfFocusPlains","tfFocusColdTaiga","tfFocusDesert","tfFocusJungle","tfFocusHell"};
+	public static String[] subNames = {"essentiaPump","terraformer","tfFocusPlains","tfFocusColdTaiga","tfFocusDesert","tfFocusJungle","tfFocusHell","voidmetalBlock"};
 	IIcon[] icons = new IIcon[subNames.length];
 
 	public BlockWGMetalDevice()
@@ -53,7 +53,7 @@ public class BlockWGMetalDevice extends BlockContainer implements ITerraformFocu
 	{	
 		for(int i=0;i<icons.length;i++)
 		{
-			if(i>0)
+			if(i<7)
 				icons[i] = iconRegister.registerIcon("thaumcraft:metalbase");
 			else
 				icons[i] = iconRegister.registerIcon("witchinggadgets:"+subNames[i]);
@@ -114,7 +114,13 @@ public class BlockWGMetalDevice extends BlockContainer implements ITerraformFocu
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z)
 	{
-		if(world.getBlockMetadata(x, y, z)==2)
+		if(world.getTileEntity(x, y, z) instanceof TileEntityEssentiaPump)
+		{
+			ForgeDirection fd = ((TileEntityEssentiaPump)world.getTileEntity(x, y, z)).facing;
+//			System.out.println(fd);
+			this.setBlockBounds(fd==ForgeDirection.EAST?.25f:0,fd==ForgeDirection.UP?.25f:0,fd==ForgeDirection.SOUTH?.25f:0, fd==ForgeDirection.WEST?.75f:1,fd==ForgeDirection.DOWN?.75f:1,fd==ForgeDirection.SOUTH?.75f:1);
+		}
+		else if(world.getBlockMetadata(x, y, z)>=2&&world.getBlockMetadata(x, y, z)<=6)
 			this.setBlockBounds(.125f,0,.125f, .875f,.75f,.875f);
 		else
 			this.setBlockBounds(0,0,0,1,1,1);
@@ -135,6 +141,8 @@ public class BlockWGMetalDevice extends BlockContainer implements ITerraformFocu
 		case 5:
 		case 6:
 			return new TileEntityTerraformFocus();
+		case 7:
+			return null;
 		}
 		return null;
 	}
@@ -152,7 +160,7 @@ public class BlockWGMetalDevice extends BlockContainer implements ITerraformFocu
 		int meta = world.getBlockMetadata(x, y, z);
 		int f = playerViewQuarter==0 ? 2:playerViewQuarter==1 ? 5:playerViewQuarter==2 ? 3: 4;
 		if(meta == 0)
-			((TileEntityEssentiaPump)world.getTileEntity(x,y,z)).facing = ForgeDirection.getOrientation(f);
+			((TileEntityEssentiaPump)world.getTileEntity(x,y,z)).facing = ForgeDirection.getOrientation(f).getOpposite();
 	}
 
 	@Override

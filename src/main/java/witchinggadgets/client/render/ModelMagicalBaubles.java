@@ -1,7 +1,6 @@
 package witchinggadgets.client.render;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.client.model.ModelBiped;
@@ -9,6 +8,7 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import travellersgear.api.ITravellersGear;
+import witchinggadgets.common.items.baubles.ItemMagicalBaubles;
 
 public class ModelMagicalBaubles extends ModelBiped
 {
@@ -41,7 +41,7 @@ public class ModelMagicalBaubles extends ModelBiped
 		this.bipedLeftArm.setRotationPoint(5.0F, 2.0F, 0.0F);
 	}
 
-	static HashMap<Integer,ModelBiped> modelMap = new HashMap();
+	static ModelBiped[] modelMap = new ModelBiped[ItemMagicalBaubles.subNames.length];
 	public static ModelBiped getModel(EntityLivingBase entity, ItemStack stack)
 	{
 		if(stack==null || !(stack.getItem() instanceof ITravellersGear))
@@ -49,8 +49,8 @@ public class ModelMagicalBaubles extends ModelBiped
 		int slot = ((ITravellersGear)stack.getItem()).getSlot(stack);
 		if(slot<0 || slot>2)
 			return null;
-		if(!modelMap.containsKey(stack.getItemDamage()))
-			modelMap.put(stack.getItemDamage(), new ModelMagicalBaubles(entity,stack));
-		return modelMap.get(stack.getItemDamage());
+		if(modelMap[stack.getItemDamage()]==null)
+			modelMap[stack.getItemDamage()] = new ModelMagicalBaubles(entity,stack);
+		return modelMap[stack.getItemDamage()];
 	}
 }

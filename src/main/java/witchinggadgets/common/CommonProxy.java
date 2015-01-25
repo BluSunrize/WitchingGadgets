@@ -5,12 +5,15 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import travellersgear.api.TravellersGearAPI;
+import witchinggadgets.asm.pouch.ContainerPatchedFocusPouch;
 import witchinggadgets.common.blocks.tiles.TileEntityCuttingTable;
+import witchinggadgets.common.blocks.tiles.TileEntityLabelLibrary;
 import witchinggadgets.common.blocks.tiles.TileEntityLoom;
 import witchinggadgets.common.blocks.tiles.TileEntitySpinningWheel;
 import witchinggadgets.common.gui.ContainerBag;
 import witchinggadgets.common.gui.ContainerCloak;
 import witchinggadgets.common.gui.ContainerCuttingTable;
+import witchinggadgets.common.gui.ContainerLabelLibrary;
 import witchinggadgets.common.gui.ContainerLoom;
 import witchinggadgets.common.gui.ContainerPrimordialGlove;
 import witchinggadgets.common.gui.ContainerSpinningWheel;
@@ -35,9 +38,13 @@ public class CommonProxy implements IGuiHandler
 		
 		if(ID == 3)return new ContainerBag(player.inventory, world);
 		if(ID==4||ID==5)return new ContainerCloak(player.inventory, world, ID==4?TravellersGearAPI.getExtendedInventory(player)[0]:BaublesApi.getBaubles(player).getStackInSlot(3) );
+		
+		if(ID == 6)return new ContainerPatchedFocusPouch(player.inventory, world, x, y, z);
 
 		if(ID == 7)return new ContainerPrimordialGlove(player.inventory, world, x, y, z);
 		//System.out.println("...or just skip it...");
+		if(ID == 8)return new ContainerLabelLibrary(player.inventory, (TileEntityLabelLibrary)tile);
+
 		if(ID == 9)return new ContainerCuttingTable(player.inventory, (TileEntityCuttingTable)tile);
 		
 		if(ID == 11)return new ContainerVoidBag(player.inventory, world);
