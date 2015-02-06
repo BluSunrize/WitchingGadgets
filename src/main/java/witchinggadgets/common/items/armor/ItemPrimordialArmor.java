@@ -36,6 +36,7 @@ import witchinggadgets.WitchingGadgets;
 import witchinggadgets.api.IPrimordialCrafting;
 import witchinggadgets.client.render.ModelPrimordialArmor;
 import witchinggadgets.common.items.tools.IPrimordialGear;
+import witchinggadgets.common.util.Utilities;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -305,27 +306,29 @@ public class ItemPrimordialArmor extends ItemFortressArmor implements IActiveAbi
 			}
 		}
 	}
+	
+	@Override
+	public boolean getIsRepairable(ItemStack stack1, ItemStack stack2)
+	{
+		return Utilities.compareToOreName(stack2, "ingotVoid");
+	}
 
 	@Override
 	public void onUserAttacking(AttackEntityEvent event, ItemStack stack)
 	{
 	}
-
 	@Override
 	public void onUserJump(LivingJumpEvent event, ItemStack stack)
 	{
 	}
-
 	@Override
 	public void onUserFall(LivingFallEvent event, ItemStack stack)
 	{
 	}
-
 	@Override
 	public void onUserTargeted(LivingSetAttackTargetEvent event, ItemStack stack)
 	{
 	}
-
 	//	public enum PrimordialArmorUpgrade
 	//	{
 	//		AIR(new AspectList().add(Aspect.AIR,32).add(Aspect.MOTION,32).add(Aspect.ARMOR,32), new ItemStack(ConfigItems.itemShard,1,0),new ItemStack(ConfigItems.itemWispEssence),new ItemStack(Items.arrow),new ItemStack(ConfigItems.itemWispEssence),new ItemStack(Items.arrow),new ItemStack(ConfigItems.itemWispEssence),new ItemStack(ConfigItems.itemShard,1,0),new ItemStack(ConfigItems.itemWispEssence),new ItemStack(Items.arrow),new ItemStack(ConfigItems.itemWispEssence),new ItemStack(Items.arrow),new ItemStack(ConfigItems.itemWispEssence)),

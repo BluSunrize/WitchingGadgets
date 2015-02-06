@@ -17,8 +17,6 @@ public class TileRenderSnowGen extends TileEntitySpecialRenderer
 		GL11.glPushMatrix();
 
 		Tessellator tes = Tessellator.instance;
-		//		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-		int tick = tile.tick;
 		GL11.glTranslatef((float)x, (float)y, (float)z);
 
 		switch(tile.facing)

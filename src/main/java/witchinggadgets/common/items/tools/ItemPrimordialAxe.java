@@ -308,32 +308,26 @@ public class ItemPrimordialAxe extends ItemAxe implements IPrimordialCrafting, I
 		player.setItemInUse(stack, this.getMaxItemUseDuration(stack));
 		return stack;
 	}
-
-
 	@Override
-	public void onUserAttacking(AttackEntityEvent event, ItemStack stack) {
-		// TODO Auto-generated method stub
-
+	public boolean getIsRepairable(ItemStack stack1, ItemStack stack2)
+	{
+		return Utilities.compareToOreName(stack2, "ingotVoid");
 	}
 
-
 	@Override
-	public void onUserJump(LivingJumpEvent event, ItemStack stack) {
-		// TODO Auto-generated method stub
-
+	public void onUserAttacking(AttackEntityEvent event, ItemStack stack)
+	{
 	}
-
-
 	@Override
-	public void onUserFall(LivingFallEvent event, ItemStack stack) {
-		// TODO Auto-generated method stub
-
+	public void onUserJump(LivingJumpEvent event, ItemStack stack)
+	{
 	}
-
-
 	@Override
-	public void onUserTargeted(LivingSetAttackTargetEvent event, ItemStack stack) {
-		// TODO Auto-generated method stub
-
+	public void onUserFall(LivingFallEvent event, ItemStack stack)
+	{
+	}
+	@Override
+	public void onUserTargeted(LivingSetAttackTargetEvent event, ItemStack stack)
+	{
 	}
 }

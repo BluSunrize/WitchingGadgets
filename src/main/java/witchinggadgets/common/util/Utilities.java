@@ -3,7 +3,6 @@ package witchinggadgets.common.util;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import net.minecraft.block.Block;
@@ -13,10 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.tileentity.TileEntity;
@@ -26,10 +22,8 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import org.apache.logging.log4j.Level;
 
-import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
-import thaumcraft.api.crafting.IArcaneRecipe;
 import thaumcraft.api.nodes.INode;
 import thaumcraft.api.research.ResearchCategories;
 import thaumcraft.api.research.ResearchCategoryList;
@@ -44,7 +38,6 @@ import witchinggadgets.WitchingGadgets;
 import witchinggadgets.common.WGContent;
 import witchinggadgets.common.items.baubles.ItemCloak;
 import baubles.api.BaublesApi;
-import cpw.mods.fml.relauncher.ReflectionHelper;
 
 public class Utilities
 {
@@ -61,42 +54,6 @@ public class Utilities
 	public static boolean consumeVisFromWand(ItemStack is, EntityPlayer player, AspectList aspects, boolean doit)
 	{
 		return ((ItemWandCasting)is.getItem()).consumeAllVisCrafting(is, player, aspects, doit);
-	}
-
-	/**
-	 * Tries to find a matching Arcane Recipe from the given inventory. This returns the recipe rather than the result like the original Thaumcraft method.
-	 * @param iInventory the inventory
-	 * @param player the user
-	 * @return
-	 */
-	public static IArcaneRecipe findMatchingArcaneRecipe(IInventory iInventory, EntityPlayer player)
-	{
-		int var2 = 0;
-		ItemStack s0 = null;
-		ItemStack s1 = null;
-		for (int slot = 0; slot < 9; slot++)
-		{
-			ItemStack s2 = iInventory.getStackInSlot(slot);
-			if (s2 != null)
-			{
-				if (var2 == 0) {
-					s0 = s2;
-				}
-				if (var2 == 1) {
-					s1 = s2;
-				}
-				var2++;
-			}
-		}
-		IArcaneRecipe var13 = null;
-		for (Object var11 : ThaumcraftApi.getCraftingRecipes()) {
-			if (((var11 instanceof IArcaneRecipe)) && (((IArcaneRecipe)var11).matches(iInventory, player.worldObj, player)))
-			{
-				var13 = (IArcaneRecipe)var11;
-				break;
-			}
-		}
-		return var13 == null ? null : var13;
 	}
 
 	/**
@@ -260,57 +217,6 @@ public class Utilities
 			flag = true;
 		}
 		return flag;
-	}
-
-	/**
-	 * Tries to find a matching Recipe from the given inventory. This returns the recipe rather than the result like the original Minecraft method.
-	 * @param iInventory the inventory
-	 * @param player the user
-	 * @return the recipe
-	 */
-	public static IRecipe findMatchingRecipe(InventoryCrafting par1InventoryCrafting, World par2World)
-	{
-		int i = 0;
-		ItemStack itemstack = null;
-		ItemStack itemstack1 = null;
-		int j;
-
-		for (j = 0; j < par1InventoryCrafting.getSizeInventory(); ++j)
-		{
-			ItemStack itemstack2 = par1InventoryCrafting.getStackInSlot(j);
-
-			if (itemstack2 != null)
-			{
-				if (i == 0)
-				{
-					itemstack = itemstack2;
-				}
-
-				if (i == 1)
-				{
-					itemstack1 = itemstack2;
-				}
-
-				++i;
-			}
-		}
-
-		List lRecipes= null;
-		try{
-			lRecipes = ReflectionHelper.getPrivateValue(CraftingManager.class, CraftingManager.getInstance(), "recipes");
-		}catch(Exception e){}
-		if(lRecipes == null)
-			return null;
-		for (j = 0; j < lRecipes.size(); ++j)
-		{
-			IRecipe irecipe = (IRecipe)lRecipes.get(j);
-
-			if (irecipe.matches(par1InventoryCrafting, par2World))
-			{
-				return irecipe;
-			}
-		}
-		return null;
 	}
 
 	public static boolean compareToOreName(ItemStack item, String oreName)

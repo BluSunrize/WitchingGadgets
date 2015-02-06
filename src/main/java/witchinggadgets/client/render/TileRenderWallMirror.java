@@ -88,8 +88,6 @@ public class TileRenderWallMirror extends TileEntitySpecialRenderer
 		double glassUmax = 1.0/32.0;
 		double glassVmin = 0.0;
 		double glassVmax = 0.5;
-		double darknessVmin= 0.5;
-		double darknessVmax= 1.0;
 		if(active && !deactivating)
 		{
 			glassUmin = animation*(1.0/32.0);

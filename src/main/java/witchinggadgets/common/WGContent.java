@@ -83,6 +83,7 @@ import witchinggadgets.common.magic.WGEnchantBackstab;
 import witchinggadgets.common.magic.WGEnchantGemBrittle;
 import witchinggadgets.common.magic.WGEnchantGemPotency;
 import witchinggadgets.common.magic.WGEnchantInvisibleGear;
+import witchinggadgets.common.magic.WGEnchantRideProtect;
 import witchinggadgets.common.magic.WGEnchantStealth;
 import witchinggadgets.common.magic.WGEnchantUnveiling;
 import witchinggadgets.common.magic.WGPotion;
@@ -151,6 +152,7 @@ public class WGContent
 	public static Enchantment enc_unveiling;
 	public static Enchantment enc_stealth;
 	public static Enchantment enc_backstab;
+	public static Enchantment enc_rideProtect;
 
 	public static ArmorMaterial armorMatSpecialRobe = EnumHelper.addArmorMaterial("WG:ADVANEDCLOTH", 25, new int[] { 2, 4, 3, 2 }, 25);
 	public static ArmorMaterial standardCloak = EnumHelper.addArmorMaterial("WG:CLOAKMATERIAL", 0, new int[] {0,0,0,0}, 0);
@@ -206,7 +208,9 @@ public class WGContent
 		eid = Utilities.getNextEnchantmentId(eid);
 		if(eid >= 0)
 			enc_backstab = new WGEnchantBackstab(eid);
-
+		eid = Utilities.getNextEnchantmentId(eid);
+		if(eid >= 0)
+			enc_rideProtect = new WGEnchantRideProtect(eid);
 	}
 	public static void postInit()
 	{

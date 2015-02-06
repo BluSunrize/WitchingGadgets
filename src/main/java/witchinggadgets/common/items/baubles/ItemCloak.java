@@ -232,8 +232,14 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, 
 		return 0;
 	}
 
-	public void onGearTick(EntityPlayer player, ItemStack stack)
+	public void onItemTicked(EntityPlayer player, ItemStack stack)
 	{
+		if(getLastPlayerHashcode(stack) != player.hashCode())
+		{
+			onItemUnequipped(player,stack);
+			onItemEquipped(player,stack);
+		}
+		
 		if(stack.getItemDamage()<subNames.length)
 		{
 			if(subNames[stack.getItemDamage()].equals("spectral") && !player.worldObj.isRemote && stack.hasTagCompound() && stack.getTagCompound().getBoolean("isSpectral"))
@@ -252,8 +258,6 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, 
 					}
 					else if(player.motionY<0 && (!stack.hasTagCompound()||!stack.getTagCompound().getBoolean("noGlide")))
 					{
-						System.out.println("can Glide in "+player.worldObj);
-						
 						float mod = player.isSneaking()?.1f:.05f;
 						player.motionY *= player.isSneaking()?.75:.5;
 						double x = Math.cos(Math.toRadians(player.rotationYawHead + 90)) * mod;
@@ -267,10 +271,11 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, 
 			}
 		}
 	}
-	public void onGearEquip(EntityPlayer player, ItemStack stack)
+	public void onItemEquipped(EntityPlayer player, ItemStack stack)
 	{
+		setLastPlayerHashcode(stack, player.hashCode());
 	}
-	public void onGearUnequip(EntityPlayer player, ItemStack stack)
+	public void onItemUnequipped(EntityPlayer player, ItemStack stack)
 	{
 		if(stack.hasTagCompound() && stack.getTagCompound().getBoolean("isSpectral"))
 			stack.getTagCompound().setBoolean("isSpectral",false);
@@ -279,17 +284,17 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, 
 	@Override
 	public void onTravelGearTick(EntityPlayer player, ItemStack stack)
 	{
-		onGearTick(player,stack);
+		onItemTicked(player,stack);
 	}
 	@Override
 	public void onTravelGearEquip(EntityPlayer player, ItemStack stack)
 	{
-		onGearEquip(player,stack);
+		onItemEquipped(player,stack);
 	}
 	@Override
 	public void onTravelGearUnequip(EntityPlayer player, ItemStack stack)
 	{
-		onGearUnequip(player,stack);
+		onItemUnequipped(player,stack);
 	}
 
 
@@ -311,8 +316,6 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, 
 				if(!stack.hasTagCompound())
 					stack.setTagCompound(new NBTTagCompound());
 				stack.getTagCompound().setBoolean("noGlide", !stack.getTagCompound().getBoolean("noGlide"));
-
-				System.out.println("Activating, "+player.worldObj+"  "+stack.getTagCompound().getBoolean("noGlide"));
 			}
 			else if(subNames[stack.getItemDamage()].equals("spectral") && !player.worldObj.isRemote && Utilities.consumeVisFromInventoryWithoutDiscount(player, new AspectList().add(Aspect.AIR,1)))
 			{
@@ -377,5 +380,21 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, 
 				((EntityCreature)event.entityLiving).setAttackTarget(null);
 		}
 	}
-
+	
+	
+	// ==================
+	// Blatantly stolen from Botania! Thanks Vazkii~
+	// ==================
+	public int getLastPlayerHashcode(ItemStack stack)
+	{
+		if(!stack.hasTagCompound())
+			stack.setTagCompound(new NBTTagCompound());
+		return stack.getTagCompound().getInteger(Lib.NBTTAG_HASHCODE);
+	}
+	public void setLastPlayerHashcode(ItemStack stack, int hash)
+	{
+		if(!stack.hasTagCompound())
+			stack.setTagCompound(new NBTTagCompound());
+		stack.getTagCompound().setInteger(Lib.NBTTAG_HASHCODE,hash);
+	}
 }

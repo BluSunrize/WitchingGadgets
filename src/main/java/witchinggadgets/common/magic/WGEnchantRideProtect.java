@@ -2,20 +2,23 @@ package witchinggadgets.common.magic;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import travellersgear.api.TravellersGearAPI;
+import baubles.api.IBauble;
 
-public class WGEnchantInvisibleGear extends Enchantment
+public class WGEnchantRideProtect extends Enchantment
 {
-	public WGEnchantInvisibleGear(int id)
+	public WGEnchantRideProtect(int id)
 	{
-		super(id, 0, EnumEnchantmentType.all);
-		this.setName("wg.invisibleGear");
+		super(id, 0, EnumEnchantmentType.armor_head);
+		this.setName("wg.rideProtect");
 	}
 
 	@Override
 	public int getMinEnchantability(int lvl)
 	{
-		return 6;
+		return 9;
 	}
 
 	@Override
@@ -28,6 +31,12 @@ public class WGEnchantInvisibleGear extends Enchantment
 	public int getMaxLevel()
 	{
 		return 1;
+	}
+
+	@Override
+	public boolean canApply(ItemStack stack)
+	{
+		return stack!=null && (stack.getItem() instanceof ItemArmor || stack.getItem() instanceof IBauble || TravellersGearAPI.isTravellersGear(stack));
 	}
 
 	@Override

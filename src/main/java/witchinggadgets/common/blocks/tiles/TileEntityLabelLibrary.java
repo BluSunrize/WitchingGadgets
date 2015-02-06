@@ -20,9 +20,7 @@ public class TileEntityLabelLibrary extends TileEntityWGBase implements IInvento
 	public void updateEntity()
 	{
 		if(!this.worldObj.isRemote)
-		{
 			this.inventory[1] = this.getOutput();
-		}
 	}
 	@Override
 	public void readCustomNBT(NBTTagCompound tag)

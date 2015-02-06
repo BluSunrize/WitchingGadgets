@@ -18,7 +18,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 import thaumcraft.client.renderers.block.BlockRenderer;
-import witchinggadgets.client.ClientUtilities;
 import witchinggadgets.common.blocks.tiles.TileEntityEssentiaPump;
 import witchinggadgets.common.blocks.tiles.TileEntityTerraformFocus;
 import witchinggadgets.common.blocks.tiles.TileEntityTerraformer;

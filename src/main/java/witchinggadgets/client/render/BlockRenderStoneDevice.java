@@ -2,14 +2,12 @@ package witchinggadgets.client.render;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFenceGate;
-import net.minecraft.block.BlockGrass;
 import net.minecraft.block.BlockPane;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.BlockWall;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.init.Blocks;
 import net.minecraft.world.IBlockAccess;
 
 import org.lwjgl.opengl.GL11;
@@ -76,7 +74,6 @@ public class BlockRenderStoneDevice implements ISimpleBlockRenderingHandler
 			blockToRender.setBlockBoundsBasedOnState(renderer.blockAccess, x, y, z);
 			renderer.setRenderBoundsFromBlock(blockToRender);
 
-			Tessellator tes = Tessellator.instance;
 			int l = block.colorMultiplier(world,x,y,z);
 			float[] rgb = {(l>>16&255)/255f,(l>>8&255)/255f,(l&255)/255f};
 
@@ -89,108 +86,13 @@ public class BlockRenderStoneDevice implements ISimpleBlockRenderingHandler
 				rgb[1] = f4;
 				rgb[2] = f5;
 			}
-			float f3 = 0.5F;
-			float f4 = 1.0F;
-			float f5 = 0.8F;
-			float f6 = 0.6F;
-			float f7 = f4 * rgb[0];
-			float f8 = f4 * rgb[1];
-			float f9 = f4 * rgb[2];
-			float f10 = f3;
-			float f11 = f5;
-			float f12 = f6;
-			float f13 = f3;
-			float f14 = f5;
-			float f15 = f6;
-			float f16 = f3;
-			float f17 = f5;
-			float f18 = f6;
-			if (blockToRender!=Blocks.grass)
-			{
-				f10 = f3 * rgb[0];
-				f11 = f5 * rgb[0];
-				f12 = f6 * rgb[0];
-				f13 = f3 * rgb[1];
-				f14 = f5 * rgb[1];
-				f15 = f6 * rgb[1];
-				f16 = f3 * rgb[2];
-				f17 = f5 * rgb[2];
-				f18 = f6 * rgb[2];
-			}
 
 			boolean flag=false;
 			switch (renderType)
 			{
 			case 0:
 				renderer.renderStandardBlockWithAmbientOcclusion(block, x, y, z, rgb[0], rgb[1], rgb[2]);
-				if(true)
-					return true;
-
-				renderer.enableAO=true;
-				if(block.shouldSideBeRendered(world, x, y-1, z, 0))
-				{
-					tes.setBrightness(block.getMixedBrightnessForBlock(world,x,y-1,z));
-					tes.setColorRGBA_F(f10, f13, f16, .75f);
-					renderer.renderFaceYNeg(blockToRender, x, y, z, blockToRender.getIcon(0, metaToRender));
-					flag=true;
-				}
-				if(block.shouldSideBeRendered(world, x, y+1, z, 1))
-				{
-					tes.setBrightness(block.getMixedBrightnessForBlock(world,x,y+1,z));
-					tes.setColorOpaque_F(f7, f8, f9);
-					renderer.renderFaceYPos(blockToRender, x, y, z, blockToRender.getIcon(1, metaToRender));
-					flag=true;
-				}
-				if(block.shouldSideBeRendered(world, x, y, z-1, 2))
-				{
-					tes.setBrightness(block.getMixedBrightnessForBlock(world,x,y,z-1));
-					tes.setColorOpaque_F(f11, f14, f17);
-					renderer.renderFaceZNeg(blockToRender, x, y, z, blockToRender.getIcon(2, metaToRender));
-					if(RenderBlocks.fancyGrass && blockToRender.getIcon(2, metaToRender).getIconName().equals("grass_side"))
-					{
-						tes.setColorOpaque_F(f11*rgb[0], f14*rgb[1], f17*rgb[2]);
-						renderer.renderFaceZNeg(blockToRender, x, y, z, BlockGrass.getIconSideOverlay());
-					}
-					flag=true;
-				}
-				if(block.shouldSideBeRendered(world, x, y, z+1, 3))
-				{
-					tes.setBrightness(block.getMixedBrightnessForBlock(world, x,y,z+1));
-					tes.setColorOpaque_F(f11, f14, f17);
-					renderer.renderFaceZPos(blockToRender, x, y, z, blockToRender.getIcon(3, metaToRender));
-					if(RenderBlocks.fancyGrass && blockToRender.getIcon(3, metaToRender).getIconName().equals("grass_side"))
-					{
-						tes.setColorOpaque_F(f11*rgb[0], f14*rgb[1], f17*rgb[2]);
-						renderer.renderFaceZPos(blockToRender, (double)x, (double)y, (double)z, BlockGrass.getIconSideOverlay());
-					}
-					flag=true;
-				}
-				if(block.shouldSideBeRendered(world, x-1, y, z, 4))
-				{
-					tes.setBrightness(block.getMixedBrightnessForBlock(world, x-1,y,z));
-					tes.setColorOpaque_F(f12, f15, f18);
-					renderer.renderFaceXNeg(blockToRender, x, y, z, blockToRender.getIcon(4, metaToRender));
-					if(RenderBlocks.fancyGrass && blockToRender.getIcon(4, metaToRender).getIconName().equals("grass_side"))
-					{
-						tes.setColorOpaque_F(f12 * rgb[0], f15 * rgb[1], f18 * rgb[2]);
-						renderer.renderFaceXNeg(blockToRender, (double)x, (double)y, (double)z, BlockGrass.getIconSideOverlay());
-					}
-
-					flag=true;
-				}
-				if(block.shouldSideBeRendered(world, x+1, y, z, 5))
-				{
-					tes.setBrightness(block.getMixedBrightnessForBlock(world, x+1,y,z));
-					tes.setColorOpaque_F(f12, f15, f18);
-					renderer.renderFaceXPos(blockToRender, x, y, z, blockToRender.getIcon(5, metaToRender));
-					if(RenderBlocks.fancyGrass && blockToRender.getIcon(5, metaToRender).getIconName().equals("grass_side"))
-					{
-						tes.setColorOpaque_F(f12 * rgb[0], f15 * rgb[1], f18 * rgb[2]);
-						renderer.renderFaceXPos(blockToRender, (double)x, (double)y, (double)z, BlockGrass.getIconSideOverlay());
-					}
-					flag=true;
-				}
-				return flag;
+				return true;
 			case 31: //LOG
 				int i1 = metaToRender & 12;
 

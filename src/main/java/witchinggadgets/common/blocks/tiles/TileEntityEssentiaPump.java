@@ -34,7 +34,7 @@ public class TileEntityEssentiaPump extends TileEntityWGBase implements IEssenti
 			Aspect a = null;
 			if(worldObj.getTileEntity(xCoord+facing.offsetX,yCoord+facing.offsetY,zCoord+facing.offsetZ) instanceof IEssentiaTransport)
 				a = ((IEssentiaTransport)worldObj.getTileEntity(xCoord+facing.offsetX,yCoord+facing.offsetY,zCoord+facing.offsetZ)).getSuctionType(facing.getOpposite());
-			if(a!=null && (aspect==null||aspect==a))
+			if(a!=null && (aspect==null||aspect==a) && amount<1)
 			{
 				for(TileMirrorEssentia mirror : getMirrors())
 					if(mirror.takeFromContainer(a,1))
@@ -45,6 +45,7 @@ public class TileEntityEssentiaPump extends TileEntityWGBase implements IEssenti
 						this.markDirty();
 						worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 						PacketHandler.INSTANCE.sendToAllAround(new PacketFXEssentiaSource(xCoord,yCoord,zCoord, (byte)(xCoord-mirror.xCoord), (byte)(yCoord-mirror.yCoord), (byte)(zCoord-mirror.zCoord), aspect.getColor()), new NetworkRegistry.TargetPoint(worldObj.provider.dimensionId,xCoord,yCoord,zCoord, 32.0D));
+						return;
 					}
 			}
 		}
@@ -186,7 +187,7 @@ public class TileEntityEssentiaPump extends TileEntityWGBase implements IEssenti
 			amount -= am;
 			if(amount<=0)
 				this.aspect = null;
-			return amount;
+			return am;
 		}
 		return 0;
 	}

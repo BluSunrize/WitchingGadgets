@@ -26,6 +26,7 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.launchwrapper.Launch;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
@@ -43,6 +44,7 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.entities.EntitySpecialItem;
+import thaumcraft.common.entities.monster.EntityCultistCleric;
 import thaumcraft.common.entities.monster.EntityCultistKnight;
 import thaumcraft.common.entities.monster.boss.EntityCultistLeader;
 import thaumcraft.common.items.wands.ItemWandCasting;
@@ -209,6 +211,8 @@ public class EventHandler
 					event.drops.add(entityitem);
 				}
 		}
+		if(event.entityLiving instanceof EntityCultistCleric && event.entityLiving.worldObj.rand.nextInt(10)<1+event.lootingLevel)
+			event.drops.add(new EntityItem(event.entityLiving.worldObj, event.entityLiving.posX, event.entityLiving.posY, event.entityLiving.posZ, ItemMagicalBaubles.getItemWithTitle(new ItemStack(WGContent.ItemMagicalBaubles,1,4),Lib.TITLE+"crimsonCultist")));
 		if(event.entityLiving instanceof EntityCultistKnight && event.entityLiving.worldObj.rand.nextInt(10)<1+event.lootingLevel)
 			event.drops.add(new EntityItem(event.entityLiving.worldObj, event.entityLiving.posX, event.entityLiving.posY, event.entityLiving.posZ, ItemMagicalBaubles.getItemWithTitle(new ItemStack(WGContent.ItemMagicalBaubles,1,4),Lib.TITLE+"crimsonKnight")));
 		if(event.entityLiving instanceof EntityCultistLeader && event.entityLiving.worldObj.rand.nextInt(2)==0)
@@ -217,9 +221,9 @@ public class EventHandler
 		if(event.recentlyHit && event.source!=null && event.source.getSourceOfDamage() instanceof EntityPlayer)
 		{
 			EntityPlayer player = (EntityPlayer)event.source.getSourceOfDamage(); 
-			if(player.getCurrentEquippedItem()!=null && player.getCurrentEquippedItem().getItem().equals(WGContent.ItemPrimordialSword))
-			{
 
+			if(player.getCurrentEquippedItem()!=null && player.getCurrentEquippedItem().getItem().equals(WGContent.ItemPrimordialSword) && player.getRNG().nextInt(6-EnchantmentHelper.getLootingModifier(player))==0)
+			{
 				ItemStack head=null;
 				if(event.entityLiving instanceof EntitySkeleton)
 					head = new ItemStack(Items.skull,1, ((EntitySkeleton)event.entityLiving).getSkeletonType());
@@ -233,6 +237,14 @@ public class EventHandler
 					NBTTagCompound tag = new NBTTagCompound();
 					tag.setString("SkullOwner", player.getDisplayName());
 					head.setTagCompound(tag);
+				}
+				else if(Loader.isModLoaded("witchery"))
+				{
+					Item wwh = GameRegistry.findItem("witchery", "wolfhead");
+					if(event.entityLiving instanceof EntityWolf)
+						head = new ItemStack(wwh,1,0);
+					if(event.entityLiving.getClass().getName().endsWith("EntityHellhound"))
+						head = new ItemStack(wwh,1,1);
 				}
 				else if(Loader.isModLoaded("IguanaTweaksTConstruct"))
 				{
@@ -267,10 +279,12 @@ public class EventHandler
 		if(event.source!=null && event.source.getSourceOfDamage() instanceof EntityPlayer && event.entityLiving instanceof EntityLiving && !event.entityLiving.worldObj.isRemote && event.entityLiving.worldObj.getGameRules().getGameRuleBooleanValue("doMobLoot"))
 		{
 			EntityPlayer player = (EntityPlayer)event.source.getSourceOfDamage();
-			
+
 			if(player.getCurrentEquippedItem()!=null && player.getCurrentEquippedItem().getItem() instanceof IPrimordialGear && ((IPrimordialGear)player.getCurrentEquippedItem().getItem()).getAbility(player.getCurrentEquippedItem())==4)
 			{
-				int baseValue = ObfuscationReflectionHelper.getPrivateValue(EntityLiving.class, (EntityLiving)event.entityLiving, "experienceValue");
+				boolean deobf = (Boolean)Launch.blackboard.get("fml.deobfuscatedEnvironment");
+				String name = deobf?"experienceValue":"field_70728_aV";
+				int baseValue = ObfuscationReflectionHelper.getPrivateValue(EntityLiving.class, (EntityLiving)event.entityLiving, name);
 				int xp = 4 * baseValue;
 				while (xp > 0)
 				{
@@ -341,7 +355,7 @@ public class EventHandler
 				}
 			}
 		}
-		if(output.getItem() instanceof IPrimordialCrafting && !event.player.worldObj.isRemote)
+		if(output.getItem() instanceof IPrimordialCrafting && !event.player.worldObj.isRemote && (!output.hasTagCompound()||!output.getTagCompound().getBoolean("wasCrafted")))
 		{
 			if(((IPrimordialCrafting)output.getItem()).getReturnedPearls(output)>0)
 			{
@@ -358,7 +372,10 @@ public class EventHandler
 								iZ = event.player.posZ+zz;
 							}
 				EntitySpecialItem entityitem = new EntitySpecialItem(event.player.worldObj, iX, iY, iZ, new ItemStack(WGContent.ItemMaterial, ((IPrimordialCrafting)output.getItem()).getReturnedPearls(output), 12));
-				entityitem.setVelocity(0,0,0);
+				entityitem.motionX=entityitem.motionY=entityitem.motionZ=0;
+				if(output.getTagCompound()==null)
+					output.setTagCompound(new NBTTagCompound());
+				output.getTagCompound().setBoolean("wasCrafted", true);
 				event.player.worldObj.spawnEntityInWorld(entityitem);
 			}
 		}

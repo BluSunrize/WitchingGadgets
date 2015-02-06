@@ -15,7 +15,6 @@ import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import org.apache.logging.log4j.Level;
@@ -270,6 +269,9 @@ public class WGResearch
 		registerInfusionEnchantmentRecipe("ENCH_BACKSTAB","",WGContent.enc_backstab,3,infusionAspects,new ItemStack[] {new ItemStack(Items.iron_sword),new ItemStack(Items.potionitem,1,8206),new ItemStack(ConfigItems.itemResource,1,14)});
 		WGModCompat.thaumicTinkererRegisterEnchantment(WGContent.enc_backstab, "witchinggadgets:textures/gui/research/icon_ench_backstab.png", new AspectList().add(Aspect.AIR, 20).add(Aspect.ENTROPY, 20).add(Aspect.FIRE, 20), "ENCH_BACKSTAB");
 
+		infusionAspects = new AspectList().add(Aspect.ARMOR, 12).add(Aspect.TRAP, 8).add(Aspect.MAGIC, 4);
+		registerInfusionEnchantmentRecipe("ENCH_RIDEPROTECT","",WGContent.enc_rideProtect,3,infusionAspects,new ItemStack[] {new ItemStack(ConfigItems.itemResource,1,14),new ItemStack(Blocks.piston),new ItemStack(Blocks.piston)});
+		WGModCompat.thaumicTinkererRegisterEnchantment(WGContent.enc_rideProtect, "witchinggadgets:textures/gui/research/icon_ench_rideProtect.png", new AspectList().add(Aspect.AIR, 20).add(Aspect.ENTROPY, 20).add(Aspect.ORDER, 20), "ENCH_RIDEPROTECT");
 
 		/**
 		 * ALCHEMY
@@ -499,15 +501,15 @@ public class WGResearch
 		researchAspects = new AspectList().add(Aspect.WATER, 3).add(Aspect.FIRE, 3).add(Aspect.MECHANISM, 1);
 		pages = new ResearchPage[]{ new ResearchPage("witchinggadgets_research_page.SAUNASTOVE.1"), new ResearchPage("witchinggadgets_research_page.SAUNASTOVE.2"), new ResearchPage((ShapedArcaneRecipe) recipeList.get("SAUNASTOVE")) };
 		getResearchItem("SAUNASTOVE", "WITCHGADG", researchAspects, -1,-1, 1, new ItemStack(WGContent.BlockWoodenDevice,1,4)).setParents("WGFAKEBATHSALTS").setPages(pages).setSecondary().setConcealed().registerResearchItem();
-		
-		
-		getFakeResearchItem("JARLABEL", "ALCHEMY", 4,-1,  new ItemStack(ConfigItems.itemBathSalts)).registerResearchItem();
+
+
+		getFakeResearchItem("JARLABEL", "ALCHEMY", 4,-1,  new ItemStack(ConfigBlocks.blockJar)).registerResearchItem();
 		//LABELLIB
 		researchAspects = new AspectList().add(Aspect.SENSES, 4).add(Aspect.MIND, 4).add(Aspect.TOOL, 2);
 		pages = new ResearchPage[]{ new ResearchPage("witchinggadgets_research_page.LABELLIB.1"), new ResearchPage((ShapedArcaneRecipe) recipeList.get("LABELLIB")) };
 		getResearchItem("LABELLIB", "WITCHGADG", researchAspects, 4, -3, 2, new ItemStack(WGContent.BlockWoodenDevice,1,5)).setParents("WGFAKEJARLABEL").setPages(pages).setSecondary().registerResearchItem();
-		
-		
+
+
 		if(Config.allowMirrors)
 		{	
 			//			//ORIGINAL MIRROR
@@ -661,6 +663,11 @@ public class WGResearch
 		researchAspects = new AspectList().add(Aspect.MAGIC, 2).add(Aspect.WEAPON, 4).add(Aspect.DARKNESS, 4);
 		pages = new ResearchPage[]{ new ResearchPage("witchinggadgets_research_page.ENCH_BACKSTAB.1"), new ResearchPage((InfusionEnchantmentRecipe) recipeList.get("ENCH_BACKSTAB"))};
 		getResearchItem("ENCH_BACKSTAB", "WITCHGADG", researchAspects, -11, 4, 2, new ResourceLocation("witchinggadgets:textures/gui/research/icon_ench_backstab.png")).setParents("ENCH_STEALTH").setConcealed().setSecondary().setPages(pages).registerResearchItem();
+		//ENCH_RIDEPROTECT
+		researchAspects = new AspectList().add(Aspect.MAGIC, 2).add(Aspect.TRAP, 4).add(Aspect.ARMOR, 4);
+		pages = new ResearchPage[]{ new ResearchPage("witchinggadgets_research_page.ENCH_RIDEPROTECT.1"), new ResearchPage((InfusionEnchantmentRecipe) recipeList.get("ENCH_RIDEPROTECT"))};
+		getResearchItem("ENCH_RIDEPROTECT", "WITCHGADG", researchAspects, -11, 0, 2, new ResourceLocation("witchinggadgets:textures/gui/research/icon_ench_rideProtect.png")).setParents("WGFAKEINFUSIONENCHANTMENT").setConcealed().setSecondary().setPages(pages).registerResearchItem();
+
 
 		//ORIGINAL ELDRITCHMINOR
 		getFakeResearchItem("ELDRITCHMINOR", "ELDRITCH", 1,3, new ResourceLocation("thaumcraft", "textures/misc/r_eldritchminor.png")).setSpecial().registerResearchItem();
@@ -793,13 +800,6 @@ public class WGResearch
 		recipeList.put(tag+tagAddon, compoundRecipe);
 	}
 
-	private static void registerShapedOreRecipe(String tag, String tagAddon, ItemStack result, Object... recipe)
-	{
-		ShapedOreRecipe oreRecipe = new ShapedOreRecipe(result,recipe);
-		GameRegistry.addRecipe(oreRecipe);
-		recipeList.put(tag+tagAddon, oreRecipe);
-	}
-
 	private static void registerShapelessOreRecipe(String tag, String tagAddon, ItemStack result, Object... recipe)
 	{
 		ShapelessOreRecipe oreRecipe = new ShapelessOreRecipe(result,recipe);
@@ -825,21 +825,6 @@ public class WGResearch
 		if(icon instanceof ResourceLocation)
 			item = new WGFakeResearchItem("WGFAKE"+original, "WITCHGADG", original, originalCat, xPos, yPos, (ResourceLocation) icon);
 		return item;
-	}
-
-	private static void registerRunicUpgrades(String nameTag, ItemStack input)
-	{
-		AspectList infusionAspects;
-		infusionAspects = new AspectList().add(Aspect.MAGIC, 16).add(Aspect.ENERGY, 32);
-		registerInfusionRecipe("RUNICARMORUPGRADES","_RCU1_"+nameTag, new Object[]{"upgrade", new NBTTagByte((byte)1)}, 3,infusionAspects,input,new ItemStack[] {new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Items.redstone), new ItemStack(ConfigItems.itemShard, 1, 1), new ItemStack(ConfigItems.itemShard, 1, 1), new ItemStack(ConfigItems.itemShard, 1, 1)});
-		infusionAspects = new AspectList().add(Aspect.MAGIC, 32).add(Aspect.ARMOR, 16);
-		registerInfusionRecipe("RUNICARMORUPGRADES","_RCU2_"+nameTag, new Object[]{"upgrade", new NBTTagByte((byte)2)}, 3,infusionAspects,input,new ItemStack[] {new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Items.flint), new ItemStack(ConfigItems.itemShard, 1, 4), new ItemStack(ConfigItems.itemShard, 1, 4), new ItemStack(ConfigItems.itemShard, 1, 4)});
-		infusionAspects = new AspectList().add(Aspect.MAGIC, 16).add(Aspect.AIR, 16).add(Aspect.MOTION, 16);
-		registerInfusionRecipe("RUNICARMORUPGRADES","_RCU3_"+nameTag, new Object[]{"upgrade", new NBTTagByte((byte)3)}, 3,infusionAspects,input,new ItemStack[] {new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Items.gunpowder), new ItemStack(ConfigItems.itemShard, 1, 5), new ItemStack(ConfigItems.itemShard, 1, 5), new ItemStack(ConfigItems.itemShard, 1, 5)});
-		infusionAspects = new AspectList().add(Aspect.MAGIC, 16).add(Aspect.LIFE, 16).add(Aspect.HEAL, 16);
-		registerInfusionRecipe("RUNICARMORUPGRADES","_RCU4_"+nameTag, new Object[]{"upgrade", new NBTTagByte((byte)4)}, 3,infusionAspects,input,new ItemStack[] {new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Items.golden_apple), new ItemStack(ConfigItems.itemShard, 1, 2), new ItemStack(ConfigItems.itemShard, 1, 2), new ItemStack(ConfigItems.itemShard, 1, 2)});
-		infusionAspects = new AspectList().add(Aspect.MAGIC, 16).add(Aspect.EARTH, 16).add(Aspect.METAL, 16);
-		registerInfusionRecipe("RUNICARMORUPGRADES","_RCU5_"+nameTag, new Object[]{"upgrade", new NBTTagByte((byte)5)}, 3,infusionAspects,input,new ItemStack[] {new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Items.iron_ingot), new ItemStack(ConfigItems.itemShard, 1, 3), new ItemStack(ConfigItems.itemShard, 1, 3), new ItemStack(ConfigItems.itemShard, 1, 3)});
 	}
 
 	private static void setupCluster(String name)

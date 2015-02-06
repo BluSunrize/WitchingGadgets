@@ -29,13 +29,12 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 
-@Mod(modid = WitchingGadgets.MODID, name = WitchingGadgets.MODNAME, version = WitchingGadgets.VERSION, dependencies="required-after:Thaumcraft;required-after:TravellersGear@[1.13,);after:TwilightForest;after:Mystcraft;after:TConstruct;after:MagicBees;after:ForgeMultipart")
+@Mod(modid = WitchingGadgets.MODID, name = WitchingGadgets.MODNAME, version = WitchingGadgets.VERSION, dependencies="required-after:Thaumcraft;required-after:TravellersGear@[1.15,);after:TwilightForest;after:Mystcraft;after:TConstruct;after:MagicBees;after:ForgeMultipart")
 public class WitchingGadgets
 {
 	public static final String MODID = "WitchingGadgets";
 	public static final String MODNAME = "Witching Gadgets";
 	public static final String VERSION = "${version}";
-	//public static BiomeGenBase BiomeMirror;
 
 	public PlayerTickHandler playerTickHandler;
 
@@ -60,9 +59,6 @@ public class WitchingGadgets
 
 		WGConfig.loadConfig(event);
 		WGContent.preInit();
-
-		//BiomeMirror = new BiomeGenMirror(WGConfig.BiomeMirrorID).setColor(0).setBiomeName("Crystal Void").setDisableRain().setTemperatureRainfall(0F, 0.0F).setHeight(new Height(0.1F, 0.1F));
-		//BiomeDictionary.registerBiomeType(BiomeMirror, Type.MAGICAL);
 
 		eventHandler = new EventHandler();
 		MinecraftForge.EVENT_BUS.register(eventHandler);
@@ -91,29 +87,16 @@ public class WitchingGadgets
 		WGContent.init();
 
 		this.customRecipeHandler = new RecipeHandler();
-		//		DimensionManager.registerProviderType(WGConfig.dimensionMirrorID, WorldProviderMirror.class, false);
-		//		DimensionManager.registerDimension(WGConfig.dimensionMirrorID, WGConfig.dimensionMirrorID);
-		//		GameRegistry.registerWorldGenerator(new WGWorldGen(), 1);
-
+		
 		proxy.registerHandlers();
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
 
-		//FMLInterModComms.sendMessage("Sync", "treadmill", "thaumcraft.common.entities.golems.EntityGolemBase:4");
-		/** TODO Readd this when iChun updates!
-		FMLInterModComms.sendMessage("GraviGun", "addBlockIDToGrabList", WGContent.BlockWoodenDevice.blockID + ": 1" + ", " + WGContent.BlockWallMirror.blockID + ", " + WGContent.BlockCustomAiry.blockID + ", " + WGContent.BlockVoidWalkway.blockID + ", " + WGContent.BlockPortal.blockID );
-	    FMLInterModComms.sendMessage("PortalGun", "addBlockIDToGrabList", WGContent.BlockWoodenDevice.blockID + ": 1" + ", " + WGContent.BlockWallMirror.blockID + ", " + WGContent.BlockCustomAiry.blockID + ", " + WGContent.BlockVoidWalkway.blockID + ", " + WGContent.BlockPortal.blockID );
-		 */
-
-		//		VillageComponentPhotoshop.VillageManager villageManager = new VillageComponentPhotoshop.VillageManager();
-		//		VillagerRegistry.instance().registerVillageCreationHandler(villageManager);
 	}
 
 	@Mod.EventHandler
 	public static void postInit(FMLPostInitializationEvent event)
 	{
 		WGModCompat.init();
-		//WGModCompat.addTags();
-		//((BiomeGenMirror)BiomeMirror).resetSpawnLists();
 		WGContent.postInit();
 		WGPacketPipeline.INSTANCE.postInitialise();
 	}

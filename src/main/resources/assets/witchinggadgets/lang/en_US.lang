@@ -111,6 +111,7 @@ item.WG_Baubles.shouldersKnockback.name=Steadfast Spaulders
 item.WG_Baubles.vambraceStrength.name=Berserker's Bracers
 item.WG_Baubles.vambraceHaste.name=Vambraces of Steady Progression
 item.WG_Baubles.titleCrimsonCult.name=Title: Crimson Cult
+wg.title.crimsonCultist=Crimson Cultist
 wg.title.crimsonKnight=Crimson Knight
 wg.title.crimsonPraetor=Crimson Praetor
 
@@ -128,6 +129,7 @@ enchantment.wg.invisibleGear=Translucency
 enchantment.wg.unveiling=Unveiling
 enchantment.wg.stealth=Stealth
 enchantment.wg.backstab=Backstabbing
+enchantment.wg.rideProtect=Throwoff
 #
 # -- Random bits of text --
 wg.chat.notyourbag=§7This bag belongs to§r %1$s! §7You are not allowed to open it.§r
@@ -168,6 +170,8 @@ wg.desc.gearSlot.bauble.AMULET=Equipped in the §aAmulet§7 slot
 wg.desc.filteredItems=Accepted Items:
 
 wg.desc.active=Active
+
+wg.desc.infusionStabilizer=Works as an Infusion Stabilizer
 
 wg.gui.search=Search
 wg.chat.nodeContents.primal=Primal Aspects within this node: §eAer: %1$s§f, §2Terra: %2$s§f, §cIgnis: %3$s§f, §3Aqua: %4$s§f, §7Ordo: %5$s§f, §8Perditio: %6$s
@@ -425,6 +429,10 @@ witchinggadgets_research_page.ENCH_STEALTH.1=More often than not, sneaking is no
 witchinggadgets_research_name.ENCH_BACKSTAB=Enchantment: Backstabbing
 witchinggadgets_research_text.ENCH_BACKSTAB=[WG] Rogues do it from behind
 witchinggadgets_research_page.ENCH_BACKSTAB.1=With your newfound ability to sneak, comes a new option of combat. By attacking enemies from behind you use the element of surpise to avoid the enemy's defenses. Items enchanted with Backstabbing do additional 20% damage per level when attacking from behind, plus another 40% when the target is not aware of you.
+#
+witchinggadgets_research_name.ENCH_RIDEPROTECT=Enchantment: Throwoff
+witchinggadgets_research_text.ENCH_RIDEPROTECT=[WG] Get off meh!
+witchinggadgets_research_page.ENCH_RIDEPROTECT.1=Moving around is incredibly difficult when someone is piggyback-riding you. Enchanting your helmet with this repulsion spell should fix that problem. Everyone who tries to jump upon you will get thrown off and damaged.
 
 
 #GEMCUTTING

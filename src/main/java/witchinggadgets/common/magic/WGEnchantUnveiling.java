@@ -16,15 +16,15 @@ public class WGEnchantUnveiling extends Enchantment
 	}
 
 	@Override
-	public int getMinEnchantability(int par1)
+	public int getMinEnchantability(int lvl)
 	{
-		return 0;
+		return 6;
 	}
 
 	@Override
-	public int getMaxEnchantability(int par1)
+	public int getMaxEnchantability(int lvl)
 	{
-		return 0;
+	    return getMinEnchantability(lvl) + 20;
 	}
 
 	@Override

@@ -1,14 +1,8 @@
 package witchinggadgets.client.gui;
 
-import java.util.List;
-
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.ItemStack;
 
 import org.lwjgl.opengl.GL11;
 
@@ -22,20 +16,11 @@ import witchinggadgets.common.util.network.WGPacketPipeline;
 public class GuiCuttingTable extends GuiContainer
 {
 	private TileEntityCuttingTable tile;
-	private EntityPlayer player;
 
 	public GuiCuttingTable (InventoryPlayer inventoryPlayer, TileEntityCuttingTable tileEntity)
 	{
 		super(new ContainerCuttingTable(inventoryPlayer, tileEntity));
 		this.tile = tileEntity;
-		this.player = inventoryPlayer.player;
-	}
-
-	@Override
-	protected void drawGuiContainerForegroundLayer(int mX, int mY)
-	{
-		if(this.tile.getOutput()!=null)
-			this.drawVirtualItem(tile.getOutput(), 118, 24, false, mX, mY, true);
 	}
 
 	@Override
@@ -60,9 +45,6 @@ public class GuiCuttingTable extends GuiContainer
 		tes.draw();
 
 		UtilsFX.drawTag(guiLeft+118,guiTop+41, this.tile.getInfusingAspect(), 0.0F, 0, this.zLevel);
-
-		if(this.tile.getOutput()!=null)
-			this.drawVirtualItem(tile.getOutput(), guiLeft+118,guiTop+24, false, mX, mY, false);
 	}
 
 	@Override
@@ -87,42 +69,6 @@ public class GuiCuttingTable extends GuiContainer
 			
 			if(this.tile.targetGemCut != old)
 				WGPacketPipeline.INSTANCE.sendToServer(new PacketTileUpdate(this.tile));
-		}
-	}
-
-	public void drawVirtualItem(ItemStack stack, int x, int y, boolean isDull, int mouseX, int mouseY, boolean foreground)
-	{
-		itemRender.renderWithColor = false;
-		if(!foreground)
-		{
-			GL11.glPushMatrix();
-			if(isDull)
-				itemRender.renderWithColor = true;
-			GL11.glEnable(2896);
-			GL11.glEnable(2884);
-			GL11.glEnable(3042);
-			GL11.glColor4f(1,1,1, 0.2F);
-			itemRender.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine, stack, x, y);
-			itemRender.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine, stack, x, y);
-			GL11.glDisable(3042);
-			GL11.glDisable(2896);
-			GL11.glPopMatrix();
-		}
-		else
-		{
-			GL11.glPushMatrix();
-			int xx = mouseX - this.guiLeft - x;
-			int yy = mouseY - this.guiTop - y;
-			if ((xx >= 0) && (yy >= 0) && (xx < 16) && (yy < 16))
-			{
-				this.renderToolTip(stack, mouseX-guiLeft, mouseY-guiTop);
-				List tooltip = stack.getTooltip(this.player, Minecraft.getMinecraft().gameSettings.advancedItemTooltips);
-				RenderHelper.enableGUIStandardItemLighting();
-				//				WGGraphicUtilities.drawTooltipHoveringText(this, tooltip, mouseX-guiLeft, mouseY-guiTop, fontRendererObj, 0, 0);
-				//				UtilsFX.drawCustomTooltip(this, itemRender, this.fontRendererObj, tooltip, mouseX-guiLeft, mouseY-guiTop, 11);
-			}
-			GL11.glPopMatrix();
-			//			itemRender.renderWithCoolor = true;
 		}
 	}
 }

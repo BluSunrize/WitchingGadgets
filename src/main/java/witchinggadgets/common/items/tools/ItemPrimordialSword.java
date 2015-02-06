@@ -31,6 +31,7 @@ import travellersgear.api.IActiveAbility;
 import travellersgear.api.IEventGear;
 import witchinggadgets.api.IPrimordialCrafting;
 import witchinggadgets.common.WGContent;
+import witchinggadgets.common.util.Utilities;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -216,28 +217,26 @@ public class ItemPrimordialSword extends ItemSword implements IPrimordialCraftin
 			stack.setTagCompound(new NBTTagCompound());
 		return stack.getTagCompound().getInteger("currentMode");
 	}
-
 	@Override
-	public void onUserAttacking(AttackEntityEvent event, ItemStack stack) {
-		// TODO Auto-generated method stub
-		
+	public boolean getIsRepairable(ItemStack stack1, ItemStack stack2)
+	{
+		return Utilities.compareToOreName(stack2, "ingotVoid");
 	}
 
 	@Override
-	public void onUserJump(LivingJumpEvent event, ItemStack stack) {
-		// TODO Auto-generated method stub
-		
+	public void onUserAttacking(AttackEntityEvent event, ItemStack stack)
+	{
 	}
-
 	@Override
-	public void onUserFall(LivingFallEvent event, ItemStack stack) {
-		// TODO Auto-generated method stub
-		
+	public void onUserJump(LivingJumpEvent event, ItemStack stack)
+	{
 	}
-
 	@Override
-	public void onUserTargeted(LivingSetAttackTargetEvent event, ItemStack stack) {
-		// TODO Auto-generated method stub
-		
+	public void onUserFall(LivingFallEvent event, ItemStack stack)
+	{
+	}
+	@Override
+	public void onUserTargeted(LivingSetAttackTargetEvent event, ItemStack stack)
+	{
 	}
 }

@@ -12,11 +12,29 @@ public class TravellersGearAPI
 	/**
 	 * @return The NBTTagCompound under which all TRPG data is saved
 	 */
-	public static NBTTagCompound getTravellersNBTData(EntityPlayer player)
+	private static NBTTagCompound getTravellersNBTData(EntityPlayer player)
 	{
-		if(!player.getEntityData().hasKey("TravellersRPG"))
-			player.getEntityData().setTag("TravellersRPG", new NBTTagCompound());
-		return player.getEntityData().getCompoundTag("TravellersRPG");
+		if(TGSaveData.getPlayerData(player)==null)
+		{
+			NBTTagCompound tag = new NBTTagCompound();
+			if(player.getEntityData().hasKey("TravellersRPG"))
+			{
+				tag = player.getEntityData().getCompoundTag("TravellersRPG");
+				player.getEntityData().removeTag("TravellersRPG");
+			}
+			tag.setLong("UUIDMost", player.getPersistentID().getMostSignificantBits());
+			tag.setLong("UUIDLeast", player.getPersistentID().getLeastSignificantBits());
+			TGSaveData.setPlayerData(player, tag);
+		}
+		if(player.getEntityData().hasKey("TravellersRPG"))
+		{
+			NBTTagCompound tag = player.getEntityData().getCompoundTag("TravellersRPG");
+			player.getEntityData().removeTag("TravellersRPG");
+			tag.setLong("UUIDMost", player.getPersistentID().getMostSignificantBits());
+			tag.setLong("UUIDLeast", player.getPersistentID().getLeastSignificantBits());
+			TGSaveData.setPlayerData(player, tag);
+		}
+		return TGSaveData.getPlayerData(player);
 	}
 
 	static Method m_isStackPseudoTravellersGear=null;
@@ -87,6 +105,7 @@ public class TravellersGearAPI
 				list.appendTag(invSlot);
 			}
 		getTravellersNBTData(player).setTag("Inventory", list);
+		TGSaveData.setDirty();
 	}
 
 	/**@param player The targeted player
@@ -100,16 +119,30 @@ public class TravellersGearAPI
 			if(scroll.hasTagCompound() && scroll.getTagCompound().hasKey("title"))
 				return scroll.getTagCompound().getString("title");
 			if(scroll.hasTagCompound() && scroll.getTagCompound().hasKey("display") && scroll.getTagCompound().getCompoundTag("display").hasKey("Lore"))
-            {
-                NBTTagList loreList = scroll.getTagCompound().getCompoundTag("display").getTagList("Lore", 8);
-                if(loreList.tagCount()>0)
-    				return loreList.getStringTagAt(0);
-            }
+			{
+				NBTTagList loreList = scroll.getTagCompound().getCompoundTag("display").getTagList("Lore", 8);
+				if(loreList.tagCount()>0)
+					return loreList.getStringTagAt(0);
+			}
 			if(scroll.hasDisplayName())
 				return scroll.getDisplayName();
 		}
 		return null;
 	}
 
-
+	/**@param player The targeted player
+	 * @return A taglist containing NBTTagCompounds, these save data on tools to be displayed on the player
+	 */
+	public static NBTTagList getDisplayTools(EntityPlayer player)
+	{
+		return getTravellersNBTData(player).getTagList("toolDisplay", 10);
+	}
+	/**@param player The targeted player
+	 * @param list the taglist
+	 */
+	public static void setDisplayTools(EntityPlayer player, NBTTagList list)
+	{
+		getTravellersNBTData(player).setTag("toolDisplay", list);
+		TGSaveData.setDirty();
+	}
 }

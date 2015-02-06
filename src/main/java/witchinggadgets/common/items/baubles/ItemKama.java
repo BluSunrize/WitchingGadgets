@@ -75,21 +75,22 @@ public class ItemKama extends ItemCloak implements IBauble
 	public void onEquipped(ItemStack stack, EntityLivingBase living)
 	{
 		if(living instanceof EntityPlayer)
-			this.onGearEquip((EntityPlayer) living, stack);
+			this.onItemEquipped((EntityPlayer) living, stack);
+		setLastPlayerHashcode(stack, living.hashCode());
 	}
 
 	@Override
 	public void onUnequipped(ItemStack stack, EntityLivingBase living)
 	{
 		if(living instanceof EntityPlayer)
-			this.onGearUnequip((EntityPlayer) living, stack);
+			this.onItemUnequipped((EntityPlayer) living, stack);
 	}
 
 	@Override
 	public void onWornTick(ItemStack stack, EntityLivingBase living)
 	{
 		if(living instanceof EntityPlayer)
-			this.onGearTick((EntityPlayer) living, stack);
+			this.onItemTicked((EntityPlayer) living, stack);
 	}
 	
 	@Override

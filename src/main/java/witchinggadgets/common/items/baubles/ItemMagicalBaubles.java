@@ -43,10 +43,10 @@ public class ItemMagicalBaubles extends Item implements IBauble, ITravellersGear
 	}
 	@Override
 	public boolean isItemTool(ItemStack stack)
-    {
-        return stack.stackSize == 1;
-    }
-	
+	{
+		return stack.stackSize == 1;
+	}
+
 	@Override
 	public int getColorFromItemStack(ItemStack stack, int pass)
 	{
@@ -137,6 +137,7 @@ public class ItemMagicalBaubles extends Item implements IBauble, ITravellersGear
 		for(int i=0;i<subNames.length;i++)
 			if(i==4)
 			{
+				itemList.add(getItemWithTitle(new ItemStack(this,1,i),Lib.TITLE+"crimsonCultist"));
 				itemList.add(getItemWithTitle(new ItemStack(this,1,i),Lib.TITLE+"crimsonKnight"));
 				itemList.add(getItemWithTitle(new ItemStack(this,1,i),Lib.TITLE+"crimsonPraetor"));
 			}

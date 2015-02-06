@@ -1,23 +1,22 @@
 package witchinggadgets.common.util.handler;
 
-import java.lang.reflect.Method;
-
 import net.minecraft.block.material.Material;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import thaumcraft.common.Thaumcraft;
-import thaumcraft.common.config.ConfigItems;
-import thaumcraft.common.items.armor.ItemBootsTraveller;
 import thaumcraft.common.lib.potions.PotionWarpWard;
 import witchinggadgets.WitchingGadgets;
 import witchinggadgets.common.WGConfig;
+import witchinggadgets.common.WGContent;
 import witchinggadgets.common.WGModCompat;
 import witchinggadgets.common.blocks.tiles.TileEntitySaunaStove;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.relauncher.Side;
 
 public class PlayerTickHandler
 {
@@ -25,53 +24,7 @@ public class PlayerTickHandler
 	public void playerTick(TickEvent.PlayerTickEvent event)
 	{
 		EntityPlayer player = event.player;
-		if(event.side == Side.SERVER)
-		{
-			try{
-				for(Method m :ItemBootsTraveller.class.getDeclaredMethods())
-				{
-					if(m.getName() == "test")
-						System.out.println(m.invoke(ConfigItems.itemBootsTraveller));
-				}
-				
-			}catch(Exception e)
-			{
-				
-			}
-			
-			
-//			Item replaceBoots = new ItemBootsTraveller(ThaumcraftApi.armorMatSpecial, 4, 3)
-//			{
-//				@Override
-//				public boolean getIsRepairable(ItemStack stack1, ItemStack stack2)
-//				{
-//					return stack2.isItemEqual(new ItemStack(Items.leather)) ? true : super.getIsRepairable(stack1, stack2);
-//				}
-//			}.setUnlocalizedName("BootsTraveller");
-//			try {
-////				GameRegistry.addSubstitutionAlias("Thaumcraft:BootsTraveller", GameRegistry.Type.ITEM, replaceBoots);
-//				GameRegistry.activateSubstitution();
-//			} catch (ExistingSubstitutionException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			System.out.println("wut wut");
-//			Item i = GameRegistry.findItem("Thaumcraft", "BootsTraveller");
-//			Item i = GameData.getItemRegistry().getObject("Thaumcraft:BootsTraveler");
-//			System.out.println(i);
-//			ConfigItems.itemBootsTraveller = new ItemBootsTraveller(ThaumcraftApi.armorMatSpecial, 4, 3)
-//			{
-//				@Override
-//				public boolean getIsRepairable(ItemStack stack1, ItemStack stack2)
-//				{
-//					System.out.println("wut wut");
-//					return stack2.isItemEqual(new ItemStack(Items.leather)) ? true : super.getIsRepairable(stack1, stack2);
-//				}
-//			}.setUnlocalizedName("BootsTraveller");
-//			
-		}
-		
-		
+
 		if(player != null && event.phase.equals(TickEvent.Phase.START))
 		{
 			World world = player.worldObj;
@@ -106,6 +59,15 @@ public class PlayerTickHandler
 				}
 				else
 					TileEntitySaunaStove.targetedPlayers.remove(player.getEntityId());	
+			}
+			if(!player.worldObj.isRemote && player.riddenByEntity!=null && player.riddenByEntity instanceof EntityLivingBase && EnchantmentHelper.getEnchantmentLevel(WGContent.enc_rideProtect.effectId, player.getCurrentArmor(3))>0)
+			{
+				System.out.println(player.worldObj+" dismount! "+player.riddenByEntity);
+				player.riddenByEntity.attackEntityFrom(DamageSource.causePlayerDamage(player), 1);
+				player.riddenByEntity.addVelocity(player.getRNG().nextFloat()*.4f, .1f, player.getRNG().nextFloat()*.4f);
+				((EntityLivingBase)player.riddenByEntity).dismountEntity(player);
+				player.riddenByEntity.ridingEntity=null;
+				player.riddenByEntity=null;
 			}
 
 			if(!world.isRemote && world.provider.dimensionId == WGConfig.dimensionMirrorID)

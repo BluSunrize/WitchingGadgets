@@ -6,4 +6,6 @@ public class Lib
 	public static final String GUI = "wg.gui.";
 	public static final String DESCRIPTION = "wg.desc.";
 	public static final String TITLE = "wg.title.";
+	
+	public static final String NBTTAG_HASHCODE = "playerHashcode";
 }

@@ -2,18 +2,14 @@ package witchinggadgets.client;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.client.event.GuiOpenEvent;
@@ -24,7 +20,6 @@ import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent.SetArmorModel;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.oredict.OreDictionary;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -48,7 +43,6 @@ import witchinggadgets.common.util.WGKeyHandler;
 import witchinggadgets.common.util.handler.InfusedGemHandler;
 import witchinggadgets.common.util.network.PacketPrimordialGlove;
 import witchinggadgets.common.util.network.WGPacketPipeline;
-import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -60,52 +54,6 @@ public class ClientEventHandler
 	boolean armDisabled = true;
 	boolean capeDisabled = true;
 	boolean shouldResetSpecialRenders = false;
-
-	@SideOnly(Side.CLIENT)
-	@SubscribeEvent
-	public void renderPlayerPre(RenderPlayerEvent.Pre event)
-	{
-		AbstractClientPlayer player = (AbstractClientPlayer) event.entityPlayer;
-		ModelBiped playerModel = null;
-		try
-		{
-			Object model = ObfuscationReflectionHelper.getPrivateValue(RenderPlayer.class, (RenderPlayer)RenderManager.instance.getEntityRenderObject(player), 1);
-			if(model instanceof ModelBiped)
-				playerModel = (ModelBiped) model;
-		}
-		catch(Exception ex)
-		{
-			ex.printStackTrace();
-		}
-		if(playerModel != null)
-		{
-			//			System.out.println("hi.");
-			//			playerModel.bipedBody.showModel = true;
-			//			playerModel.bipedLeftLeg.showModel = true;
-			//			playerModel.bipedRightLeg.showModel = true;
-			//			if(player.getCurrentArmor(3)!=null && player.getCurrentArmor(3).getItem().equals(WGContent.ItemEliteArmorHelm))
-			//			{
-			//				playerModel.bipedHeadwear.isHidden=true;
-			//				headgearDisabled = true;
-			//			}
-			//			else if(headgearDisabled)
-			//			{
-			//				playerModel.bipedHeadwear.isHidden=false;
-			//				headgearDisabled = false;
-			//			}
-			//
-			//			if(player.getCurrentEquippedItem()!=null && player.getCurrentEquippedItem().getItem().equals(WGContent.ItemPrimordialBracelet))
-			//			{
-			//				playerModel.bipedRightArm.isHidden=true;
-			//				armDisabled = true;
-			//			}
-			//			else if(armDisabled)
-			//			{
-			//				playerModel.bipedRightArm.isHidden=false;
-			//				armDisabled = false;
-			//			}
-		}
-	}
 
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent()
@@ -125,36 +73,17 @@ public class ClientEventHandler
 	@SubscribeEvent(priority=EventPriority.HIGHEST)
 	public void getTooltip(ItemTooltipEvent event)
 	{
-		//		String mod = GameRegistry.findUniqueIdentifierFor(event.itemStack.getItem())!=null?GameRegistry.findUniqueIdentifierFor(event.itemStack.getItem()).modId:"Minecraft";
-		//		String cS = Block.getBlockFromItem(event.itemStack.getItem())!=null?Block.getBlockFromItem(event.itemStack.getItem()).getClass().getCanonicalName():event.itemStack.getItem().getClass().getCanonicalName();
-		//		event.toolTip.add(mod+":"+event.itemStack.getItem().getUnlocalizedName()/*+"__"+cS*/);
-
-		if(Block.getBlockFromItem(event.itemStack.getItem())!=null)
+		//		UniqueIdentifier uidd = GameRegistry.findUniqueIdentifierFor(event.itemStack.getItem());
+		//		if(uidd!=null)
+		//			event.toolTip.add(uidd.toString());
+		if(event.itemStack.getItem().equals(Items.skull))
+			event.toolTip.add(StatCollector.translateToLocal("wg.desc.infusionStabilizer"));
+		else if(Block.getBlockFromItem(event.itemStack.getItem())!=null)
 			for(Class intf : Block.getBlockFromItem(event.itemStack.getItem()).getClass().getInterfaces())
-				if(intf.getCanonicalName().endsWith("InfusionStabiliser"))
-					event.toolTip.add("Works as Infusion Stabilizer");
+				if(intf.getCanonicalName().endsWith("IInfusionStabiliser"))
+					event.toolTip.add(StatCollector.translateToLocal("wg.desc.infusionStabilizer"));
 		//		for(int o: OreDictionary.getOreIDs(event.itemStack))
 		//			event.toolTip.add(OreDictionary.getOreName(o));
-
-		if(event.itemStack.getTagCompound()!=null && event.itemStack.getTagCompound().hasKey("AdvancedTooltipInfo"))
-		{
-			NBTTagList taglist = event.itemStack.getTagCompound().getTagList("AdvancedTooltipInfo",8);
-			if(taglist.tagCount()>0)
-				for(int i=0;i<taglist.tagCount();i++)
-				{
-					String[] unformattedCode = {"!0!"    ,"!1!"    ,"!2!"    ,"!3!"    ,"!4!"    ,"!5!"    ,"!6!"    ,"!7!"    ,"!8!"    ,"!9!"    ,"!a!"    ,"!b!"    ,"!c!"    ,"!d!"    ,"!e!"    ,"!f!"    ,"!k!"    ,"!l!"    ,"!m!"    ,"!n!"    ,"!o!"    ,"!r!"};
-					String[] formattedCode = {  "\u00A70","\u00A71","\u00A72","\u00A73","\u00A74","\u00A75","\u00A76","\u00A77","\u00A78","\u00A79","\u00A7a","\u00A7b","\u00A7c","\u00A7d","\u00A7e","\u00A7f","\u00A7k","\u00A7l","\u00A7m","\u00A7n","\u00A7o","\u00A7r"};
-
-					String unformatted = taglist.getStringTagAt(i);
-
-					for(int j=0;j<unformattedCode.length;j++)
-						if(unformatted.contains(unformattedCode[j]))
-							unformatted = unformatted.replaceAll(unformattedCode[j], formattedCode[j]);
-					if(unformatted.contains("\u00A7") && !unformatted.endsWith("\u00A7r"))
-						unformatted += "\u00A7r";
-					event.toolTip.add(1+i,unformatted);
-				}
-		}
 
 		try{
 			if(event.entityPlayer!=null)

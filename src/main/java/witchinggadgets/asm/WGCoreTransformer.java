@@ -68,7 +68,7 @@ public class WGCoreTransformer implements IClassTransformer
 		mv.visitInsn(Opcodes.IRETURN);
 		mv.visitMaxs(2, 1);
 		mv.visitEnd();
-
+		
 		cr.accept(cw, 0);
 		return cw.toByteArray();
 	}

@@ -19,7 +19,6 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -498,7 +497,6 @@ public class ClientUtilities
 		Tessellator tes = Tessellator.instance;
 
 		double w = icon.getMaxU()-icon.getMinU();
-		double h = icon.getMaxV()-icon.getMinV();
 		double tx = offset!=null?offset.xCoord:0;
 		double ty = offset!=null?offset.yCoord:0;
 		double tz = offset!=null?offset.zCoord:0;
@@ -599,8 +597,6 @@ public class ClientUtilities
 
 	public static BufferedImage getImageForResource(ResourceLocation resource) throws IOException
 	{
-		ITextureObject texob = Minecraft.getMinecraft().getTextureManager().getTexture(resource);
-		//return ImageIO.read(Minecraft.getMinecraft().getResourceManager().getResource(resource).getInputStream());
 		InputStream layer = Minecraft.getMinecraft().getResourceManager().getResource(resource).getInputStream();
 		return ImageIO.read(layer);
 	}
