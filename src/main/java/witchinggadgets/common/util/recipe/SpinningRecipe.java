@@ -13,6 +13,8 @@ import thaumcraft.api.ThaumcraftApiHelper;
 
 public class SpinningRecipe 
 {
+	static List<SpinningRecipe> recipeList = new ArrayList<SpinningRecipe>();
+
 	String researchTag;
 	ItemStack output;
 	Object[] input;
@@ -67,16 +69,16 @@ public class SpinningRecipe
 		{
 			tempList.add(input[ix]);
 		}
-		
-//		for(Object temp: this.input)
-//		{
-//			//if(temp == null)System.out.println("Impossible!");
-//			//if(temp instanceof ItemStack)System.out.println(((ItemStack)temp).getDisplayName());
-//			//if(temp instanceof ArrayList)System.out.println("OreDictStuff");
-//		}
-		
+
+		//		for(Object temp: this.input)
+		//		{
+		//			//if(temp == null)System.out.println("Impossible!");
+		//			//if(temp instanceof ItemStack)System.out.println(((ItemStack)temp).getDisplayName());
+		//			//if(temp instanceof ArrayList)System.out.println("OreDictStuff");
+		//		}
+
 		boolean inRecipe = false;
-		
+
 		for(int ix=0;ix<inp.length;ix++)
 		{
 			ItemStack stack = inp[ix];
@@ -84,7 +86,7 @@ public class SpinningRecipe
 			while(i.hasNext())
 			{
 				boolean match = false;
-				
+
 				Object next = i.next();
 				//if(next == null)System.out.println("HOW CAN THAT BE NULL?!");
 				if (next instanceof ItemStack)
@@ -100,21 +102,21 @@ public class SpinningRecipe
 						match = match || itemsMatch(oreDictStack, stack);
 					}
 				}
-				
-				
-				
+
+
+
 				if(match)
 				{
 					inRecipe = true;
 					tempList.remove(next);
-	                break;
+					break;
 				}
 			}
 			if(!inRecipe)
 				return false;
-			
+
 		}
-		
+
 		return tempList.isEmpty();
 	}
 
@@ -128,5 +130,52 @@ public class SpinningRecipe
 	public ItemStack getOutput()
 	{
 		return this.output;
+	}
+
+
+
+	public static void addRecipe(SpinningRecipe recipe)
+	{
+		recipeList.add(recipe);
+	}
+	public static SpinningRecipe getSpinningRecipe(ItemStack[] input)
+	{
+		Iterator<SpinningRecipe> i = recipeList.iterator();
+		int factualLength = 0;
+		for(ItemStack temp : input)
+		{
+			if(temp!=null)factualLength++;
+		}
+		ItemStack[] inputCopy = new ItemStack[factualLength];
+		int ix=0;
+		for(ItemStack temp : input)
+		{
+			if(temp!=null)
+			{
+				inputCopy[ix]=temp;
+				ix++;
+			}
+		}
+
+		while(i.hasNext())
+		{
+			SpinningRecipe s = i.next();
+			if(s.inputsMatch(null, inputCopy))return s;
+		}
+		return null;
+	}
+	public static void removeRecipe(SpinningRecipe recipe)
+	{
+		recipeList.remove(recipe);
+	}
+	public static void removeRecipe(ItemStack stack)
+	{
+		Iterator<SpinningRecipe> i = recipeList.iterator();
+		while(i.hasNext())
+		{
+			SpinningRecipe s = i.next();
+			if(ItemStack.areItemStacksEqual(s.output, stack))
+				i.remove();
+		}		
 	}
 }

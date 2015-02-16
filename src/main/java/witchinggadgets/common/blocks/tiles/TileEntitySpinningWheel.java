@@ -5,7 +5,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import witchinggadgets.WitchingGadgets;
 import witchinggadgets.common.util.recipe.SpinningRecipe;
 
 public class TileEntitySpinningWheel extends TileEntityWGBase implements IInventory
@@ -81,7 +80,7 @@ public class TileEntitySpinningWheel extends TileEntityWGBase implements IInvent
 	private SpinningRecipe getRecipe()
 	{
 		ItemStack[] inputs = {inv[0],inv[1],inv[2],inv[3],inv[4]};
-		return WitchingGadgets.instance.customRecipeHandler.getSpinningRecipe(inputs);
+		return SpinningRecipe.getSpinningRecipe(inputs);
 	}
 
 	public boolean isActive()

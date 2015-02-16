@@ -1,6 +1,7 @@
 package witchinggadgets.common.util.recipe;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
@@ -18,7 +19,7 @@ public class InfernalBlastfurnaceRecipe
 
 	static List<InfernalBlastfurnaceRecipe> recipes = new ArrayList();
 
-	public InfernalBlastfurnaceRecipe(ItemStack input, ItemStack output, int time, boolean isOreDict, boolean isSpecial)
+	public InfernalBlastfurnaceRecipe(ItemStack output, ItemStack input, int time, boolean isOreDict, boolean isSpecial)
 	{
 		this.input=input;
 		this.output=	output;
@@ -42,6 +43,10 @@ public class InfernalBlastfurnaceRecipe
 		return this.bonus;
 	}
 
+	public ItemStack getInput()
+	{
+		return this.input;
+	}
 	public ItemStack getOutput()
 	{
 		return this.output;
@@ -52,9 +57,8 @@ public class InfernalBlastfurnaceRecipe
 	}
 	public boolean matches(ItemStack stack)
 	{
-		if(!this.isOreDict)
-			return OreDictionary.itemMatches(input, stack, true);
-		return Utilities.stacksMatchWithOreDic(input, stack);
+		boolean baseMatch = (!this.isOreDict)? OreDictionary.itemMatches(input, stack, true) : Utilities.stacksMatchWithOreDic(input, stack);
+		return baseMatch && stack.stackSize>=input.stackSize;
 	}
 
 	public static InfernalBlastfurnaceRecipe getRecipe(ItemStack stack)
@@ -65,40 +69,70 @@ public class InfernalBlastfurnaceRecipe
 		return null;
 	}
 
-	public static InfernalBlastfurnaceRecipe addRecipe(String input, int inputSize, ItemStack output, int time, boolean isSpecial)
+	public static InfernalBlastfurnaceRecipe addRecipe(ItemStack output, String input, int inputSize, int time, boolean isSpecial)
 	{
 		if(!OreDictionary.getOres(input).isEmpty())
 		{
 			ItemStack inputStack = OreDictionary.getOres(input).get(0);
-			return addRecipe(inputStack, output, time, true, isSpecial);
+			return addRecipe(output, inputStack, time, true, isSpecial);
 		}
 		return null;
 	}
-	public static InfernalBlastfurnaceRecipe addRecipe(ItemStack input, ItemStack output, int time, boolean oreDic, boolean isSpecial)
+	public static InfernalBlastfurnaceRecipe addRecipe(ItemStack output, ItemStack input, int time, boolean oreDic, boolean isSpecial)
 	{
-		InfernalBlastfurnaceRecipe recipe = new InfernalBlastfurnaceRecipe(input,output, time, oreDic, isSpecial);
+		InfernalBlastfurnaceRecipe recipe = new InfernalBlastfurnaceRecipe(output,input, time, oreDic, isSpecial);
+		return addRecipe(recipe);
+	}
+	public static InfernalBlastfurnaceRecipe addRecipe(InfernalBlastfurnaceRecipe recipe)
+	{
 		recipes.add(recipe);
 		return recipe;
+	}
+	public static void removeRecipe(InfernalBlastfurnaceRecipe recipe)
+	{
+		recipes.remove(recipe);
+	}
+	public static void removeRecipe(ItemStack stack)
+	{
+		Iterator<InfernalBlastfurnaceRecipe> it = recipes.iterator();
+		while(it.hasNext())
+		{
+			InfernalBlastfurnaceRecipe ir = it.next();
+			if(OreDictionary.itemMatches(ir.output, stack, true))
+				it.remove();
+		}
 	}
 
 	public static void tryAddSpecialOreMelting(String ore, String ingot, boolean isSpecial)
 	{
 		if(OreDictionary.getOres("ore"+ore).isEmpty()||OreDictionary.getOres("ingot"+ingot).isEmpty())
 			return;
-		InfernalBlastfurnaceRecipe.addRecipe("ore"+ore,1, Utilities.copyStackWithSize(OreDictionary.getOres("ingot"+ingot).get(0), 1), 1200, isSpecial);
+		InfernalBlastfurnaceRecipe.addRecipe(Utilities.copyStackWithSize(OreDictionary.getOres("ingot"+ingot).get(0), 1), "ore"+ore,1, 1200, isSpecial);
 	}
 
 	public static void tryAddIngotImprovement(String base, String result, boolean isSpecial)
 	{
 		if(OreDictionary.getOres("ingot"+base).isEmpty()||OreDictionary.getOres("ingot"+result).isEmpty())
 			return;
-		InfernalBlastfurnaceRecipe.addRecipe("ingot"+base,1, Utilities.copyStackWithSize(OreDictionary.getOres("ingot"+result).get(0), 1), 1200, isSpecial);
+		InfernalBlastfurnaceRecipe.addRecipe(Utilities.copyStackWithSize(OreDictionary.getOres("ingot"+result).get(0), 1), "ingot"+base,1, 1200, isSpecial);
 		if(!OreDictionary.getOres("block"+base).isEmpty())
 		{
 			if(!OreDictionary.getOres("block"+result).isEmpty())
-				InfernalBlastfurnaceRecipe.addRecipe("block"+base,1, Utilities.copyStackWithSize(OreDictionary.getOres("block"+result).get(0), 1), 1200, isSpecial);
+				InfernalBlastfurnaceRecipe.addRecipe(Utilities.copyStackWithSize(OreDictionary.getOres("block"+result).get(0), 1), "block"+base,1, 1200, isSpecial);
 			else
-				InfernalBlastfurnaceRecipe.addRecipe("block"+base,1, Utilities.copyStackWithSize(OreDictionary.getOres("ingot"+result).get(0), 9), 1200, isSpecial);
+				InfernalBlastfurnaceRecipe.addRecipe(Utilities.copyStackWithSize(OreDictionary.getOres("ingot"+result).get(0), 9), "block"+base,1, 1200, isSpecial);
 		}
+	}
+
+	@Override
+	public boolean equals(Object o)
+	{
+		if(!(o instanceof InfernalBlastfurnaceRecipe))
+			return false;
+		InfernalBlastfurnaceRecipe r = (InfernalBlastfurnaceRecipe) o;
+
+		return ItemStack.areItemStacksEqual(r.input, this.input)
+				&& ItemStack.areItemStacksEqual(r.output, this.output)
+				&& r.isOreDict==this.isOreDict;
 	}
 }

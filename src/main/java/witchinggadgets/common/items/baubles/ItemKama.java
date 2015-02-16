@@ -1,12 +1,16 @@
 package witchinggadgets.common.items.baubles;
 
+import java.util.List;
+
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.StatCollector;
 import witchinggadgets.client.render.ModelKama;
+import witchinggadgets.common.util.Lib;
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import cpw.mods.fml.relauncher.Side;
@@ -72,11 +76,18 @@ public class ItemKama extends ItemCloak implements IBauble
 	}
 
 	@Override
+	public void addInformation(ItemStack stack, EntityPlayer par2EntityPlayer, List list, boolean par4)
+	{
+		if(stack.hasTagCompound() && stack.getTagCompound().getBoolean("noGlide"))
+			list.add(StatCollector.translateToLocal(Lib.DESCRIPTION+"noGlide"));
+		list.add(StatCollector.translateToLocalFormatted(Lib.DESCRIPTION+"gearSlot.tg."+getSlot(stack)));
+	}
+	
+	@Override
 	public void onEquipped(ItemStack stack, EntityLivingBase living)
 	{
 		if(living instanceof EntityPlayer)
 			this.onItemEquipped((EntityPlayer) living, stack);
-		setLastPlayerHashcode(stack, living.hashCode());
 	}
 
 	@Override

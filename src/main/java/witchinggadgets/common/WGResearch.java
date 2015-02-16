@@ -323,13 +323,13 @@ public class WGResearch
 		 * SPINNING
 		 */
 		SpinningRecipe spin_Thread = new SpinningRecipe("SPINNINGWHEEL", new ItemStack(WGContent.ItemMaterial,2,0), new Object[] {Items.string, Items.string, Items.string, Items.string});
-		WitchingGadgets.instance.customRecipeHandler.addRecipe(spin_Thread);
+		SpinningRecipe.addRecipe(spin_Thread);
 
 		SpinningRecipe spin_goldThread = new SpinningRecipe("SPINNINGWHEEL", new ItemStack(WGContent.ItemMaterial,2,1), new Object[] {Items.string, Items.string, Items.gold_nugget, Items.gold_nugget});
-		WitchingGadgets.instance.customRecipeHandler.addRecipe(spin_goldThread);
+		SpinningRecipe.addRecipe(spin_goldThread);
 
 		SpinningRecipe spin_thaumiumThread = new SpinningRecipe("SPINNINGWHEEL", new ItemStack(WGContent.ItemMaterial,2,2), new Object[] {Items.string, Items.string, "nuggetThaumium", "nuggetThaumium"});
-		WitchingGadgets.instance.customRecipeHandler.addRecipe(spin_thaumiumThread);
+		SpinningRecipe.addRecipe(spin_thaumiumThread);
 		/**
 		WeavingRecipe weave_void = new WeavingRecipe("BAGOFTRICKS", new ItemStack(WGContent.ItemMaterial,2,3),new AspectList().add(Aspect.VOID, 8), new Object[] {new ItemStack(WGContent.ItemMaterial,1,0), new ItemStack(WGContent.ItemMaterial,1,0), new ItemStack(WGContent.ItemMaterial,1,0), new ItemStack(WGContent.ItemMaterial,1,0), new ItemStack(WGContent.ItemMaterial,1,2), new ItemStack(WGContent.ItemMaterial,1,2)});
 		WitchingGadgets.instance.customRecipeHandler.addRecipe(weave_void);
@@ -391,7 +391,7 @@ public class WGResearch
 		addBlastTrippling("Tin");
 		addBlastTrippling("Silver");
 		addBlastTrippling("Lead");
-		InfernalBlastfurnaceRecipe.addRecipe("clusterCinnabar",1, new ItemStack(ConfigItems.itemResource,3,3),440,false).addBonus(new ItemStack(ConfigItems.itemNugget,1,5));
+		InfernalBlastfurnaceRecipe.addRecipe(new ItemStack(ConfigItems.itemResource,3,3), "clusterCinnabar",1, 440,false).addBonus(new ItemStack(ConfigItems.itemNugget,1,5));
 
 		if(WGModCompat.loaded_TCon)
 		{
@@ -864,7 +864,7 @@ public class WGResearch
 	{
 		if(!OreDictionary.getOres("ingot"+name).isEmpty())
 		{
-			InfernalBlastfurnaceRecipe r = InfernalBlastfurnaceRecipe.addRecipe("cluster"+name,1, Utilities.copyStackWithSize(OreDictionary.getOres("ingot"+name).get(0),3),440,false);
+			InfernalBlastfurnaceRecipe r = InfernalBlastfurnaceRecipe.addRecipe(Utilities.copyStackWithSize(OreDictionary.getOres("ingot"+name).get(0),3), "cluster"+name,1, 440,false);
 			if(!OreDictionary.getOres("nugget"+name).isEmpty())
 				r.addBonus(OreDictionary.getOres("nugget"+name).get(0));
 		}

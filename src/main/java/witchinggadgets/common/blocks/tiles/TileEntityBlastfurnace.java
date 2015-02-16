@@ -93,7 +93,7 @@ public class TileEntityBlastfurnace extends TileEntityWGBase implements IEssenti
 					outputItem(bonus);
 				}
 
-				inputStack.stackSize--;
+				inputStack.stackSize-=recipe.getInput().stackSize;
 				if(inputStack.stackSize>0)
 					inputs.set(0, inputStack);
 				else

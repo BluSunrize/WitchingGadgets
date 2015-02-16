@@ -17,7 +17,6 @@ import witchinggadgets.common.util.handler.EventHandler;
 import witchinggadgets.common.util.handler.PlayerTickHandler;
 import witchinggadgets.common.util.handler.WGWandManager;
 import witchinggadgets.common.util.network.WGPacketPipeline;
-import witchinggadgets.common.util.recipe.RecipeHandler;
 import witchinggadgets.common.world.VillageComponentPhotoshop;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -37,8 +36,6 @@ public class WitchingGadgets
 	public static final String VERSION = "${version}";
 
 	public PlayerTickHandler playerTickHandler;
-
-	public RecipeHandler customRecipeHandler;
 
 	public WGWandManager wgWandManager = new WGWandManager();
 
@@ -85,8 +82,6 @@ public class WitchingGadgets
 		WGPacketPipeline.INSTANCE.initialise();
 
 		WGContent.init();
-
-		this.customRecipeHandler = new RecipeHandler();
 		
 		proxy.registerHandlers();
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);

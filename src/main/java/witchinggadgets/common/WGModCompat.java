@@ -15,6 +15,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
+import witchinggadgets.common.minetweaker.WGMinetweaker;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -45,6 +46,9 @@ public class WGModCompat
 		loaded_Enviromine = Loader.isModLoaded("enviromine");
 		loaded_Railcraft = Loader.isModLoaded("Railcraft");
 		loaded_TT = Loader.isModLoaded("ThaumicTinkerer");
+		
+		if(Loader.isModLoaded("MineTweaker3"))
+			WGMinetweaker.init();	
 	}
 
 	public static void addTags()

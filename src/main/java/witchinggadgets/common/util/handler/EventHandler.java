@@ -42,7 +42,6 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.oredict.OreDictionary;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
-import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.entities.EntitySpecialItem;
 import thaumcraft.common.entities.monster.EntityCultistCleric;
 import thaumcraft.common.entities.monster.EntityCultistKnight;
@@ -55,10 +54,6 @@ import thaumcraft.common.tiles.TileInfusionMatrix;
 import travellersgear.api.TravellersGearAPI;
 import witchinggadgets.api.IPrimordialCrafting;
 import witchinggadgets.common.WGContent;
-import witchinggadgets.common.blocks.tiles.MultipartEssentiaBuffer;
-import witchinggadgets.common.blocks.tiles.MultipartEssentiaTube;
-import witchinggadgets.common.blocks.tiles.MultipartEssentiaTube_Filtered;
-import witchinggadgets.common.blocks.tiles.MultipartEssentiaTube_Valve;
 import witchinggadgets.common.items.ItemMaterials;
 import witchinggadgets.common.items.baubles.ItemMagicalBaubles;
 import witchinggadgets.common.items.tools.IPrimordialGear;
@@ -67,12 +62,8 @@ import witchinggadgets.common.util.Lib;
 import witchinggadgets.common.util.Utilities;
 import witchinggadgets.common.util.network.PacketClientNotifier;
 import witchinggadgets.common.util.network.WGPacketPipeline;
-import codechicken.lib.vec.BlockCoord;
-import codechicken.multipart.TMultiPart;
-import codechicken.multipart.TileMultipart;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
-import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
@@ -148,21 +139,8 @@ public class EventHandler
 		for(ItemStack cloak : Utilities.getActiveMagicalCloak(event.entityPlayer))
 			if(cloak!=null && cloak.hasTagCompound() && cloak.getTagCompound().getBoolean("isSpectral"))
 				event.setCanceled(true);
-
-		if(event.entityPlayer.getCurrentEquippedItem()!=null && Block.getBlockFromItem(event.entityPlayer.getCurrentEquippedItem().getItem()) == ConfigBlocks.blockTube && event.entityPlayer.getCurrentEquippedItem().getItemDamage()!=7 && event.entityPlayer.getCurrentEquippedItem().getItemDamage()!=2)
-			if(event.action==PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK && event.world.getTileEntity(event.x,event.y,event.z) instanceof TileMultipart)
-			{
-				TileMultipart mp = (TileMultipart)event.world.getTileEntity(event.x,event.y,event.z);
-				int meta = event.entityPlayer.getCurrentEquippedItem().getItemDamage();
-				TMultiPart part = meta==1?new MultipartEssentiaTube_Valve(meta): meta==3?new MultipartEssentiaTube_Filtered(meta): meta==4?new MultipartEssentiaBuffer(meta): new MultipartEssentiaTube(meta); 
-				if(mp.canAddPart(part) && !event.world.isRemote)
-				{
-					TileMultipart.addPart(event.world, new BlockCoord(event.x,event.y,event.z), part);
-					event.useItem = Event.Result.DENY;
-					if(!event.entityPlayer.capabilities.isCreativeMode)
-						event.entityPlayer.getCurrentEquippedItem().stackSize--;
-				}
-			}
+		if(Loader.isModLoaded("ForgeMultipart"))
+			WGMultiPartHandler.handleWorldInteraction(event);
 	}
 	@SubscribeEvent
 	public void onPlayerInteractWithEntity(EntityInteractEvent event)

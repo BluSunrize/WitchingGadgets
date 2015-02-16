@@ -58,9 +58,9 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, 
 	}
 	@Override
 	public boolean isItemTool(ItemStack stack)
-    {
-        return stack.stackSize == 1;
-    }
+	{
+		return stack.stackSize == 1;
+	}
 
 	@Override
 	public void registerIcons(IIconRegister iconRegister)
@@ -224,6 +224,7 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, 
 	{
 		if(stack.hasTagCompound() && stack.getTagCompound().getBoolean("noGlide"))
 			list.add(StatCollector.translateToLocal(Lib.DESCRIPTION+"noGlide"));
+		list.add(StatCollector.translateToLocalFormatted(Lib.DESCRIPTION+"gearSlot.tg."+getSlot(stack)));
 	}
 
 	@Override
@@ -234,12 +235,12 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, 
 
 	public void onItemTicked(EntityPlayer player, ItemStack stack)
 	{
-		if(getLastPlayerHashcode(stack) != player.hashCode())
+		if(player.ticksExisted<1)
 		{
 			onItemUnequipped(player,stack);
 			onItemEquipped(player,stack);
 		}
-		
+
 		if(stack.getItemDamage()<subNames.length)
 		{
 			if(subNames[stack.getItemDamage()].equals("spectral") && !player.worldObj.isRemote && stack.hasTagCompound() && stack.getTagCompound().getBoolean("isSpectral"))
@@ -273,7 +274,6 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, 
 	}
 	public void onItemEquipped(EntityPlayer player, ItemStack stack)
 	{
-		setLastPlayerHashcode(stack, player.hashCode());
 	}
 	public void onItemUnequipped(EntityPlayer player, ItemStack stack)
 	{
@@ -379,22 +379,5 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, 
 			if(!goggles && !special)
 				((EntityCreature)event.entityLiving).setAttackTarget(null);
 		}
-	}
-	
-	
-	// ==================
-	// Blatantly stolen from Botania! Thanks Vazkii~
-	// ==================
-	public int getLastPlayerHashcode(ItemStack stack)
-	{
-		if(!stack.hasTagCompound())
-			stack.setTagCompound(new NBTTagCompound());
-		return stack.getTagCompound().getInteger(Lib.NBTTAG_HASHCODE);
-	}
-	public void setLastPlayerHashcode(ItemStack stack, int hash)
-	{
-		if(!stack.hasTagCompound())
-			stack.setTagCompound(new NBTTagCompound());
-		stack.getTagCompound().setInteger(Lib.NBTTAG_HASHCODE,hash);
 	}
 }
