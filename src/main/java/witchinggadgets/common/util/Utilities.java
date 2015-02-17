@@ -388,4 +388,21 @@ public class Utilities
 				return true;
 		return false;
 	}
+	
+	public static class OreDictStack
+	{
+		public final String key;
+		public final int amount;
+		
+		public OreDictStack(String key, int amount)
+		{
+			this.key=key;
+			this.amount=amount;
+		}
+		
+		public boolean matches(ItemStack stack)
+		{
+			return Utilities.compareToOreName(stack, key) && stack.stackSize>=amount;
+		}
+	}
 }

@@ -15,12 +15,12 @@ public class SpinningWheel
 {
 
 	@ZenMethod
-	public static void addRecipe(IItemStack output, IIngredient[] input, String researchTag)
+	public static void addRecipe(IItemStack output, IIngredient[] input)
 	{
 		Object[] oInput = WGMinetweaker.toObjects(input);
 		if(oInput==null)
 			return;
-		SpinningRecipe r = new SpinningRecipe(researchTag, WGMinetweaker.toStack(output), oInput);
+		SpinningRecipe r = new SpinningRecipe(WGMinetweaker.toStack(output), oInput);
 		MineTweakerAPI.apply(new Add(r));
 	}
 

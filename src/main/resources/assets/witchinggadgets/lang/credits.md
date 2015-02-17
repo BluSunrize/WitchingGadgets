@@ -8,6 +8,7 @@ Code credit
 * SlimeKnights/Tinkers Construct - Packet system
 * OndraSter - Concept and execution of a core mod
 * Vazkii - HashCode system to call equipmethods on Baubles
+* SpitefulFox - FakeResearchItem system
 
 Other credit
 ----

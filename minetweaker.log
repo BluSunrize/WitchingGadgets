@@ -1,4 +1,105 @@
 INFO: Adding command minetweaker
 INFO: Adding minetweaker command mfr
-ERROR: Thaumcraft.zs:5 > could not find SPINNINGWHEEL
-INFO: Adding Spinning Recipe for Stick
+INFO: Removing minetweaker command mfr
+INFO: Removing command minetweaker
+INFO: Adding command minetweaker
+INFO: Adding minetweaker command mfr
+INFO: Removing minetweaker command mfr
+INFO: Removing command minetweaker
+INFO: Adding command minetweaker
+INFO: Adding minetweaker command mfr
+INFO: Removing minetweaker command mfr
+INFO: Removing command minetweaker
+INFO: Adding command minetweaker
+INFO: Adding minetweaker command mfr
+INFO: Adding Infernal Blastfurnace Recipe for Jungle Wood Planks
+INFO: Removing Infernal Blastfurnace Recipe for Jungle Wood Planks
+INFO: Removing minetweaker command mfr
+INFO: Removing command minetweaker
+INFO: Adding command minetweaker
+INFO: Adding minetweaker command mfr
+INFO: Adding Infernal Blastfurnace Recipe for Jungle Wood Planks
+INFO: Removing Infernal Blastfurnace Recipe for Jungle Wood Planks
+INFO: Removing minetweaker command mfr
+INFO: Removing command minetweaker
+INFO: Adding command minetweaker
+INFO: Adding minetweaker command mfr
+INFO: Removing minetweaker command mfr
+INFO: Removing command minetweaker
+INFO: Adding command minetweaker
+INFO: Adding minetweaker command mfr
+INFO: Removing minetweaker command mfr
+INFO: Removing command minetweaker
+INFO: Adding command minetweaker
+INFO: Adding minetweaker command mfr
+INFO: Adding Infernal Blastfurnace Recipe for Jungle Wood Planks
+INFO: Removing Infernal Blastfurnace Recipe for Jungle Wood Planks
+INFO: Removing minetweaker command mfr
+INFO: Removing command minetweaker
+INFO: Adding command minetweaker
+INFO: Adding minetweaker command mfr
+INFO: Adding Infernal Blastfurnace Recipe for Jungle Wood Planks
+INFO: Removing Infernal Blastfurnace Recipe for Jungle Wood Planks
+INFO: Removing minetweaker command mfr
+INFO: Removing command minetweaker
+INFO: Adding command minetweaker
+INFO: Adding minetweaker command mfr
+INFO: Adding Infernal Blastfurnace Recipe for Jungle Wood Planks
+INFO: Removing Infernal Blastfurnace Recipe for Jungle Wood Planks
+INFO: Removing minetweaker command mfr
+INFO: Removing command minetweaker
+INFO: Adding command minetweaker
+INFO: Adding minetweaker command mfr
+INFO: Adding Infernal Blastfurnace Recipe for Jungle Wood Planks
+INFO: Removing Infernal Blastfurnace Recipe for Jungle Wood Planks
+INFO: Removing minetweaker command mfr
+INFO: Removing command minetweaker
+INFO: Adding command minetweaker
+INFO: Adding minetweaker command mfr
+ERROR: Thaumcraft.zs:4 > No such static member in mods.witchinggadgets.InfernalBlastfurnace: InfernalBlastfurnace
+ERROR: Error executing Thaumcraft.zs: Truncated class file
+java.lang.ClassFormatError: Truncated class file
+	at java.lang.ClassLoader.defineClass1(Native Method)
+	at java.lang.ClassLoader.defineClass(Unknown Source)
+	at java.lang.ClassLoader.defineClass(Unknown Source)
+	at stanhebben.zenscript.ZenModule$MyClassLoader.findClass(ZenModule.java:346)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at Thaumcraft.__script__(Thaumcraft.zs:4)
+	at __ZenMain__.run(Thaumcraft.zs)
+	at minetweaker.runtime.MTTweaker.load(MTTweaker.java:157)
+	at minetweaker.MineTweakerImplementationAPI.reload(MineTweakerImplementationAPI.java:624)
+	at minetweaker.MineTweakerImplementationAPI$1.execute(MineTweakerImplementationAPI.java:82)
+	at minetweaker.MineTweakerImplementationAPI$19.execute(MineTweakerImplementationAPI.java:610)
+	at minetweaker.mc1710.server.MCServer$MCCommand.processCommand(MCServer.java:124)
+	at net.minecraft.command.CommandHandler.executeCommand(CommandHandler.java:96)
+	at net.minecraft.network.NetHandlerPlayServer.handleSlashCommand(NetHandlerPlayServer.java:788)
+	at net.minecraft.network.NetHandlerPlayServer.processChatMessage(NetHandlerPlayServer.java:764)
+	at net.minecraft.network.play.client.C01PacketChatMessage.processPacket(C01PacketChatMessage.java:47)
+	at net.minecraft.network.play.client.C01PacketChatMessage.processPacket(C01PacketChatMessage.java:68)
+	at net.minecraft.network.NetworkManager.processReceivedPackets(NetworkManager.java:241)
+	at net.minecraft.network.NetworkSystem.networkTick(NetworkSystem.java:182)
+	at net.minecraft.server.MinecraftServer.updateTimeLightAndEntities(MinecraftServer.java:726)
+	at net.minecraft.server.MinecraftServer.tick(MinecraftServer.java:614)
+	at net.minecraft.server.integrated.IntegratedServer.tick(IntegratedServer.java:118)
+	at net.minecraft.server.MinecraftServer.run(MinecraftServer.java:485)
+	at net.minecraft.server.MinecraftServer$2.run(MinecraftServer.java:752)
+INFO: Removing minetweaker command mfr
+INFO: Removing command minetweaker
+INFO: Adding command minetweaker
+INFO: Adding minetweaker command mfr
+ERROR: Thaumcraft.zs:4 > a method available but none matches the parameters (minetweaker.item.IItemStack)
+INFO: Removing minetweaker command mfr
+INFO: Removing command minetweaker
+INFO: Adding command minetweaker
+INFO: Adding minetweaker command mfr
+INFO: Removing Infernal Blastfurnace Recipe for Jungle Wood Planks
+INFO: [Stuck] Removing Infernal Blastfurnace Recipe for Jungle Wood Planks
+INFO: Removing minetweaker command mfr
+INFO: Removing command minetweaker
+INFO: Adding command minetweaker
+INFO: Adding minetweaker command mfr
+INFO: Removing Infernal Blastfurnace Recipe for Jungle Wood Planks
+INFO: Adding Infernal Blastfurnace Recipe for Jungle Wood Planks
+WARNING: 1 modifications were stuck
+INFO: Stuck: Removing Infernal Blastfurnace Recipe for Jungle Wood Planks

@@ -7,24 +7,31 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import witchinggadgets.common.util.Utilities;
+import witchinggadgets.common.util.Utilities.OreDictStack;
 
 public class InfernalBlastfurnaceRecipe
 {
-	private final ItemStack input;
+	private final Object input;
 	private final ItemStack output;
 	private final int time;
-	private final boolean isOreDict;
 	private final boolean isSpecial;
 	private ItemStack bonus;
 
-	static List<InfernalBlastfurnaceRecipe> recipes = new ArrayList();
+	public static List<InfernalBlastfurnaceRecipe> recipes = new ArrayList();
 
-	public InfernalBlastfurnaceRecipe(ItemStack output, ItemStack input, int time, boolean isOreDict, boolean isSpecial)
+	public InfernalBlastfurnaceRecipe(ItemStack output, Object input, int time, boolean isSpecial)
 	{
-		this.input=input;
-		this.output=	output;
+		if(input instanceof ItemStack)
+			this.input= (ItemStack)input;
+		else if(input instanceof OreDictStack)
+			this.input= (OreDictStack)input;
+		else if(input instanceof String)
+			this.input=new OreDictStack((String) input, 1);
+		else
+			throw new RuntimeException("Infernal Blast Furance Recipes MUST be initialized with ItemStack, OreDictStack or String");
+
+		this.output=output;
 		this.time=time;
-		this.isOreDict=isOreDict;
 		this.isSpecial = isSpecial;
 		bonus = null;
 	}
@@ -43,7 +50,7 @@ public class InfernalBlastfurnaceRecipe
 		return this.bonus;
 	}
 
-	public ItemStack getInput()
+	public Object getInput()
 	{
 		return this.input;
 	}
@@ -57,14 +64,26 @@ public class InfernalBlastfurnaceRecipe
 	}
 	public boolean matches(ItemStack stack)
 	{
-		boolean baseMatch = (!this.isOreDict)? OreDictionary.itemMatches(input, stack, true) : Utilities.stacksMatchWithOreDic(input, stack);
-		return baseMatch && stack.stackSize>=input.stackSize;
+		if(input instanceof OreDictStack)
+			return ((OreDictStack)input).matches(stack);
+		else if(input instanceof ItemStack)
+			return OreDictionary.itemMatches((ItemStack) input, stack, true) && (stack.stackSize>=((ItemStack)input).stackSize) ;
+		return false;
 	}
 
-	public static InfernalBlastfurnaceRecipe getRecipe(ItemStack stack)
+	public static InfernalBlastfurnaceRecipe getRecipeForInput(ItemStack stack)
 	{
 		for(InfernalBlastfurnaceRecipe ir: recipes)
 			if(ir.matches(stack))
+				return ir;
+		return null;
+	}
+	public static InfernalBlastfurnaceRecipe getRecipeForOutput(ItemStack stack)
+	{
+		for(InfernalBlastfurnaceRecipe ir: recipes)
+			if(OreDictionary.itemMatches(ir.getOutput(), stack, true))
+				return ir;
+			else if(OreDictionary.itemMatches(ir.getBonus(), stack, true))
 				return ir;
 		return null;
 	}
@@ -74,13 +93,13 @@ public class InfernalBlastfurnaceRecipe
 		if(!OreDictionary.getOres(input).isEmpty())
 		{
 			ItemStack inputStack = OreDictionary.getOres(input).get(0);
-			return addRecipe(output, inputStack, time, true, isSpecial);
+			return addRecipe(output, inputStack, time, isSpecial);
 		}
 		return null;
 	}
-	public static InfernalBlastfurnaceRecipe addRecipe(ItemStack output, ItemStack input, int time, boolean oreDic, boolean isSpecial)
+	public static InfernalBlastfurnaceRecipe addRecipe(ItemStack output, Object input, int time, boolean isSpecial)
 	{
-		InfernalBlastfurnaceRecipe recipe = new InfernalBlastfurnaceRecipe(output,input, time, oreDic, isSpecial);
+		InfernalBlastfurnaceRecipe recipe = new InfernalBlastfurnaceRecipe(output,input, time, isSpecial);
 		return addRecipe(recipe);
 	}
 	public static InfernalBlastfurnaceRecipe addRecipe(InfernalBlastfurnaceRecipe recipe)
@@ -131,8 +150,9 @@ public class InfernalBlastfurnaceRecipe
 			return false;
 		InfernalBlastfurnaceRecipe r = (InfernalBlastfurnaceRecipe) o;
 
-		return ItemStack.areItemStacksEqual(r.input, this.input)
-				&& ItemStack.areItemStacksEqual(r.output, this.output)
-				&& r.isOreDict==this.isOreDict;
+		return ItemStack.areItemStacksEqual(r.output, this.output)
+				&& (this.input instanceof ItemStack && r.input instanceof ItemStack)?OreDictionary.itemMatches((ItemStack)this.input, (ItemStack)r.input, true):
+					(this.input instanceof OreDictStack && r.input instanceof OreDictStack)?((OreDictStack)this.input).key.equals( ((OreDictStack)r.input) ):
+						false;
 	}
 }

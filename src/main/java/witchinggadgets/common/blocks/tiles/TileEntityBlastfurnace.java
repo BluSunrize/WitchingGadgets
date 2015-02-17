@@ -20,6 +20,7 @@ import thaumcraft.common.lib.utils.InventoryUtils;
 import thaumcraft.common.tiles.TileBellows;
 import witchinggadgets.WitchingGadgets;
 import witchinggadgets.common.util.Utilities;
+import witchinggadgets.common.util.Utilities.OreDictStack;
 import witchinggadgets.common.util.recipe.InfernalBlastfurnaceRecipe;
 
 public class TileEntityBlastfurnace extends TileEntityWGBase implements IEssentiaTransport
@@ -74,7 +75,7 @@ public class TileEntityBlastfurnace extends TileEntityWGBase implements IEssenti
 			if(cooking)
 			{
 				ItemStack inputStack = inputs.get(0);
-				InfernalBlastfurnaceRecipe recipe = InfernalBlastfurnaceRecipe.getRecipe(inputStack);
+				InfernalBlastfurnaceRecipe recipe = InfernalBlastfurnaceRecipe.getRecipeForInput(inputStack);
 				ItemStack outputStack = recipe.getOutput();
 				outputItem(outputStack);
 
@@ -93,7 +94,7 @@ public class TileEntityBlastfurnace extends TileEntityWGBase implements IEssenti
 					outputItem(bonus);
 				}
 
-				inputStack.stackSize-=recipe.getInput().stackSize;
+				inputStack.stackSize-= (recipe.getInput() instanceof OreDictStack)? ((OreDictStack)recipe.getInput()).amount : ((ItemStack)recipe.getInput()).stackSize;
 				if(inputStack.stackSize>0)
 					inputs.set(0, inputStack);
 				else
@@ -104,7 +105,7 @@ public class TileEntityBlastfurnace extends TileEntityWGBase implements IEssenti
 			else
 			{
 				ItemStack inputStack = inputs.get(0);
-				InfernalBlastfurnaceRecipe recipe = InfernalBlastfurnaceRecipe.getRecipe(inputStack);
+				InfernalBlastfurnaceRecipe recipe = InfernalBlastfurnaceRecipe.getRecipeForInput(inputStack);
 				if(recipe!=null)
 				{
 					this.recipeTime = recipe.getSmeltingTime();

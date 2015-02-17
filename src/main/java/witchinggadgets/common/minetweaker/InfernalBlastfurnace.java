@@ -6,24 +6,24 @@ import minetweaker.OneWayAction;
 import minetweaker.api.item.IIngredient;
 import minetweaker.api.item.IItemStack;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 import stanhebben.zenscript.annotations.Optional;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
+import witchinggadgets.common.util.Utilities.OreDictStack;
 import witchinggadgets.common.util.recipe.InfernalBlastfurnaceRecipe;
 
 @ZenClass("mods.witchinggadgets.InfernalBlastfurnace")
 public class InfernalBlastfurnace
 {
-
 	@ZenMethod
-	public static void addRecipe(IItemStack output, IIngredient input, int time, @Optional IItemStack bonus, @Optional boolean useOreDict, @Optional boolean isSpecial)
+	public static void addRecipe(IItemStack output, IIngredient input, int time, @Optional IItemStack bonus, @Optional boolean isSpecial)
 	{
 		Object oInput = WGMinetweaker.toObject(input);
 		if(oInput==null)
 			return;
-		ItemStack inputStack = (oInput instanceof String)? OreDictionary.getOres((String) oInput).get(0) : (ItemStack)oInput;
-		InfernalBlastfurnaceRecipe r = new InfernalBlastfurnaceRecipe(WGMinetweaker.toStack(output), inputStack, time, useOreDict, isSpecial);
+		Object inputStack = (oInput instanceof String)? new OreDictStack((String)oInput, input.getAmount()) : (ItemStack)oInput;
+		
+		InfernalBlastfurnaceRecipe r = new InfernalBlastfurnaceRecipe(WGMinetweaker.toStack(output), inputStack, time, isSpecial);
 		if(bonus!=null)
 			r.addBonus(WGMinetweaker.toStack(bonus));
 		MineTweakerAPI.apply(new Add(r));

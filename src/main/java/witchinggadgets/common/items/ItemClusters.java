@@ -1,6 +1,5 @@
 package witchinggadgets.common.items;
 
-import java.awt.Color;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,7 +30,7 @@ public class ItemClusters extends Item
 		"Zinc","Platinum",
 		"Ignatius","ShadowIron","Lemurite","Midasium","Vyroxeres","Ceruclase","Alduorite","Kalendrite","Vulcanite","Sanguinite",
 		"Prometheum","DeepIron","Infuscolium","Oureclase","AstralSilver","Carmot","Mithril","Rubracium","Orichalcum","Adamantine","Atlarus",
-		"Eximite","Meutoite",
+		"Eximite","Meutoite"
 
 
 	};
@@ -54,8 +53,10 @@ public class ItemClusters extends Item
 		if(pass==0)
 		{
 			//System.out.println(subNames[stack.getItemDamage()]+" "+materialMap.get( subNames[stack.getItemDamage()] )[0]);
-			Color col = new Color( materialMap.get( subNames[stack.getItemDamage()] )[0] );
-			return col.getRGB();
+			if(materialMap.get( subNames[stack.getItemDamage()])!=null)
+				return materialMap.get( subNames[stack.getItemDamage()] )[0];
+			//			Color col = new Color(  );
+			//			return col.getRGB();
 		}
 		return 0xffffff;
 	}
@@ -87,8 +88,10 @@ public class ItemClusters extends Item
 	{
 		if(pass==0)
 			return this.iconMetal;
-		else 
-			return this.iconOverlay[ materialMap.get( subNames[damage] )[1] ];
+		else if(materialMap.get(subNames[damage])!=null)
+			return this.iconOverlay[ materialMap.get(subNames[damage])[1] ];
+		else
+			return this.iconOverlay[0];
 	}
 	@Override
 	public IIcon getIcon(ItemStack stack, int pass)

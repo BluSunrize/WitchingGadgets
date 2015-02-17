@@ -5,23 +5,19 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
-import thaumcraft.api.ThaumcraftApiHelper;
 
 public class SpinningRecipe 
 {
-	static List<SpinningRecipe> recipeList = new ArrayList<SpinningRecipe>();
+	public static List<SpinningRecipe> recipeList = new ArrayList<SpinningRecipe>();
 
-	String researchTag;
 	ItemStack output;
 	Object[] input;
 
-	public SpinningRecipe(String r_tag, ItemStack r_output, Object... r_recipe)
+	public SpinningRecipe(ItemStack r_output, Object... r_recipe)
 	{
-		this.researchTag = r_tag;
 		this.output = r_output;
 		this.input = new Object[r_recipe.length];
 
@@ -47,17 +43,14 @@ public class SpinningRecipe
 			}
 			else
 			{
-				String ret = "Invalid SpinningWheel recipe: "+r_tag+", Output: "+r_output.getDisplayName();
+				String ret = "Invalid SpinningWheel recipe for: "+r_output.getDisplayName()+" input should be ItemStack, Item, Block or String";
 				throw new RuntimeException(ret);
 			}
 		}
 	}
-
-	public boolean inputsMatch(EntityPlayer player, ItemStack[] inp)
+	
+	public boolean inputsMatch(ItemStack[] inp)
 	{
-		if (researchTag != null && player != null && researchTag.length()>0 && !ThaumcraftApiHelper.isResearchComplete(player.getCommandSenderName(), researchTag)) {
-			return false;
-		}
 		if(inp == null || this.input == null)return false;
 		if(inp.length != this.input.length)
 		{
@@ -131,7 +124,10 @@ public class SpinningRecipe
 	{
 		return this.output;
 	}
-
+	public Object[] getInput()
+	{
+		return this.input;
+	}
 
 
 	public static void addRecipe(SpinningRecipe recipe)
@@ -160,7 +156,21 @@ public class SpinningRecipe
 		while(i.hasNext())
 		{
 			SpinningRecipe s = i.next();
-			if(s.inputsMatch(null, inputCopy))return s;
+			if(s.inputsMatch(inputCopy))
+				return s;
+		}
+		return null;
+	}
+	public static SpinningRecipe getSpinningRecipe(ItemStack output)
+	{
+		Iterator<SpinningRecipe> i = recipeList.iterator();
+		while(i.hasNext())
+		{
+			SpinningRecipe s = i.next();
+//			System.out.println("query "+output);
+//			System.out.println("check "+s.getOutput());
+			if(OreDictionary.itemMatches(s.getOutput(),output, true))
+				return s;
 		}
 		return null;
 	}

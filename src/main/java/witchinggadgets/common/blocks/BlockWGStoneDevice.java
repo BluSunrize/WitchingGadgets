@@ -233,7 +233,7 @@ public class BlockWGStoneDevice extends BlockContainer
 			if(entity instanceof EntityItem)
 			{
 				ItemStack input = ((EntityItem)entity).getEntityItem();
-				if(InfernalBlastfurnaceRecipe.getRecipe(input)==null)
+				if(InfernalBlastfurnaceRecipe.getRecipeForInput(input)==null)
 				{
 					world.addBlockEvent(x,y,z, this, 5,0);
 					entity.setDead();

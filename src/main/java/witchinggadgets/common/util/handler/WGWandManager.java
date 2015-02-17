@@ -10,6 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.wands.IWandTriggerManager;
@@ -37,6 +38,8 @@ public class WGWandManager implements IWandTriggerManager
 	private boolean createBlastFurnace(ItemStack itemstack, EntityPlayer player, World world, int clickedX, int clickedY, int clickedZ)
 	{
 		if(world.isRemote)
+			return false;
+		if(!ThaumcraftApiHelper.isResearchComplete(player.getCommandSenderName(), "INFERNALBLASTFURNACE"))
 			return false;
 		if(!Utilities.consumeVisFromWand(itemstack, player, new AspectList().add(Aspect.FIRE, 50).add(Aspect.EARTH, 50).add(Aspect.ENTROPY, 50), false))
 			return false;
