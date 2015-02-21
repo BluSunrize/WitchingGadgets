@@ -1,8 +1,9 @@
 package witchinggadgets.common.minetweaker;
 
+import java.util.List;
+
 import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
-import minetweaker.OneWayAction;
 import minetweaker.api.item.IIngredient;
 import minetweaker.api.item.IItemStack;
 import net.minecraft.item.ItemStack;
@@ -68,9 +69,10 @@ public class SpinningWheel
 	{
 		MineTweakerAPI.apply(new Remove(WGMinetweaker.toStack(output)));
 	}
-	private static class Remove extends OneWayAction
+	private static class Remove implements IUndoableAction
 	{
 		private final ItemStack output;
+		List<SpinningRecipe> removedRecipes;
 		public Remove(ItemStack output)
 		{
 			this.output = output;
@@ -78,7 +80,15 @@ public class SpinningWheel
 		@Override
 		public void apply()
 		{
-			SpinningRecipe.removeRecipe(output);
+			removedRecipes = SpinningRecipe.removeRecipes(output);
+		}
+		@Override
+		public void undo()
+		{
+			if(removedRecipes!=null)
+				for(SpinningRecipe recipe : removedRecipes)
+					if(recipe!=null)
+						SpinningRecipe.addRecipe(recipe);
 		}
 		@Override
 		public String describe()
@@ -86,9 +96,18 @@ public class SpinningWheel
 			return "Removing Spinning Recipe for " + output.getDisplayName();
 		}
 		@Override
+		public String describeUndo() {
+			return "Re-Adding Spinning Recipe for " + output.getDisplayName();
+		}
+		@Override
 		public Object getOverrideKey()
 		{
 			return null;
+		}
+		@Override
+		public boolean canUndo()
+		{
+			return true;
 		}
 	}
 }

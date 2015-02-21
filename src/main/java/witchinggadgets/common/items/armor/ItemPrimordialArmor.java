@@ -120,6 +120,8 @@ public class ItemPrimordialArmor extends ItemFortressArmor implements IActiveAbi
 					ent.motionZ = newVel * delZ;
 				}
 			break;
+		case 2:
+			break;
 		case 3:
 			int[] curedPotions = {Potion.blindness.id,Potion.poison.id,Potion.wither.id,Potion.confusion.id};
 			for(int c : curedPotions)
@@ -144,8 +146,13 @@ public class ItemPrimordialArmor extends ItemFortressArmor implements IActiveAbi
 		}
 		else if(source.isFireDamage() || source.isExplosion())
 		{
+			if(source.isFireDamage() && getAbility(armor)==2)
+			{
+				if(player.isBurning())
+					player.extinguish();
+			}
 			priority = 1;
-			ratio = this.damageReduceAmount / 20.0D;
+			ratio = getAbility(armor)==2? .75f : (this.damageReduceAmount / 20.0D);
 		}
 		else if (source.isUnblockable())
 		{
@@ -306,7 +313,7 @@ public class ItemPrimordialArmor extends ItemFortressArmor implements IActiveAbi
 			}
 		}
 	}
-	
+
 	@Override
 	public boolean getIsRepairable(ItemStack stack1, ItemStack stack2)
 	{

@@ -5,6 +5,7 @@ import static codechicken.lib.gui.GuiDraw.drawTexturedModalRect;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
@@ -38,6 +39,11 @@ public class NEIInfernalBlastfurnaceHandler extends TemplateRecipeHandler
 			output = new PositionedStack(recipe.getOutput(), 126, 14, false);
 			if(recipe.getBonus()!=null)
 				bonus = new PositionedStack(recipe.getBonus(), 126, 39, false);
+		}
+		@Override
+		public List<PositionedStack> getIngredients()
+		{
+			return this.getCycledIngredients(NEIInfernalBlastfurnaceHandler.this.cycleticks / 20, super.getIngredients());
 		}
 		@Override
 		public PositionedStack getIngredient()

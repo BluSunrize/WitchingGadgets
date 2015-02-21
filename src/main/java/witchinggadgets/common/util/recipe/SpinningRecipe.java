@@ -1,6 +1,7 @@
 package witchinggadgets.common.util.recipe;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -48,76 +49,50 @@ public class SpinningRecipe
 			}
 		}
 	}
-	
-	public boolean inputsMatch(ItemStack[] inp)
+
+	public boolean inputsMatch(ItemStack[] query)
 	{
-		if(inp == null || this.input == null)return false;
-		if(inp.length != this.input.length)
-		{
+		if(query == null || this.input == null)return false;
+		if(query.length != this.input.length)
 			return false;
-		}
+		
+		List<Object> inputList = new ArrayList(Arrays.asList(input));
+		boolean match = false;
 
-		List<Object> tempList = new ArrayList<Object>();
-		for(int ix=0; ix<this.input.length; ix++)
+		for(ItemStack stack : query)
 		{
-			tempList.add(input[ix]);
-		}
-
-		//		for(Object temp: this.input)
-		//		{
-		//			//if(temp == null)System.out.println("Impossible!");
-		//			//if(temp instanceof ItemStack)System.out.println(((ItemStack)temp).getDisplayName());
-		//			//if(temp instanceof ArrayList)System.out.println("OreDictStuff");
-		//		}
-
-		boolean inRecipe = false;
-
-		for(int ix=0;ix<inp.length;ix++)
-		{
-			ItemStack stack = inp[ix];
-			Iterator i = tempList.iterator();
-			while(i.hasNext())
+			Iterator iterator = inputList.iterator();
+			while(iterator.hasNext())
 			{
-				boolean match = false;
-
-				Object next = i.next();
-				//if(next == null)System.out.println("HOW CAN THAT BE NULL?!");
+				Object next = iterator.next();
 				if (next instanceof ItemStack)
 				{
-					match = itemsMatch((ItemStack)next, stack);
+					if(OreDictionary.itemMatches((ItemStack)next, stack, false))
+					{
+						match = true;
+						iterator.remove();
+						break;
+					}
 				}
 				else if (next instanceof ArrayList)
 				{
-					ArrayList oreDict = (ArrayList)next;
-					for (int io=0; io<oreDict.size(); io++)
+					ArrayList<ItemStack> oreDict = (ArrayList<ItemStack>)next;
+					for(ItemStack oreStack : oreDict)
 					{
-						ItemStack oreDictStack = (ItemStack)oreDict.get(io);
-						match = match || itemsMatch(oreDictStack, stack);
+						if(OreDictionary.itemMatches(oreStack, stack, false))
+						{
+							match = true;
+							iterator.remove();
+							break;
+						}
 					}
 				}
-
-
-
-				if(match)
-				{
-					inRecipe = true;
-					tempList.remove(next);
-					break;
-				}
 			}
-			if(!inRecipe)
+			if(!match)
 				return false;
-
 		}
 
-		return tempList.isEmpty();
-	}
-
-	private boolean itemsMatch(ItemStack i1, ItemStack i2)
-	{
-		boolean id = i1.getItem().equals(i2.getItem());
-		boolean meta = i1.getItemDamage() == i2.getItemDamage();
-		return id&&meta;
+		return inputList.isEmpty();
 	}
 
 	public ItemStack getOutput()
@@ -167,9 +142,7 @@ public class SpinningRecipe
 		while(i.hasNext())
 		{
 			SpinningRecipe s = i.next();
-//			System.out.println("query "+output);
-//			System.out.println("check "+s.getOutput());
-			if(OreDictionary.itemMatches(s.getOutput(),output, true))
+			if(OreDictionary.itemMatches(s.getOutput(),output, false))
 				return s;
 		}
 		return null;
@@ -178,14 +151,19 @@ public class SpinningRecipe
 	{
 		recipeList.remove(recipe);
 	}
-	public static void removeRecipe(ItemStack stack)
+	public static List<SpinningRecipe> removeRecipes(ItemStack stack)
 	{
+		List<SpinningRecipe> list = new ArrayList();
 		Iterator<SpinningRecipe> i = recipeList.iterator();
 		while(i.hasNext())
 		{
 			SpinningRecipe s = i.next();
-			if(ItemStack.areItemStacksEqual(s.output, stack))
+			if(OreDictionary.itemMatches(s.output, stack, false))
+			{
+				list.add(s);
 				i.remove();
-		}		
+			}
+		}	
+		return list;
 	}
 }

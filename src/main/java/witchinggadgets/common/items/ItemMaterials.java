@@ -287,7 +287,7 @@ public class ItemMaterials extends Item
 				ArrayList<ChunkCoordinates> pedestals = new ArrayList();
 				ArrayList<Object[]> warnings = new ArrayList();
 				ArrayList<ItemStack> components = new ArrayList();
-				
+
 				for(int xx=-12; xx<=12; xx++)
 					for(int zz=-12; zz<=12; zz++)
 					{
@@ -387,8 +387,8 @@ public class ItemMaterials extends Item
 					if(essmod>1)
 						player.addChatMessage(new ChatComponentTranslation(Lib.CHAT+"infusionInfo.essentiaMod",essmod).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.GREEN)) );
 				}
-				
-				
+
+
 				for(Object[] warning : warnings)
 				{
 					String w = Lib.CHAT+"infusionWarning."+warning[0];

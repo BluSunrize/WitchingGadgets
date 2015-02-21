@@ -146,7 +146,7 @@ public class ItemInfusedGem extends Item implements IInfusedGem
 									world.setBlock(x+xOff, y+yOff, z+zOff, Blocks.cobblestone);
 							}
 			}
-			if(aspect.equals(Aspect.EARTH))
+			if(aspect.equals(Aspect.EARTH) && !world.isRemote)
 				player.addPotionEffect(new PotionEffect(WGContent.pot_knockbackRes.id,100+potency*100,1+(potency>0?1:0)));
 			if(aspect.equals(Aspect.ORDER))
 				player.heal(6+potency*6);

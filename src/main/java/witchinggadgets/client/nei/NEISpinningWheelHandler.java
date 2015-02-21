@@ -4,6 +4,7 @@ import static codechicken.lib.gui.GuiDraw.changeTexture;
 import static codechicken.lib.gui.GuiDraw.drawTexturedModalRect;
 
 import java.awt.Rectangle;
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
@@ -12,7 +13,6 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import org.lwjgl.opengl.GL11;
 
-import scala.actors.threadpool.Arrays;
 import witchinggadgets.common.util.recipe.SpinningRecipe;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
@@ -21,19 +21,19 @@ public class NEISpinningWheelHandler extends TemplateRecipeHandler
 {
 	public class CachedSpinningWheelRecipe extends CachedRecipe
 	{
-		PositionedStack[] inputs;
+		List<PositionedStack> inputs;
 		PositionedStack output;
 		public CachedSpinningWheelRecipe(SpinningRecipe recipe)
 		{
-			inputs = new PositionedStack[recipe.getInput().length];
-			for(int i=0; i<inputs.length; i++)
-				inputs[i] = new PositionedStack(recipe.getInput()[i], 21, 9+18*i, true);
+			inputs = new ArrayList();
+			for(int i=0; i<recipe.getInput().length; i++)
+				inputs.add(new PositionedStack(recipe.getInput()[i], 21, 9+18*i, true));
 			output = new PositionedStack(recipe.getOutput(), 126, 46, false);
 		}
 		@Override
 		public List<PositionedStack> getIngredients()
 		{
-			return Arrays.asList(inputs);
+			return this.getCycledIngredients(NEISpinningWheelHandler.this.cycleticks / 20, this.inputs);
 		}
 		@Override
 		public PositionedStack getResult()

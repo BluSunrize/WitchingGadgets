@@ -67,7 +67,7 @@ public class InfernalBlastfurnaceRecipe
 		if(input instanceof OreDictStack)
 			return ((OreDictStack)input).matches(stack);
 		else if(input instanceof ItemStack)
-			return OreDictionary.itemMatches((ItemStack) input, stack, true) && (stack.stackSize>=((ItemStack)input).stackSize) ;
+			return OreDictionary.itemMatches((ItemStack) input, stack, false) && (stack.stackSize>=((ItemStack)input).stackSize) ;
 		return false;
 	}
 
@@ -111,15 +111,20 @@ public class InfernalBlastfurnaceRecipe
 	{
 		recipes.remove(recipe);
 	}
-	public static void removeRecipe(ItemStack stack)
+	public static List<InfernalBlastfurnaceRecipe> removeRecipes(ItemStack stack)
 	{
+		List<InfernalBlastfurnaceRecipe> list = new ArrayList();
 		Iterator<InfernalBlastfurnaceRecipe> it = recipes.iterator();
 		while(it.hasNext())
 		{
 			InfernalBlastfurnaceRecipe ir = it.next();
 			if(OreDictionary.itemMatches(ir.output, stack, true))
+			{
+				list.add(ir);
 				it.remove();
+			}
 		}
+		return list;
 	}
 
 	public static void tryAddSpecialOreMelting(String ore, String ingot, boolean isSpecial)
@@ -150,9 +155,10 @@ public class InfernalBlastfurnaceRecipe
 			return false;
 		InfernalBlastfurnaceRecipe r = (InfernalBlastfurnaceRecipe) o;
 
-		return ItemStack.areItemStacksEqual(r.output, this.output)
-				&& (this.input instanceof ItemStack && r.input instanceof ItemStack)?OreDictionary.itemMatches((ItemStack)this.input, (ItemStack)r.input, true):
-					(this.input instanceof OreDictStack && r.input instanceof OreDictStack)?((OreDictStack)this.input).key.equals( ((OreDictStack)r.input) ):
-						false;
+		boolean b_out = ItemStack.areItemStacksEqual(r.output, this.output);
+		boolean b_in_IS = (this.input instanceof ItemStack && r.input instanceof ItemStack) && OreDictionary.itemMatches((ItemStack)this.input, (ItemStack)r.input, true);
+		boolean b_in_OD = (this.input instanceof OreDictStack && r.input instanceof OreDictStack) && ((OreDictStack)this.input).key.equals( ((OreDictStack)r.input).key );
+		
+		return b_out && (b_in_IS||b_in_OD);
 	}
 }
