@@ -71,7 +71,7 @@ public class ItemMagicalBaubles extends Item implements IBauble, ITravellersGear
 		if(stack.hasTagCompound() && stack.getTagCompound().hasKey("title"))
 			list.add(StatCollector.translateToLocalFormatted(stack.getTagCompound().getString("title")));
 		
-		if(Loader.isModLoaded("Baubles"))
+		if(Loader.isModLoaded("Botania"))
 		{
 			ItemStack cosmetic = getCosmeticItem(stack);
 			if(cosmetic != null)

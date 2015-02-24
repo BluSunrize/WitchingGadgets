@@ -41,6 +41,7 @@ import witchinggadgets.common.WGContent;
 import witchinggadgets.common.WGModCompat;
 import witchinggadgets.common.util.Lib;
 import witchinggadgets.common.util.Utilities;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -227,6 +228,13 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, 
 		if(stack.hasTagCompound() && stack.getTagCompound().getBoolean("noGlide"))
 			list.add(StatCollector.translateToLocal(Lib.DESCRIPTION+"noGlide"));
 		list.add(StatCollector.translateToLocalFormatted(Lib.DESCRIPTION+"gearSlot.tg."+getSlot(stack)));
+
+		if(Loader.isModLoaded("Botania"))
+		{
+			ItemStack cosmetic = getCosmeticItem(stack);
+			if(cosmetic != null)
+				list.add( String.format(StatCollector.translateToLocal("botaniamisc.hasCosmetic"), cosmetic.getDisplayName()).replaceAll("&","\u00a7") );
+		}
 	}
 
 	@Override
