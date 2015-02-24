@@ -17,9 +17,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-
-import org.apache.logging.log4j.Level;
-
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -148,6 +145,12 @@ public class WGResearch
 		craftingAspects = new AspectList().add(Aspect.ORDER,10).add(Aspect.EARTH, 10);
 		registerArcaneRecipe("WGBAUBLES","_KNOCKBACKSHOULDERS",new ItemStack(WGContent.ItemMagicalBaubles,1,1), craftingAspects, " S ","ETE", 'E', new ItemStack(ConfigItems.itemShard,1,3), 'S', "travelgearShoulderBase", 'T',"ingotThaumium");
 
+		ItemStack luckyCoin = new ItemStack(ConfigItems.itemResource,1,18);
+		luckyCoin.addEnchantment(Enchantment.fortune, 1);
+		luckyCoin.addEnchantment(Enchantment.looting, 1);
+		craftingAspects = new AspectList().add(Aspect.ORDER,30);
+		registerArcaneRecipe("WGBAUBLES","_COIN",luckyCoin, craftingAspects, "BCB","CCC","BCB", 'C',  new ItemStack(ConfigItems.itemResource,1,18), 'B', Items.enchanted_book);
+		
 		craftingAspects = new AspectList().add(Aspect.AIR,5).add(Aspect.ORDER,5);
 		for(int cm=0; cm<ItemCloak.subNames.length; cm++)
 			registerArcaneRecipe("CLOAKKAMA",("_"+cm),new ItemStack(WGContent.ItemKama,1,cm), craftingAspects, "B","C", 'B',"baubleBeltBase", 'C',new ItemStack(WGContent.ItemCloak,1,cm));
@@ -187,7 +190,11 @@ public class WGResearch
 		ItemStack stack_ingot = !OreDictionary.getOres("ingotSilver").isEmpty()?OreDictionary.getOres("ingotSilver").get(0): new ItemStack(Items.iron_ingot);
 		infusionAspects = new AspectList().add(Aspect.FLIGHT,16).add(Aspect.MOTION, 8).add(Aspect.AIR,16);
 		registerInfusionRecipe("WGBAUBLES","_DOUBLEJUMPSHOULDERS",new ItemStack(WGContent.ItemMagicalBaubles,1,0),2,infusionAspects,OreDictionary.getOres("travelgearShoulderBase").get(0),new ItemStack[] {new ItemStack(Items.feather),stack_ingot,new ItemStack(Items.feather),new ItemStack(ConfigItems.itemShard,1,0),new ItemStack(Items.feather),stack_ingot});
+		
+		infusionAspects = new AspectList().add(Aspect.GREED,32).add(Aspect.TOOL,16);
+		registerInfusionRecipe("WGBAUBLES","_LUCKRING",new ItemStack(WGContent.ItemMagicalBaubles,1,5),3,infusionAspects,luckyCoin,new ItemStack[] {new ItemStack(Items.gold_ingot),new ItemStack(Items.dye,1,4),new ItemStack(Items.iron_ingot),new ItemStack(Items.dye,1,4),new ItemStack(Items.iron_ingot),new ItemStack(Items.dye,1,4),new ItemStack(Items.iron_ingot),new ItemStack(Items.dye,1,4)});
 
+		
 		infusionAspects = new AspectList().add(Aspect.TRAVEL,4).add(Aspect.MIND, 6).add(Aspect.TOOL,2);
 		registerInfusionRecipe("LABYRINTHSTRING","",new ItemStack(WGContent.ItemMaterial,1,11),2,infusionAspects,new ItemStack(ConfigBlocks.blockMagicalLog,1,0),new ItemStack[] {new ItemStack(Items.ender_pearl),new ItemStack(WGContent.ItemMaterial,1,0),new ItemStack(WGContent.ItemMaterial,1,0),new ItemStack(WGContent.ItemMaterial,1,0)});
 
@@ -305,7 +312,6 @@ public class WGResearch
 				registerAlchemyRecipe("METALLURGICPERFECTION_CLUSTERS","_"+ItemClusters.subNames[iOre], new ItemStack(WGContent.ItemCluster, 1, iOre), "ore"+ItemClusters.subNames[iOre], alchemyAspects);
 				setupCluster(ItemClusters.subNames[iOre]);
 			}
-			String ss = ItemClusters.subNames[iOre];
 			boolean bb = !OreDictionary.getOres("nugget"+ItemClusters.subNames[iOre]).isEmpty() && !OreDictionary.getOres("ingot"+ItemClusters.subNames[iOre]).isEmpty();
 			if(bb)
 			{
@@ -318,8 +324,7 @@ public class WGResearch
 				ItemStack nuggets = Utilities.copyStackWithSize(OreDictionary.getOres("nugget"+ItemClusters.subNames[iOre]).get(0), 3);
 				registerAlchemyRecipe("METALLURGICPERFECTION_TRANSMUTATION","_"+ItemClusters.subNames[iOre], nuggets, "nugget"+ItemClusters.subNames[iOre], alchemyAspects);
 			}
-			WitchingGadgets.logger.log(Level.INFO, "Registered transmutation for: "+ss+" was "+(bb?"succesful":"unsuccesful"));
-
+			//WitchingGadgets.logger.log(Level.INFO, "Registered transmutation for: "+ss+" was "+(bb?"succesful":"unsuccesful"));
 		}
 
 		/**
@@ -472,7 +477,8 @@ public class WGResearch
 				new ResearchPage("witchinggadgets_research_page.WGBAUBLES.1"), new ResearchPage((ShapedArcaneRecipe) recipeList.get("WGBAUBLES_KNOCKBACKSHOULDERS")), 
 				new ResearchPage("witchinggadgets_research_page.WGBAUBLES.2"), new ResearchPage((ShapedArcaneRecipe) recipeList.get("WGBAUBLES_WOLFVAMBRACES")),
 				new ResearchPage("witchinggadgets_research_page.WGBAUBLES.3"), new ResearchPage((InfusionRecipe) recipeList.get("WGBAUBLES_HASTEVAMBRACES")),
-				new ResearchPage("witchinggadgets_research_page.WGBAUBLES.4"), new ResearchPage((InfusionRecipe) recipeList.get("WGBAUBLES_DOUBLEJUMPSHOULDERS"))
+				new ResearchPage("witchinggadgets_research_page.WGBAUBLES.4"), new ResearchPage((InfusionRecipe) recipeList.get("WGBAUBLES_DOUBLEJUMPSHOULDERS")),
+				new ResearchPage("witchinggadgets_research_page.WGBAUBLES.5"), new ResearchPage((InfusionRecipe) recipeList.get("WGBAUBLES_LUCKRING")), new ResearchPage((ShapedArcaneRecipe) recipeList.get("WGBAUBLES_COIN"))
 		};
 		getResearchItem("WGBAUBLES", "WITCHGADG", researchAspects, 7, -5, 1, new ItemStack(WGContent.ItemMagicalBaubles,1,2)).setParents("THAUMIUM").setPages(pages).registerResearchItem();
 

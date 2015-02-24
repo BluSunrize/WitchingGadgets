@@ -8,6 +8,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -36,6 +37,7 @@ import thaumcraft.api.crafting.InfusionEnchantmentRecipe;
 import thaumcraft.api.nodes.INode;
 import thaumcraft.api.research.ScanResult;
 import thaumcraft.common.Thaumcraft;
+import thaumcraft.common.config.ConfigItems;
 import thaumcraft.common.lib.crafting.ThaumcraftCraftingManager;
 import thaumcraft.common.lib.network.PacketHandler;
 import thaumcraft.common.lib.network.playerdata.PacketScannedToServer;
@@ -268,6 +270,10 @@ public class ItemMaterials extends Item
 	{
 		for(int i=0;i<subNames.length;i++)
 			itemList.add(new ItemStack(item,1,i));
+		ItemStack luckyCoin = new ItemStack(ConfigItems.itemResource,1,18);
+		luckyCoin.addEnchantment(Enchantment.fortune, 1);
+		luckyCoin.addEnchantment(Enchantment.looting, 1);
+		itemList.add(luckyCoin);
 	}
 
 	@Override
@@ -379,15 +385,16 @@ public class ItemMaterials extends Item
 				if(te instanceof TilePedestal)
 					if(((TilePedestal)te).getStackInSlot(0) != null)
 						central = ((TilePedestal)te).getStackInSlot(0).copy();
-
-				InfusionEnchantmentRecipe enchRecipe = ThaumcraftCraftingManager.findMatchingInfusionEnchantmentRecipe(components, central, player);
-				if(enchRecipe!=null)
+				if(central!=null)
 				{
-					float essmod = 1+enchRecipe.getEssentiaMod(central)-EnchantmentHelper.getEnchantmentLevel(enchRecipe.enchantment.effectId, central);
-					if(essmod>1)
-						player.addChatMessage(new ChatComponentTranslation(Lib.CHAT+"infusionInfo.essentiaMod",essmod).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.GREEN)) );
+					InfusionEnchantmentRecipe enchRecipe = ThaumcraftCraftingManager.findMatchingInfusionEnchantmentRecipe(components, central, player);
+					if(enchRecipe!=null)
+					{
+						float essmod = 1+enchRecipe.getEssentiaMod(central)-EnchantmentHelper.getEnchantmentLevel(enchRecipe.enchantment.effectId, central);
+						if(essmod>1)
+							player.addChatMessage(new ChatComponentTranslation(Lib.CHAT+"infusionInfo.essentiaMod",essmod).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.GREEN)) );
+					}
 				}
-
 
 				for(Object[] warning : warnings)
 				{

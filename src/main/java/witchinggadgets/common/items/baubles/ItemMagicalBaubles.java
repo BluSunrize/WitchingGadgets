@@ -24,13 +24,16 @@ import witchinggadgets.common.items.ItemInfusedGem;
 import witchinggadgets.common.util.Lib;
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemMagicalBaubles extends Item implements IBauble, ITravellersGear
+@Optional.Interface(iface = "vazkii.botania.api.item.ICosmeticAttachable", modid = "Botania")
+public class ItemMagicalBaubles extends Item implements IBauble, ITravellersGear, vazkii.botania.api.item.ICosmeticAttachable
 {
 	//String[] subNames = {"ringSocketed_gold","ringSocketed_thaumium","ringSocketed_silver"};
-	public static String[] subNames = {"shouldersDoublejump","shouldersKnockback","vambraceStrength","vambraceHaste","titleCrimsonCult"};
+	public static String[] subNames = {"shouldersDoublejump","shouldersKnockback","vambraceStrength","vambraceHaste","titleCrimsonCult","ringLuck"};
 	IIcon[] icons = new IIcon[subNames.length];
 	IIcon[] ringGems = new IIcon[ItemInfusedGem.GemCut.values().length];
 
@@ -67,6 +70,13 @@ public class ItemMagicalBaubles extends Item implements IBauble, ITravellersGear
 		list.add(StatCollector.translateToLocalFormatted(Lib.DESCRIPTION+"gearSlot."+type));
 		if(stack.hasTagCompound() && stack.getTagCompound().hasKey("title"))
 			list.add(StatCollector.translateToLocalFormatted(stack.getTagCompound().getString("title")));
+		
+		if(Loader.isModLoaded("Baubles"))
+		{
+			ItemStack cosmetic = getCosmeticItem(stack);
+			if(cosmetic != null)
+				list.add( String.format(StatCollector.translateToLocal("botaniamisc.hasCosmetic"), cosmetic.getDisplayName()).replaceAll("&","\u00a7") );
+		}
 	}
 
 	@Override
@@ -251,5 +261,22 @@ public class ItemMagicalBaubles extends Item implements IBauble, ITravellersGear
 		ring.getTagCompound().setByte("GemCut", (byte) ItemInfusedGem.getCut(gem).ordinal());
 		ring.getTagCompound().setString("Aspect", ItemInfusedGem.getAspect(gem).getTag());
 		return ring;
+	}
+	
+	@Optional.Method(modid = "Botania")
+	public ItemStack getCosmeticItem(ItemStack stack)
+	{
+		if(!stack.hasTagCompound())
+			return null;
+		ItemStack cosmetic = ItemStack.loadItemStackFromNBT(stack.getTagCompound().getCompoundTag("botaniaCosmeticOverride"));
+		return cosmetic;
+	}
+	@Optional.Method(modid = "Botania")
+	public void setCosmeticItem(ItemStack stack, ItemStack cosmetic)
+	{
+		if(!stack.hasTagCompound())
+			stack.setTagCompound(new NBTTagCompound());
+		NBTTagCompound cosTag = cosmetic.writeToNBT(new NBTTagCompound());
+		stack.getTagCompound().setTag("botaniaCosmeticOverride",cosTag);
 	}
 }

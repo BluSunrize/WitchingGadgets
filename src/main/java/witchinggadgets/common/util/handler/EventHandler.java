@@ -199,9 +199,9 @@ public class EventHandler
 		if(event.recentlyHit && event.source!=null && event.source.getSourceOfDamage() instanceof EntityPlayer)
 		{
 			EntityPlayer player = (EntityPlayer)event.source.getSourceOfDamage(); 
-
-			if(player.getCurrentEquippedItem()!=null && player.getCurrentEquippedItem().getItem().equals(WGContent.ItemPrimordialSword) && player.getRNG().nextInt(6-EnchantmentHelper.getLootingModifier(player))==0)
+			if(player.getCurrentEquippedItem()!=null && player.getCurrentEquippedItem().getItem().equals(WGContent.ItemPrimordialSword) && player.getRNG().nextInt(6)<EnchantmentHelper.getLootingModifier(player))
 			{
+				System.out.println("I'm lootign because fuck you.");
 				ItemStack head=null;
 				if(event.entityLiving instanceof EntitySkeleton)
 					head = new ItemStack(Items.skull,1, ((EntitySkeleton)event.entityLiving).getSkeletonType());

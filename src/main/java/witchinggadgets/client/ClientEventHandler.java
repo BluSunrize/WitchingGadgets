@@ -6,6 +6,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -20,6 +21,7 @@ import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent.SetArmorModel;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.oredict.OreDictionary;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -31,6 +33,7 @@ import thaumcraft.api.nodes.IRevealer;
 import thaumcraft.api.research.ResearchCategories;
 import thaumcraft.client.gui.GuiResearchBrowser;
 import thaumcraft.common.Thaumcraft;
+import thaumcraft.common.config.ConfigItems;
 import travellersgear.api.RenderTravellersGearEvent;
 import witchinggadgets.common.WGContent;
 import witchinggadgets.common.WGResearch;
@@ -76,6 +79,9 @@ public class ClientEventHandler
 		//		UniqueIdentifier uidd = GameRegistry.findUniqueIdentifierFor(event.itemStack.getItem());
 		//		if(uidd!=null)
 		//			event.toolTip.add(uidd.toString());
+		if(OreDictionary.itemMatches(new ItemStack(ConfigItems.itemResource,1,18), event.itemStack, true) && EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, event.itemStack)==1 && EnchantmentHelper.getEnchantmentLevel(Enchantment.looting.effectId, event.itemStack)==1)
+			event.toolTip.set(0, StatCollector.translateToLocal("item.modifiedTC.luckyCoin"));
+		
 		if(event.itemStack.getItem().equals(Items.skull))
 			event.toolTip.add(StatCollector.translateToLocal("wg.desc.infusionStabilizer"));
 		else if(Block.getBlockFromItem(event.itemStack.getItem())!=null)

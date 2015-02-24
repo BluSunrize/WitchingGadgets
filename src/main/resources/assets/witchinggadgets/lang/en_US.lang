@@ -32,8 +32,6 @@ tile.WG_RoseVine.name=Rose Vines
 tile.WG_CustomAir.name=Glimmer of Light
 
 #
-fluid.fzdarkiron.molten=Molten Dark Iron
-#
 # -- Items --
 item.WG_Material.threadSimple.name=Yarn
 item.WG_Material.threadGold.name=Golden Thread
@@ -114,10 +112,13 @@ item.WG_Baubles.titleCrimsonCult.name=Title: Crimson Cult
 wg.title.crimsonCultist=Crimson Cultist
 wg.title.crimsonKnight=Crimson Knight
 wg.title.crimsonPraetor=Crimson Praetor
+item.WG_Baubles.ringLuck.name=Ring of the Covetous Coin
 
 item.WG_ScanCamera.name=Thaumic Iconograph Box
 
 item.WG_CrystalFlask.name=Crystal Capsule
+
+item.modifiedTC.luckyCoin=Lucky Gold Coin
 
 # -- Creative --
 itemGroup.witchinggadgets=Witching Gadgets
@@ -312,9 +313,10 @@ witchinggadgets_research_page.ENDERBAG.1=By attuning your Bag of Tricks to the e
 witchinggadgets_research_name.WGBAUBLES=Witching Wearables
 witchinggadgets_research_text.WGBAUBLES=[WG] It's like a magic boutique
 witchinggadgets_research_page.WGBAUBLES.1=What looks like catalogue pages from a wizarding equipment store actually proved to be arcane shematics for magical garments! §oAll of these are to be equipped in Baubles or Traveller's Gear slots. The default keybinding for the TG inventory is 'Numpad 7'.§r<BR>§lSteadfast Spaulders:§r<BR>These shoulderpads are not designed to be very fashionable, and their protection value is negligable. However, the magic infused into them is able to root you to the floor, so that you shall not waver when stuck by enemy attacks. §oGrants you 60% knockback resistance.§r
-witchinggadgets_research_page.WGBAUBLES.2=§lBerserker's Bracers:§r<BR>Covered in wolven fur, these vambraces wont hold off blades. But by the magic infused into them, they grant the user the ferociousness of a wolf. Also, they are incredibly fluffy. §oIncreases your attack damage by 2 points.§r
+witchinggadgets_research_page.WGBAUBLES.2=§lBerserker's Bracers:§r<BR>Covered in wolven fur, these vambraces wont hold off blades. But by the magic infused into them, they grant the user the ferociousness of a wolf. Also, they are incredibly fluffy.<BR>§oIncreases your attack damage by 2 points.§r
 witchinggadgets_research_page.WGBAUBLES.3=§lVambraces of Steady Progression:§r<BR>These vambraces, designed by dwarven thaumaturgists, are designed to grant you the ability of digging a hole at a steady pace without interruption. To achieve that, they react dynamically to the working conditions, increasing the user's dig speed while sumberged in water, flying in the air, or when confronted with highly resilient materials.<BR>They also increase the speed at which you climb ladders, for when you eventually need to outrun the thing you woke in the dark below.
 witchinggadgets_research_page.WGBAUBLES.4=§lSeraph's Shoulders:§r<BR>Flying is an ability many wish for. It is quite an advanced form of magic that allows users to fly, but a small jump in the air is within your possibilities.<BR>These shoulders spawn some powerful magical wings, which allow you to perform a second jump in midair.
+witchinggadgets_research_page.WGBAUBLES.5=§lRing of the Covetous Coin:§r<BR>It's great to be lucky! But one can never have enough luck. You've devised a way to boost your own luck, by socketing a golden coin in a ring and loading it with magic.<BR>§oWearing the ring will increase your fortune and looting by two levels.<BR>The enchanted books used to make the coin can carry any enchantment.§r
 #
 witchinggadgets_research_name.CLOAKKAMA=Kama
 witchinggadgets_research_text.CLOAKKAMA=[WG] It's not a kilt!

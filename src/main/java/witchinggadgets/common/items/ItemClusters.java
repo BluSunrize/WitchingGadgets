@@ -9,9 +9,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.oredict.OreDictionary;
-
-import org.apache.logging.log4j.Level;
-
 import witchinggadgets.WitchingGadgets;
 import witchinggadgets.client.ClientUtilities;
 import witchinggadgets.common.WGContent;
@@ -131,7 +128,7 @@ public class ItemClusters extends Item
 					colour = ClientUtilities.getVibrantColourToInt(colour);
 
 					materialMap.put(ore, new Integer[]{colour, clustertype} );
-					WitchingGadgets.logger.log(Level.INFO, "Initialized Cluster "+ore+": type: "+clustertype+", colour: "+Integer.toHexString(colour));
+					//WitchingGadgets.logger.log(Level.INFO, "Initialized Cluster "+ore+": type: "+clustertype+", colour: "+Integer.toHexString(colour));
 				}
 			}
 	}

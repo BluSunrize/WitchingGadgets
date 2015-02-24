@@ -41,10 +41,12 @@ import witchinggadgets.common.WGContent;
 import witchinggadgets.common.WGModCompat;
 import witchinggadgets.common.util.Lib;
 import witchinggadgets.common.util.Utilities;
+import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, IEventGear
+@Optional.Interface(iface = "vazkii.botania.api.item.ICosmeticAttachable", modid = "Botania")
+public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, IEventGear, vazkii.botania.api.item.ICosmeticAttachable
 {
 	public static String[] subNames = {"standard","spectral","storage","wolf","raven"};
 	int[] defaultColours = {};
@@ -379,5 +381,22 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, 
 			if(!goggles && !special)
 				((EntityCreature)event.entityLiving).setAttackTarget(null);
 		}
+	}
+	
+	@Optional.Method(modid = "Botania")
+	public ItemStack getCosmeticItem(ItemStack stack)
+	{
+		if(!stack.hasTagCompound())
+			return null;
+		ItemStack cosmetic = ItemStack.loadItemStackFromNBT(stack.getTagCompound().getCompoundTag("botaniaCosmeticOverride"));
+		return cosmetic;
+	}
+	@Optional.Method(modid = "Botania")
+	public void setCosmeticItem(ItemStack stack, ItemStack cosmetic)
+	{
+		if(!stack.hasTagCompound())
+			stack.setTagCompound(new NBTTagCompound());
+		NBTTagCompound cosTag = cosmetic.writeToNBT(new NBTTagCompound());
+		stack.getTagCompound().setTag("botaniaCosmeticOverride",cosTag);
 	}
 }
