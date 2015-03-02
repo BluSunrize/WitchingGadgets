@@ -35,7 +35,6 @@ public class ItemMagicalBaubles extends Item implements IBauble, ITravellersGear
 	//String[] subNames = {"ringSocketed_gold","ringSocketed_thaumium","ringSocketed_silver"};
 	public static String[] subNames = {"shouldersDoublejump","shouldersKnockback","vambraceStrength","vambraceHaste","titleCrimsonCult","ringLuck"};
 	IIcon[] icons = new IIcon[subNames.length];
-	IIcon[] ringGems = new IIcon[ItemInfusedGem.GemCut.values().length];
 
 	public ItemMagicalBaubles()
 	{
@@ -84,9 +83,6 @@ public class ItemMagicalBaubles extends Item implements IBauble, ITravellersGear
 	{
 		for(int i=0;i<subNames.length;i++)
 			this.icons[i] = iconRegister.registerIcon("witchinggadgets:bauble_"+subNames[i]);
-
-		for(int i=0;i<ringGems.length;i++)
-			this.ringGems[i] = iconRegister.registerIcon("witchinggadgets:bauble_ringGem_"+ItemInfusedGem.GemCut.values()[i]);
 	}
 
 	@Override
@@ -100,16 +96,6 @@ public class ItemMagicalBaubles extends Item implements IBauble, ITravellersGear
 		return ModelMagicalBaubles.getModel(entity, stack);
 	}
 
-	@Override
-	public boolean requiresMultipleRenderPasses()
-	{
-		return false;
-	}
-	@Override
-	public int getRenderPasses(int meta)
-	{
-		return subNames[meta].contains("Socketed")?2:1;
-	}
 	@SideOnly(Side.CLIENT)
 	public IIcon getIconFromDamage(int metadata)
 	{
@@ -123,10 +109,6 @@ public class ItemMagicalBaubles extends Item implements IBauble, ITravellersGear
 	@Override
 	public IIcon getIcon(ItemStack stack, int pass)
 	{
-		if(pass>0 && BaubleType.RING.equals(this.getBaubleType(stack)) && ItemInfusedGem.getCut(stack)!=null)
-		{
-			return this.ringGems[ItemInfusedGem.getCut(stack).ordinal()];
-		}
 		return getIconFromDamageForRenderPass(stack.getItemDamage(), pass);
 	}
 

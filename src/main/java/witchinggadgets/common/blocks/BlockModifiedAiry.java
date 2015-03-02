@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.client.particle.EffectRenderer;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -28,6 +29,14 @@ public class BlockModifiedAiry extends BlockAiry
 	{
 		super();
 		this.setCreativeTab(WitchingGadgets.tabWG);
+	}
+	
+
+	@Override
+	public void registerBlockIcons(IIconRegister iconRegister)
+	{
+		super.registerBlockIcons(iconRegister);
+		this.blockIcon = iconRegister.registerIcon("thaumcraft:blank");
 	}
 
 	@SideOnly(Side.CLIENT)

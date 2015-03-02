@@ -85,8 +85,8 @@ public class TileEntityEssentiaPump extends TileEntityWGBase implements IEssenti
 					if(te!=null && te instanceof TileMirrorEssentia && canSeeMirror((TileMirrorEssentia) te))
 						list.add((TileMirrorEssentia) te);
 				}
-//		if(list.isEmpty())
-//			System.out.println("no mirrors?");
+		//		if(list.isEmpty())
+		//			System.out.println("no mirrors?");
 		return list;
 	}
 
@@ -96,7 +96,7 @@ public class TileEntityEssentiaPump extends TileEntityWGBase implements IEssenti
 		ForgeDirection fd = ForgeDirection.getOrientation(worldObj.getBlockMetadata(tile.xCoord,tile.yCoord,tile.zCoord)%6);
 		Vec3 mPos = Vec3.createVectorHelper(tile.xCoord+.5+fd.offsetX,yCoord+.5+fd.offsetY,zCoord+.5+fd.offsetZ);
 		MovingObjectPosition mop =  worldObj.rayTraceBlocks(tPos, mPos);
-//		System.out.println("object encountered at "+mop);
+		//		System.out.println("object encountered at "+mop);
 		return mop==null || (mop.blockX==xCoord&&mop.blockY==yCoord&&mop.blockZ==zCoord) || (mop.blockX==tile.xCoord&&mop.blockY==tile.yCoord&&mop.blockZ==tile.zCoord);
 	}
 

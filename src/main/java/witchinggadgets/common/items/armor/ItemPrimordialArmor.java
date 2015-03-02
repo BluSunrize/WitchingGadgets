@@ -9,6 +9,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.entity.projectile.EntityEgg;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -27,6 +28,7 @@ import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.common.Thaumcraft;
+import thaumcraft.common.config.Config;
 import thaumcraft.common.items.armor.Hover;
 import thaumcraft.common.items.armor.ItemFortressArmor;
 import travellersgear.api.IActiveAbility;
@@ -95,7 +97,7 @@ public class ItemPrimordialArmor extends ItemFortressArmor implements IActiveAbi
 		case 0:
 			AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(player.posX-1.5,player.posY-2,player.posZ-1.5, player.posX+1.5,player.posY+2.5,player.posZ+1.5);
 			for(Entity ent : (List<Entity>)world.getEntitiesWithinAABB(Entity.class, aabb))
-				if(ent instanceof IProjectile && !(ent instanceof IManaBurst))
+				if(ent instanceof IProjectile && !(ent instanceof IManaBurst) && !(ent instanceof EntityEgg))
 				{
 					//Thanks WayOfFlowingTime =P
 					double delX = ent.posX - player.posX;
@@ -120,10 +122,8 @@ public class ItemPrimordialArmor extends ItemFortressArmor implements IActiveAbi
 					ent.motionZ = newVel * delZ;
 				}
 			break;
-		case 2:
-			break;
 		case 3:
-			int[] curedPotions = {Potion.blindness.id,Potion.poison.id,Potion.wither.id,Potion.confusion.id};
+			int[] curedPotions = {Potion.blindness.id,Potion.poison.id,Potion.wither.id,Potion.confusion.id,Config.potionTaintPoisonID};
 			for(int c : curedPotions)
 				if(world.isRemote)
 					player.removePotionEffectClient(c);

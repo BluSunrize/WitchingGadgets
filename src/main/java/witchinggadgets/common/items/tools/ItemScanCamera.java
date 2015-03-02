@@ -1,13 +1,13 @@
 package witchinggadgets.common.items.tools;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
@@ -33,11 +33,10 @@ public class ItemScanCamera extends Item {
 		this.setFull3D();
 		this.setCreativeTab(WitchingGadgets.tabWG);
 	}
-
 	@Override
-	public IIcon getIconFromDamageForRenderPass(int par1, int pass)
+	public void registerIcons(IIconRegister iconRegister)
 	{
-		return null;
+		this.itemIcon = iconRegister.registerIcon("thaumcraft:blank");
 	}
 	
 	@Override

@@ -302,6 +302,9 @@ public class ItemInfusedGem extends Item implements IInfusedGem
 	@Override
 	public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean selected)
 	{
+		if(stack.hasTagCompound() && stack.getTagCompound().getByte("GemCut")>1)
+			stack.getTagCompound().setByte("GemCut",(byte)1);
+		
 		int brittle = EnchantmentHelper.getEnchantmentLevel(WGContent.enc_gemstoneBrittle.effectId, stack);
 		if(entity instanceof EntityPlayer)
 			if(world.rand.nextInt(1000)<brittle || (getCut(stack)==GemCut.POINT&&stack.getItemDamage()!=0))
@@ -367,10 +370,6 @@ public class ItemInfusedGem extends Item implements IInfusedGem
 		list.add(createGem(Aspect.WATER, ItemInfusedGem.GemCut.OVAL, false));
 		list.add(createGem(Aspect.AIR, ItemInfusedGem.GemCut.OVAL, false));
 		list.add(createGem(Aspect.EARTH, ItemInfusedGem.GemCut.OVAL, false));
-		//		list.add(createGem(Aspect.WATER, ItemInfusedGem.GemCut.TABLE, false));
-		//		list.add(createGem(Aspect.EARTH, ItemInfusedGem.GemCut.STEP, false));
-		//		list.add(createGem(Aspect.AIR, ItemInfusedGem.GemCut.ROSE, false));
-		//		list.add(createGem(Aspect.HEAL, ItemInfusedGem.GemCut.OVAL, false));
 	}
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean bool)
@@ -490,15 +489,15 @@ public class ItemInfusedGem extends Item implements IInfusedGem
 	{
 		if(!stack.hasTagCompound() || !stack.getTagCompound().hasKey("GemCut"))
 			return null;
-		return GemCut.values()[stack.getTagCompound().getByte("GemCut")];
+		return GemCut.getValue(stack.getTagCompound().getByte("GemCut"));
 	}
 
 	public enum GemCut
 	{
 		POINT,
-		TABLE,
-		STEP,
-		ROSE,
+//		TABLE,
+//		STEP,
+//		ROSE,
 		OVAL;
 
 		public static GemCut getValue(byte b) 

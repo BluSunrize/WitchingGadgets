@@ -107,9 +107,7 @@ public class WGContent
 	public static Block BlockMetalDevice;
 	public static Block BlockMagicBed;
 	public static Block BlockRoseVine;
-	public static Block BlockVapourizer;
 	public static Block BlockCustomAiry;
-	public static Block BlockMPVisRelay;
 
 	public static Item ItemMaterial;
 	public static Item ItemCluster;
@@ -154,8 +152,7 @@ public class WGContent
 	public static Enchantment enc_backstab;
 	public static Enchantment enc_rideProtect;
 
-	public static ArmorMaterial armorMatSpecialRobe = EnumHelper.addArmorMaterial("WG:ADVANEDCLOTH", 25, new int[] { 2, 4, 3, 2 }, 25);
-	public static ArmorMaterial standardCloak = EnumHelper.addArmorMaterial("WG:CLOAKMATERIAL", 0, new int[] {0,0,0,0}, 0);
+	public static ArmorMaterial armorMatSpecialRobe = EnumHelper.addArmorMaterial("WG:ADVANCEDCLOTH", 25, new int[] { 2, 4, 3, 2 }, 25);
 	public static ToolMaterial primordialTool = EnumHelper.addToolMaterial("WG:PRIMORDIALTOOL",4, 1500, 8, 6, 25);
 	public static ArmorMaterial primordialArmor = EnumHelper.addArmorMaterial("WG:PRIMORDIALARMOR", 40, new int[] {3,7,6,3}, 30);
 	//	public static HashMap<String,Cloak> cloakRegistry = new HashMap<String, Cloak>();
@@ -575,7 +572,7 @@ public class WGContent
 		WGResearch.setupResearchPages();
 		WGResearch.registerRecipes();
 		WGResearch.registerResearch();
-		WGResearch.modifyStandardThaucmraftResearch();
+		WGResearch.modifyStandardThaumcraftResearch();
 	}
 
 	static void addOreAspects(String ore, AspectList aspects, boolean isRareOre)

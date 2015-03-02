@@ -3,14 +3,14 @@
   "modid": "WitchingGadgets",
   "name": "Witching Gadgets",
   "description": "It's a kind of magic",
-  "version": "1.0.8",
-  "mcversion": "1.6.4",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
   "authors": ["BluSunrize"],
-  "credits": "The Forge guys, Azanor for Thaucmraft, 'The Skype Guys' for inspiration and criticism",
-  "logoFile": "",
+  "credits": "The Forge guys, Azanor for Thaucmraft, SlimeKnights for the packet system, 'The Skype Guys' and #kihira on IRC for inspiration and criticism",
+  "logoFile": "assets/witchinggadgets/logo.png",
   "screenshots": [],
-  "dependencies": ["Thaumcraft"]
+  "dependencies": ["Thaumcraft","TravellersGear"]
 }
 ]

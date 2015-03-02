@@ -219,6 +219,9 @@ public class BlockWGWoodenDevice extends BlockContainer implements IWandable
 		int playerViewQuarter = MathHelper.floor_double(entityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
 		int meta = world.getBlockMetadata(x, y, z);
 		int f = playerViewQuarter==0 ? 2:playerViewQuarter==1 ? 5:playerViewQuarter==2 ? 3: 4;
+		System.out.println("i_f = "+f);
+		System.out.println("fd = "+ForgeDirection.getOrientation(f));
+
 		if(meta == 0)
 			((TileEntitySpinningWheel)world.getTileEntity(x,y,z)).facing = f;
 		else if(meta == 1)

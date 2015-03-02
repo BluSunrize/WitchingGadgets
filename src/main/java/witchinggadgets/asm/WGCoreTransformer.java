@@ -1,5 +1,6 @@
 package witchinggadgets.asm;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -13,6 +14,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.launchwrapper.Launch;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.MathHelper;
 
 import org.apache.logging.log4j.Level;
@@ -28,9 +30,11 @@ import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
+import thaumcraft.common.config.Config;
 import witchinggadgets.WitchingGadgets;
 import witchinggadgets.common.WGConfig;
 import witchinggadgets.common.WGContent;
+import witchinggadgets.common.items.armor.ItemPrimordialArmor;
 import witchinggadgets.common.items.baubles.ItemMagicalBaubles;
 import baubles.api.BaublesApi;
 
@@ -47,29 +51,20 @@ public class WGCoreTransformer implements IClassTransformer
 			byte[] newCode = patchFocusPouch_Interface(className, origCode);
 			return patchFocusPouch_Methods(className, newCode);
 		}
-		//		if(className.startsWith("net.minecraft.enchantment."))
-		//			System.out.println("defaultMinecraftClass "+className);
 		if(className.equals(deobf?"net.minecraft.enchantment.EnchantmentHelper":"a"))
 		{
-			byte[] newCode = patchGetFortuneModifier(className, origCode, deobf);
+			byte[] newCode = patchGetFortuneModifier(origCode, deobf);
+			return newCode;
+		}
+		if(className.equals(deobf?"net.minecraft.entity.EntityLivingBase":"sv"))
+		{
+			byte[] newCode = patchOnNewPotionEffect(origCode, deobf);
 			return newCode;
 		}
 
-		//		if (className.equals("thaumcraft.common.items.wands.ItemFocusPouch"))
-		//		{
-		//			ClassReader cr = new ClassReader(origCode); 
-		//			ClassVisitor cv = new ClassVisitor(Opcodes.ASM4, cw0)
-		//			{
-		//				@Override
-		//				public void visit(int version, int access, String name, String signature, String superName, String[] interfaces)
-		//				{
-		//					for(String i : interfaces)
-		//						System.out.println(i);
-		//				}
-		//			};
-		//		}
 		return origCode;
 	}
+
 
 	private byte[] patchBoots(String className, byte[] origCode, boolean deobf)
 	{
@@ -98,6 +93,8 @@ public class WGCoreTransformer implements IClassTransformer
 	{
 		return WGConfig.coremod_allowBootsRepair && stack2.isItemEqual(new ItemStack(Items.leather));
 	}
+
+
 
 	private byte[] patchFocusPouch_Interface(String className, byte[] origCode)
 	{
@@ -128,7 +125,7 @@ public class WGCoreTransformer implements IClassTransformer
 
 		MethodVisitor mv = cw.visitMethod(Opcodes.ACC_PUBLIC,methodToPatch1, "(Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/item/ItemStack;Z)Z", null, null);
 		mv.visitCode();
-		mv.visitFieldInsn(Opcodes.GETSTATIC, "witchinggadgets/common/WGConfig", "allowFocusPouchActive", "Z");
+		mv.visitFieldInsn(Opcodes.GETSTATIC, "witchinggadgets/common/WGConfig", "coremod_allowFocusPouchActive", "Z");
 		mv.visitInsn(Opcodes.IRETURN);
 		mv.visitMaxs(3, 1);
 		mv.visitEnd();
@@ -153,7 +150,8 @@ public class WGCoreTransformer implements IClassTransformer
 	}
 
 
-	private byte[] patchGetFortuneModifier(String className, byte[] origCode, boolean deobf)
+
+	private byte[] patchGetFortuneModifier(byte[] origCode, boolean deobf)
 	{
 		WitchingGadgets.logger.log(Level.INFO, "[CORE] Patching getEnchantmentLevel");
 
@@ -179,7 +177,6 @@ public class WGCoreTransformer implements IClassTransformer
 				while(insnNodes.hasNext())
 				{
 					AbstractInsnNode insn=insnNodes.next();
-					System.out.println(insn.getOpcode());
 
 					if(insn.getOpcode()==Opcodes.IRETURN
 							||insn.getOpcode()==Opcodes.RETURN
@@ -199,7 +196,6 @@ public class WGCoreTransformer implements IClassTransformer
 				while(insnNodes.hasNext())
 				{
 					AbstractInsnNode insn=insnNodes.next();
-					System.out.println(insn.getOpcode());
 
 					if(insn.getOpcode()==Opcodes.IRETURN
 							||insn.getOpcode()==Opcodes.RETURN
@@ -213,7 +209,7 @@ public class WGCoreTransformer implements IClassTransformer
 					}
 				}
 			}
-		ClassWriter cw=new ClassWriter(ClassWriter.COMPUTE_MAXS|ClassWriter.COMPUTE_FRAMES);
+		ClassWriter cw=new ClassWriter(ClassWriter.COMPUTE_MAXS);
 		classNode.accept(cw);
 
 		return cw.toByteArray();
@@ -221,7 +217,7 @@ public class WGCoreTransformer implements IClassTransformer
 	public static int enchantment_getFortuneLevel(EntityLivingBase living)
 	{
 		int base = EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, living.getHeldItem());
-		if(living instanceof EntityPlayer)
+		if(WGConfig.coremod_allowEnchantModifications && living instanceof EntityPlayer)
 			for(int i=0; i<BaublesApi.getBaubles((EntityPlayer)living).getSizeInventory(); i++)
 			{
 				ItemStack bStack = BaublesApi.getBaubles((EntityPlayer)living).getStackInSlot(i);
@@ -235,7 +231,7 @@ public class WGCoreTransformer implements IClassTransformer
 	public static int enchantment_getLootingLevel(EntityLivingBase living)
 	{
 		int base = EnchantmentHelper.getEnchantmentLevel(Enchantment.looting.effectId, living.getHeldItem());
-		if(living instanceof EntityPlayer)
+		if(WGConfig.coremod_allowEnchantModifications && living instanceof EntityPlayer)
 			for(int i=0; i<BaublesApi.getBaubles((EntityPlayer)living).getSizeInventory(); i++)
 			{
 				ItemStack bStack = BaublesApi.getBaubles((EntityPlayer)living).getStackInSlot(i);
@@ -245,5 +241,99 @@ public class WGCoreTransformer implements IClassTransformer
 				}
 			}
 		return base;
+	}
+
+
+
+	private byte[] patchOnNewPotionEffect(byte[] origCode, boolean deobf)
+	{
+		WitchingGadgets.logger.log(Level.INFO, "[CORE] Patching onNewPotionEffect");
+
+		final String methodToPatch = "onNewPotionEffect";
+		final String methodToPatch_obf = "func_70670_a";
+		final String desc = "(Lnet/minecraft/potion/PotionEffect;)V";
+		String name1 = deobf?methodToPatch:methodToPatch_obf;
+
+		ClassReader cr = new ClassReader(origCode);
+
+		ClassNode classNode=new ClassNode();
+		cr.accept(classNode, 0);
+		for(MethodNode methodNode : classNode.methods)
+			if(methodNode.name.equals(name1) && methodNode.desc.equals(desc))
+			{
+				Iterator<AbstractInsnNode> insnNodes=methodNode.instructions.iterator();
+				while(insnNodes.hasNext())
+				{
+					AbstractInsnNode insn=insnNodes.next();
+					if(insn.getOpcode()==Opcodes.IRETURN
+							||insn.getOpcode()==Opcodes.RETURN
+							||insn.getOpcode()==Opcodes.ARETURN
+							||insn.getOpcode()==Opcodes.LRETURN
+							||insn.getOpcode()==Opcodes.DRETURN)
+					{
+						InsnList endList=new InsnList();
+						endList.add(new VarInsnNode(Opcodes.ALOAD, 0));
+						endList.add(new VarInsnNode(Opcodes.ALOAD, 1));
+						endList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "witchinggadgets/asm/WGCoreTransformer", "living_onPotionApplied", "(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/potion/PotionEffect;)V", false));
+						methodNode.instructions.insertBefore(insn, endList);
+					}
+				}
+			}
+		ClassWriter cw=new ClassWriter(ClassWriter.COMPUTE_MAXS);
+		classNode.accept(cw);
+
+		return cw.toByteArray();		
+	}
+	static Field f_potionAmplifier;
+	static Field f_potionDuration;
+	public static void living_onPotionApplied(EntityLivingBase living, PotionEffect effect)
+	{
+		if(WGConfig.coremod_allowPotionApplicationMod && effect!=null && !living.worldObj.isRemote)
+		{
+			int id = effect.getPotionID();
+			if(id==Config.potionVisExhaustID
+					||id==Config.potionThaumarhiaID
+					||id==Config.potionUnHungerID
+					||id==Config.potionBlurredID
+					||id==Config.potionSunScornedID
+					||id==Config.potionInfVisExhaustID
+					||id==Config.potionDeathGazeID)
+			{
+				int ordo = 0;
+				for(int i=1; i<=4; i++)
+				{
+					ItemStack armor = living.getEquipmentInSlot(i);
+					if(armor!=null && armor.getItem()!=null && armor.getItem() instanceof ItemPrimordialArmor && ((ItemPrimordialArmor)armor.getItem()).getAbility(armor)==4)
+						ordo++;
+				}
+
+				try{
+					if(f_potionAmplifier==null)
+						f_potionAmplifier = PotionEffect.class.getDeclaredField("amplifier");
+					if(!f_potionAmplifier.isAccessible())
+						f_potionAmplifier.setAccessible(true);
+					if(f_potionDuration==null)
+						f_potionDuration = PotionEffect.class.getDeclaredField("duration");
+					if(!f_potionDuration.isAccessible())
+						f_potionDuration.setAccessible(true);
+
+					int val_Amp = f_potionAmplifier.getInt(effect);
+					if(val_Amp>0)
+						val_Amp = Math.max(0, val_Amp-ordo);
+					f_potionAmplifier.setInt(effect, val_Amp);
+
+					int val_Dur = f_potionDuration.getInt(effect);
+					if(val_Dur>0)
+						val_Dur /= (ordo+1);
+					f_potionDuration.setInt(effect, val_Dur);
+					
+					
+				}catch(Exception e)
+				{
+					e.printStackTrace();
+				}
+			}
+			
+		}
 	}
 }

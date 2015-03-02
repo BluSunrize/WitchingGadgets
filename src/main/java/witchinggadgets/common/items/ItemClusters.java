@@ -31,7 +31,7 @@ public class ItemClusters extends Item
 
 
 	};
-	static HashMap<String, Integer[]> materialMap = new HashMap();
+	public static HashMap<String, Integer[]> materialMap = new HashMap();
 
 	IIcon iconMetal;
 	IIcon[] iconOverlay = new IIcon[3];
@@ -49,11 +49,8 @@ public class ItemClusters extends Item
 	{
 		if(pass==0)
 		{
-			//System.out.println(subNames[stack.getItemDamage()]+" "+materialMap.get( subNames[stack.getItemDamage()] )[0]);
 			if(materialMap.get( subNames[stack.getItemDamage()])!=null)
 				return materialMap.get( subNames[stack.getItemDamage()] )[0];
-			//			Color col = new Color(  );
-			//			return col.getRGB();
 		}
 		return 0xffffff;
 	}
@@ -128,7 +125,6 @@ public class ItemClusters extends Item
 					colour = ClientUtilities.getVibrantColourToInt(colour);
 
 					materialMap.put(ore, new Integer[]{colour, clustertype} );
-					//WitchingGadgets.logger.log(Level.INFO, "Initialized Cluster "+ore+": type: "+clustertype+", colour: "+Integer.toHexString(colour));
 				}
 			}
 	}

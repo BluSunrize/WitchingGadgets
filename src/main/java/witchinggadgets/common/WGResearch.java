@@ -192,7 +192,7 @@ public class WGResearch
 		registerInfusionRecipe("WGBAUBLES","_DOUBLEJUMPSHOULDERS",new ItemStack(WGContent.ItemMagicalBaubles,1,0),2,infusionAspects,OreDictionary.getOres("travelgearShoulderBase").get(0),new ItemStack[] {new ItemStack(Items.feather),stack_ingot,new ItemStack(Items.feather),new ItemStack(ConfigItems.itemShard,1,0),new ItemStack(Items.feather),stack_ingot});
 		
 		infusionAspects = new AspectList().add(Aspect.GREED,32).add(Aspect.TOOL,16);
-		registerInfusionRecipe("WGBAUBLES","_LUCKRING",new ItemStack(WGContent.ItemMagicalBaubles,1,5),3,infusionAspects,luckyCoin,new ItemStack[] {new ItemStack(Items.gold_ingot),new ItemStack(Items.dye,1,4),new ItemStack(Items.iron_ingot),new ItemStack(Items.dye,1,4),new ItemStack(Items.iron_ingot),new ItemStack(Items.dye,1,4),new ItemStack(Items.iron_ingot),new ItemStack(Items.dye,1,4)});
+		registerInfusionRecipe("WGBAUBLES","_LUCKRING",new ItemStack(WGContent.ItemMagicalBaubles,1,5),3,infusionAspects,luckyCoin,new ItemStack[] {new ItemStack(Items.gold_ingot),new ItemStack(Items.dye,1,4),stack_ingot,new ItemStack(Items.dye,1,4),stack_ingot,new ItemStack(Items.dye,1,4),stack_ingot,new ItemStack(Items.dye,1,4)});
 
 		
 		infusionAspects = new AspectList().add(Aspect.TRAVEL,4).add(Aspect.MIND, 6).add(Aspect.TOOL,2);
@@ -743,28 +743,11 @@ public class WGResearch
 
 	}
 
-	public static void modifyStandardThaucmraftResearch()
+	public static void modifyStandardThaumcraftResearch()
 	{
-		//Move Enchanted Fabric to cloth research
-		ResearchItem enchfabric = ResearchCategories.getResearch("ENCHFABRIC");
-		ResearchPage[] pages = enchfabric.getPages();
-
-		if(WGConfig.enableEnchFabLoom)
-		{
-			ArrayList<ResearchPage> al = new ArrayList<ResearchPage>();
-			for(ResearchPage p : pages)
-				al.add(p);
-
-			al.add(2, new ResearchPage("LOOM","witchinggadgets_research_page.ENCHFABRIC.r1"));
-			pages = new ResearchPage[al.size()];
-			pages = al.toArray(pages);
-
-			ResearchCategories.researchCategories.get("ARTIFICE").research.remove("ENCHFABRIC");
-			new ResearchItem("ENCHFABRIC", "ARTIFICE", new AspectList().add(Aspect.CLOTH, 2).add(Aspect.MAGIC, 1), 0, 3, 2, new ItemStack(ConfigItems.itemResource, 1, 7)).setPages(pages).registerResearchItem();
-		}
-
+		//Add Thaumium Shears
 		ResearchItem thaumium = ResearchCategories.getResearch("THAUMIUM");
-		pages = thaumium.getPages();
+		ResearchPage[] pages = thaumium.getPages();
 		ResearchPage[] newPages = new ResearchPage[pages.length+1];
 		for(int i=0;i<7;i++)
 			newPages[i] = pages[i];
