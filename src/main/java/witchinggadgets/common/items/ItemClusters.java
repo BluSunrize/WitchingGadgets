@@ -3,6 +3,8 @@ package witchinggadgets.common.items;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.logging.log4j.Level;
+
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -11,6 +13,7 @@ import net.minecraft.util.IIcon;
 import net.minecraftforge.oredict.OreDictionary;
 import witchinggadgets.WitchingGadgets;
 import witchinggadgets.client.ClientUtilities;
+import witchinggadgets.common.WGConfig;
 import witchinggadgets.common.WGContent;
 
 public class ItemClusters extends Item
@@ -103,29 +106,36 @@ public class ItemClusters extends Item
 	@Override
 	public void getSubItems(Item item, CreativeTabs tab, List itemList)
 	{
-		for(int iOre=0; iOre<subNames.length; iOre++)
-			if(!OreDictionary.getOres("ore"+subNames[iOre]).isEmpty() && !OreDictionary.getOres("ingot"+subNames[iOre]).isEmpty())
-				itemList.add( new ItemStack(item,1,iOre) );
+		if(WGConfig.allowClusters)
+			for(int iOre=0; iOre<subNames.length; iOre++)
+				if(!OreDictionary.getOres("ore"+subNames[iOre]).isEmpty() && !OreDictionary.getOres("ingot"+subNames[iOre]).isEmpty())
+					itemList.add( new ItemStack(item,1,iOre) );
 	}
 
 	public static void setupClusters()
 	{
-		for(String ore : subNames)
-			if(!OreDictionary.getOres("ore"+ore).isEmpty() && !OreDictionary.getOres("ingot"+ore).isEmpty())
-			{
-				List<Integer> colList = ClientUtilities.getItemColours( OreDictionary.getOres("ore"+ore).get(0) );
-				if(!colList.isEmpty())
+		if(WGConfig.allowClusters)
+			for(String ore : subNames)
+				if(!OreDictionary.getOres("ore"+ore).isEmpty() && !OreDictionary.getOres("ingot"+ore).isEmpty())
 				{
-					int oreBlockColour = colList.get(0);
-					int[] rgb = {oreBlockColour>>16&0xff, oreBlockColour>>8&0xff, oreBlockColour&0xff};
-					int clustertype = rgb[0]>rgb[2]&&rgb[1]>rgb[2]?2 :rgb[0]>rgb[1]&&rgb[0]>rgb[2]?1 : 0;
-					List<Integer> colours = ClientUtilities.getItemColours(OreDictionary.getOres("ingot"+ore).get(0));
+					try{
+						List<Integer> colList = ClientUtilities.getItemColours( OreDictionary.getOres("ore"+ore).get(0) );
+						if(!colList.isEmpty())
+						{
+							int oreBlockColour = colList.get(0);
+							int[] rgb = {oreBlockColour>>16&0xff, oreBlockColour>>8&0xff, oreBlockColour&0xff};
+							int clustertype = rgb[0]>rgb[2]&&rgb[1]>rgb[2]?2 :rgb[0]>rgb[1]&&rgb[0]>rgb[2]?1 : 0;
+							List<Integer> colours = ClientUtilities.getItemColours(OreDictionary.getOres("ingot"+ore).get(0));
 
-					int colour = ClientUtilities.getVibrantColourToInt(colours.get((int)(colours.size()*.65)));
-					colour = ClientUtilities.getVibrantColourToInt(colour);
+							int colour = ClientUtilities.getVibrantColourToInt(colours.get((int)(colours.size()*.65)));
+							colour = ClientUtilities.getVibrantColourToInt(colour);
 
-					materialMap.put(ore, new Integer[]{colour, clustertype} );
+							materialMap.put(ore, new Integer[]{colour, clustertype} );
+						}
+					}catch(Exception e)
+					{
+						WitchingGadgets.logger.log(Level.ERROR, "Error setting up cluster for "+ore);
+					}
 				}
-			}
 	}
 }	

@@ -1,7 +1,9 @@
 package witchinggadgets.client.nei;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 import witchinggadgets.WitchingGadgets;
+import witchinggadgets.common.WGConfig;
 import witchinggadgets.common.WGContent;
 import witchinggadgets.common.items.ItemClusters;
 import codechicken.nei.api.API;
@@ -18,8 +20,8 @@ public class NEIWGConfig implements IConfigureNEI
 		API.registerRecipeHandler(new NEIInfernalBlastfurnaceHandler());
 		API.registerUsageHandler(new NEIInfernalBlastfurnaceHandler());
 
-		if(ItemClusters.materialMap.isEmpty())
-			API.hideItem(new ItemStack(WGContent.ItemCluster));
+		if(ItemClusters.materialMap.isEmpty() || !WGConfig.allowClusters)
+			API.hideItem(new ItemStack(WGContent.ItemCluster,1,OreDictionary.WILDCARD_VALUE));
 		API.hideItem(new ItemStack(WGContent.BlockWallMirror));
 		API.hideItem(new ItemStack(WGContent.BlockVoidWalkway));
 	}

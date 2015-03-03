@@ -32,7 +32,7 @@ public class WGModCompat
 	public static boolean loaded_Enviromine;
 	public static boolean loaded_Railcraft;
 	public static boolean loaded_TT;
-	
+
 	public static void init()
 	{
 		//Twilight Forest
@@ -40,13 +40,13 @@ public class WGModCompat
 		tfMagicMapFocus = GameRegistry.findItem("TwilightForest", "item.magicMapFocus");
 		tfTowerWood = GameRegistry.findBlock("TwilightForest", "tile.TFTowerStone");
 		tConResource = GameRegistry.findItem("TConstruct", "materials");
-		
+
 		loaded_TCon = Loader.isModLoaded("TConstruct");
 		loaded_Twilight = Loader.isModLoaded("TwilightForest");
 		loaded_Enviromine = Loader.isModLoaded("enviromine");
 		loaded_Railcraft = Loader.isModLoaded("Railcraft");
 		loaded_TT = Loader.isModLoaded("ThaumicTinkerer");
-		
+
 		if(Loader.isModLoaded("MineTweaker3"))
 			WGMinetweaker.init();	
 	}
@@ -216,11 +216,13 @@ public class WGModCompat
 		try{
 			if(railcraft_isSubBlockEnabled==null)
 			{
-
 				Class c_RailcraftConfig = Class.forName("mods.railcraft.common.core.RailcraftConfig");
 				railcraft_isSubBlockEnabled = c_RailcraftConfig.getMethod("isSubBlockEnabled", String.class);
 			}
-			return (Boolean) railcraft_isSubBlockEnabled.invoke(null, "machine.alpha.blast.furnace");
+			boolean enabled = (Boolean) railcraft_isSubBlockEnabled.invoke(null, "machine.alpha.blast.furnace");
+			boolean block = GameRegistry.findBlock("Railcraft","brick.infernal")!=null;
+			boolean stair = GameRegistry.findBlock("Railcraft","stair")!=null;
+			return enabled&&block&&stair;
 		}catch(Exception e)
 		{
 			e.printStackTrace();

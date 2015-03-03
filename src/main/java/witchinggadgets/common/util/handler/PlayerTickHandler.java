@@ -11,7 +11,6 @@ import net.minecraft.world.World;
 import thaumcraft.common.Thaumcraft;
 import thaumcraft.common.lib.potions.PotionWarpWard;
 import witchinggadgets.WitchingGadgets;
-import witchinggadgets.common.WGConfig;
 import witchinggadgets.common.WGContent;
 import witchinggadgets.common.WGModCompat;
 import witchinggadgets.common.blocks.tiles.TileEntitySaunaStove;
@@ -70,20 +69,6 @@ public class PlayerTickHandler
 				player.riddenByEntity=null;
 			}
 
-			if(!world.isRemote && world.provider.dimensionId == WGConfig.dimensionMirrorID)
-			{
-				//				int x = (int)Math.round(player.posX);
-				//				int y = (int)player.posY;
-				//				int z = (int)Math.round(player.posZ);
-				//				if(player.isSneaking())y--;
-				//				if(!player.isRiding() && !player.capabilities.isFlying)
-				//				{
-				//					for(int xx=-2;xx<=2;xx++)
-				//						for(int zz=-2;zz<=2;zz++)
-				//							if(world.isAirBlock(x+xx, y-1, z+zz))
-				//								world.setBlock(x+xx, y-1, z+zz, WGContent.BlockVoidWalkway);
-				//				}
-			}
 		}
 	}
 

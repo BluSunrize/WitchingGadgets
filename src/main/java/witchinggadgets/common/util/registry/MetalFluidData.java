@@ -13,9 +13,9 @@ public class MetalFluidData
 		addOreFluid("Ardite", "ardite.molten", 650);
 		addOreFluid("Nickel", "nickel.molten", 400);
 		addOreFluid("FzDarkIron", "fzdarkiron.molten", 600);
-		
+
 		addOreFluid("Manganese", "manganese.molten", 700);
-		
+
 		addOreFluid("Zinc", "zinc.molten", 550);
 		addOreFluid("Platinum", "platinum.molten", 550);
 
@@ -29,7 +29,7 @@ public class MetalFluidData
 		addOreFluid("Kalendrite", "kalendrite.molten", 550);
 		addOreFluid("Vulcanite", "vulcanite.molten", 550);
 		addOreFluid("Sanguinite", "sanguinite.molten", 550);
-		
+
 		addOreFluid("Prometheum", "prometheum.molten", 550);
 		addOreFluid("DeepIron", "deep.iron.molten", 550);
 		addOreFluid("Infuscolium", "infuscolium.molten", 550);
@@ -48,11 +48,15 @@ public class MetalFluidData
 
 	public static int getOreFluidTemp(String ore)
 	{
-		return oreFluidTemp.get(ore);
+		if(oreFluidTemp.get(ore) != null)
+			return oreFluidTemp.get(ore);
+		return 0;
 	}
 	public static String getOreFluidName(String ore)
 	{
-		return oreFluidName.get(ore);
+		if(oreFluidTemp.get(ore) != null)
+			return oreFluidName.get(ore);
+		return "";
 	}
 	public static void addOreFluid(String ore, String fluidName, int temp)
 	{

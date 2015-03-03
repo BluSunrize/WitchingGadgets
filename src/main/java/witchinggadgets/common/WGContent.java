@@ -32,7 +32,6 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.config.ConfigItems;
 import witchinggadgets.WitchingGadgets;
-import witchinggadgets.common.blocks.BlockMirrorPortal;
 import witchinggadgets.common.blocks.BlockModifiedAiry;
 import witchinggadgets.common.blocks.BlockRoseVines;
 import witchinggadgets.common.blocks.BlockVoidWalkway;
@@ -51,7 +50,6 @@ import witchinggadgets.common.blocks.tiles.TileEntityEssentiaPump;
 import witchinggadgets.common.blocks.tiles.TileEntityEtherealWall;
 import witchinggadgets.common.blocks.tiles.TileEntityLabelLibrary;
 import witchinggadgets.common.blocks.tiles.TileEntityMagicalTileLock;
-import witchinggadgets.common.blocks.tiles.TileEntityMirrorPortal;
 import witchinggadgets.common.blocks.tiles.TileEntitySarcophagus;
 import witchinggadgets.common.blocks.tiles.TileEntitySaunaStove;
 import witchinggadgets.common.blocks.tiles.TileEntitySnowGen;
@@ -224,9 +222,6 @@ public class WGContent
 		BlockVoidWalkway = new BlockVoidWalkway().setBlockName("WG_VoidWalkway");
 		GameRegistry.registerBlock(BlockVoidWalkway, BlockVoidWalkway.getLocalizedName());
 
-		BlockPortal = new BlockMirrorPortal().setBlockName("WG_MirrorPortal");
-		GameRegistry.registerBlock(BlockPortal, BlockPortal.getLocalizedName());
-
 		BlockStoneDevice = new BlockWGStoneDevice().setBlockName("WG_StoneDevice");
 		GameRegistry.registerBlock(BlockStoneDevice, ItemBlockStoneDevice.class, BlockStoneDevice.getLocalizedName());
 
@@ -255,7 +250,6 @@ public class WGContent
 		//UNIQUE
 		registerTile(TileEntityWallMirror.class);
 		registerTile(TileEntityVoidWalkway.class);
-		registerTile(TileEntityMirrorPortal.class);
 		registerTile(TileEntityTempLight.class);
 		//STONE
 		registerTile(TileEntityEtherealWall.class);
@@ -291,12 +285,12 @@ public class WGContent
 				{
 					int pos = yy*9 + zz*3 + xx;
 					if(rc)
-						TileEntityBlastfurnace.brickBlock[pos] = GameRegistry.findBlock("Railcraft","tile.railcraft.brick.infernal");
+						TileEntityBlastfurnace.brickBlock[pos] = GameRegistry.findBlock("Railcraft","brick.infernal");
 					else			
 						TileEntityBlastfurnace.brickBlock[pos] = pos<9&&pos!=4?Blocks.nether_brick: pos==10||pos==12||pos==13||pos==14||pos==16?Blocks.soul_sand: Blocks.obsidian;
 				}
 
-		TileEntityBlastfurnace.stairBlock = WGModCompat.railcraftAllowBlastFurnace()? GameRegistry.findBlock("Railcraft", "tile.railcraft.stair"): Blocks.nether_brick_stairs;
+		TileEntityBlastfurnace.stairBlock = rc? GameRegistry.findBlock("Railcraft", "stair"): Blocks.nether_brick_stairs;
 	}
 
 	private static void preInitItems()

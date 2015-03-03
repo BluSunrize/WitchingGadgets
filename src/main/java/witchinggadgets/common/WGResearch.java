@@ -69,7 +69,7 @@ public class WGResearch
 		 */
 
 		registerShapedOreRecipe("GEMCUTTING","_TOOLS", new ItemStack(WGContent.ItemMaterial,1,8), "qfi","sss", 'q',"gemQuartz", 'f',Items.flint, 'i',"ingotIron", 's',"stickWood");
-		
+
 		if(Config.allowMirrors)
 		{
 			//WALLMIRROR
@@ -150,7 +150,7 @@ public class WGResearch
 		luckyCoin.addEnchantment(Enchantment.looting, 1);
 		craftingAspects = new AspectList().add(Aspect.ORDER,30);
 		registerArcaneRecipe("WGBAUBLES","_COIN",luckyCoin, craftingAspects, "BCB","CCC","BCB", 'C',  new ItemStack(ConfigItems.itemResource,1,18), 'B', Items.enchanted_book);
-		
+
 		craftingAspects = new AspectList().add(Aspect.AIR,5).add(Aspect.ORDER,5);
 		for(int cm=0; cm<ItemCloak.subNames.length; cm++)
 			registerArcaneRecipe("CLOAKKAMA",("_"+cm),new ItemStack(WGContent.ItemKama,1,cm), craftingAspects, "B","C", 'B',"baubleBeltBase", 'C',new ItemStack(WGContent.ItemCloak,1,cm));
@@ -190,11 +190,11 @@ public class WGResearch
 		ItemStack stack_ingot = !OreDictionary.getOres("ingotSilver").isEmpty()?OreDictionary.getOres("ingotSilver").get(0): new ItemStack(Items.iron_ingot);
 		infusionAspects = new AspectList().add(Aspect.FLIGHT,16).add(Aspect.MOTION, 8).add(Aspect.AIR,16);
 		registerInfusionRecipe("WGBAUBLES","_DOUBLEJUMPSHOULDERS",new ItemStack(WGContent.ItemMagicalBaubles,1,0),2,infusionAspects,OreDictionary.getOres("travelgearShoulderBase").get(0),new ItemStack[] {new ItemStack(Items.feather),stack_ingot,new ItemStack(Items.feather),new ItemStack(ConfigItems.itemShard,1,0),new ItemStack(Items.feather),stack_ingot});
-		
+
 		infusionAspects = new AspectList().add(Aspect.GREED,32).add(Aspect.TOOL,16);
 		registerInfusionRecipe("WGBAUBLES","_LUCKRING",new ItemStack(WGContent.ItemMagicalBaubles,1,5),3,infusionAspects,luckyCoin,new ItemStack[] {new ItemStack(Items.gold_ingot),new ItemStack(Items.dye,1,4),stack_ingot,new ItemStack(Items.dye,1,4),stack_ingot,new ItemStack(Items.dye,1,4),stack_ingot,new ItemStack(Items.dye,1,4)});
 
-		
+
 		infusionAspects = new AspectList().add(Aspect.TRAVEL,4).add(Aspect.MIND, 6).add(Aspect.TOOL,2);
 		registerInfusionRecipe("LABYRINTHSTRING","",new ItemStack(WGContent.ItemMaterial,1,11),2,infusionAspects,new ItemStack(ConfigBlocks.blockMagicalLog,1,0),new ItemStack[] {new ItemStack(Items.ender_pearl),new ItemStack(WGContent.ItemMaterial,1,0),new ItemStack(WGContent.ItemMaterial,1,0),new ItemStack(WGContent.ItemMaterial,1,0)});
 
@@ -309,22 +309,25 @@ public class WGResearch
 			alchemyAspects = new AspectList().add(Aspect.METAL,1).add(Aspect.ORDER,1);
 			if(!OreDictionary.getOres("ore"+ItemClusters.subNames[iOre]).isEmpty() && !OreDictionary.getOres("ingot"+ItemClusters.subNames[iOre]).isEmpty())
 			{
-				registerAlchemyRecipe("METALLURGICPERFECTION_CLUSTERS","_"+ItemClusters.subNames[iOre], new ItemStack(WGContent.ItemCluster, 1, iOre), "ore"+ItemClusters.subNames[iOre], alchemyAspects);
+				if(WGConfig.allowClusters)
+					registerAlchemyRecipe("METALLURGICPERFECTION_CLUSTERS","_"+ItemClusters.subNames[iOre], new ItemStack(WGContent.ItemCluster, 1, iOre), "ore"+ItemClusters.subNames[iOre], alchemyAspects);
 				setupCluster(ItemClusters.subNames[iOre]);
 			}
-			boolean bb = !OreDictionary.getOres("nugget"+ItemClusters.subNames[iOre]).isEmpty() && !OreDictionary.getOres("ingot"+ItemClusters.subNames[iOre]).isEmpty();
-			if(bb)
+			if(WGConfig.allowClusters)
 			{
-				ItemStack ingot = OreDictionary.getOres("ingot"+ItemClusters.subNames[iOre]).get(0);
-				alchemyAspects = ThaumcraftApi.objectTags.get( Arrays.asList(new Object[] { ingot.getItem(), Integer.valueOf(ingot.getItemDamage()) }) );
-				if(alchemyAspects==null)
-					alchemyAspects=new AspectList();
-				alchemyAspects.remove(Aspect.METAL);
-				alchemyAspects.add(Aspect.METAL, 2);
-				ItemStack nuggets = Utilities.copyStackWithSize(OreDictionary.getOres("nugget"+ItemClusters.subNames[iOre]).get(0), 3);
-				registerAlchemyRecipe("METALLURGICPERFECTION_TRANSMUTATION","_"+ItemClusters.subNames[iOre], nuggets, "nugget"+ItemClusters.subNames[iOre], alchemyAspects);
+				boolean bb = !OreDictionary.getOres("nugget"+ItemClusters.subNames[iOre]).isEmpty() && !OreDictionary.getOres("ingot"+ItemClusters.subNames[iOre]).isEmpty();
+				if(bb)
+				{
+					ItemStack ingot = OreDictionary.getOres("ingot"+ItemClusters.subNames[iOre]).get(0);
+					alchemyAspects = ThaumcraftApi.objectTags.get( Arrays.asList(new Object[] { ingot.getItem(), Integer.valueOf(ingot.getItemDamage()) }) );
+					if(alchemyAspects==null)
+						alchemyAspects=new AspectList();
+					alchemyAspects.remove(Aspect.METAL);
+					alchemyAspects.add(Aspect.METAL, 2);
+					ItemStack nuggets = Utilities.copyStackWithSize(OreDictionary.getOres("nugget"+ItemClusters.subNames[iOre]).get(0), 3);
+					registerAlchemyRecipe("METALLURGICPERFECTION_TRANSMUTATION","_"+ItemClusters.subNames[iOre], nuggets, "nugget"+ItemClusters.subNames[iOre], alchemyAspects);
+				}
 			}
-			//WitchingGadgets.logger.log(Level.INFO, "Registered transmutation for: "+ss+" was "+(bb?"succesful":"unsuccesful"));
 		}
 
 		/**
@@ -571,50 +574,53 @@ public class WGResearch
 		getResearchItem("PURECINNABAR", "WITCHGADG", researchAspects, -6, -3, 1, new ItemStack(ConfigItems.itemNugget, 1, 21)).setConcealed().setSecondary().setParents(new String[] { "WGFAKEPUREIRON" }).setPages(pages).registerResearchItem();
 
 		//METALLURGICPERFECTION_CLUSTERS
-		ArrayList<ResearchPage> clusterPages = new ArrayList<ResearchPage>();
-		clusterPages.add(new ResearchPage("witchinggadgets_research_page.METALLURGICPERFECTION_CLUSTERS.1"));
-		for(String ore : ItemClusters.subNames)
-			if(recipeList.containsKey("METALLURGICPERFECTION_CLUSTERS_"+ore))
-				clusterPages.add( new ResearchPage((CrucibleRecipe)recipeList.get("METALLURGICPERFECTION_CLUSTERS_"+ore)) );
-		pages = clusterPages.toArray(new ResearchPage[0]);
-		researchAspects = new AspectList().add(Aspect.METAL,20).add(Aspect.ORDER, 10).add(Aspect.CRYSTAL, 10);
-		ArrayList<String> clusterParents = new ArrayList<String>();
-		clusterParents.add("WGFAKEPUREIRON");
-		clusterParents.add("PUREGOLD");
-		if(Utilities.researchExists("ALCHEMY", "PURECOPPER"))
-			clusterParents.add("PURECOPPER");
-		if(Utilities.researchExists("ALCHEMY", "PURETIN"))
-			clusterParents.add("PURETIN");
-		if(Utilities.researchExists("ALCHEMY", "PURESILVER"))
-			clusterParents.add("PURESILVER");
-		if(Utilities.researchExists("ALCHEMY", "PURELEAD"))
-			clusterParents.add("PURELEAD");
-		clusterParents.add("PURECINNABAR");
-		getResearchItem("METALLURGICPERFECTION_CLUSTERS", "WITCHGADG", researchAspects, -6, -1, 1, new ResourceLocation("witchinggadgets:textures/gui/research/icon_mp_cluster.png")).setConcealed().setSecondary().setSpecial().setParents(clusterParents.toArray(new String[0])).setPages(pages).registerResearchItem();
+		if(WGConfig.allowClusters)
+		{
+			ArrayList<ResearchPage> clusterPages = new ArrayList<ResearchPage>();
+			clusterPages.add(new ResearchPage("witchinggadgets_research_page.METALLURGICPERFECTION_CLUSTERS.1"));
+			for(String ore : ItemClusters.subNames)
+				if(recipeList.containsKey("METALLURGICPERFECTION_CLUSTERS_"+ore))
+					clusterPages.add( new ResearchPage((CrucibleRecipe)recipeList.get("METALLURGICPERFECTION_CLUSTERS_"+ore)) );
+			pages = clusterPages.toArray(new ResearchPage[0]);
+			researchAspects = new AspectList().add(Aspect.METAL,20).add(Aspect.ORDER, 10).add(Aspect.CRYSTAL, 10);
+			ArrayList<String> clusterParents = new ArrayList<String>();
+			clusterParents.add("WGFAKEPUREIRON");
+			clusterParents.add("PUREGOLD");
+			if(Utilities.researchExists("ALCHEMY", "PURECOPPER"))
+				clusterParents.add("PURECOPPER");
+			if(Utilities.researchExists("ALCHEMY", "PURETIN"))
+				clusterParents.add("PURETIN");
+			if(Utilities.researchExists("ALCHEMY", "PURESILVER"))
+				clusterParents.add("PURESILVER");
+			if(Utilities.researchExists("ALCHEMY", "PURELEAD"))
+				clusterParents.add("PURELEAD");
+			clusterParents.add("PURECINNABAR");
+			getResearchItem("METALLURGICPERFECTION_CLUSTERS", "WITCHGADG", researchAspects, -6, -1, 1, new ResourceLocation("witchinggadgets:textures/gui/research/icon_mp_cluster.png")).setConcealed().setSecondary().setSpecial().setParents(clusterParents.toArray(new String[0])).setPages(pages).registerResearchItem();
 
-		//ORIGINAL TRANSIRON
-		getFakeResearchItem("TRANSIRON", "ALCHEMY", -4,-2, new ItemStack(ConfigItems.itemNugget, 1, 0)).registerResearchItem();
+			//ORIGINAL TRANSIRON
+			getFakeResearchItem("TRANSIRON", "ALCHEMY", -4,-2, new ItemStack(ConfigItems.itemNugget, 1, 0)).registerResearchItem();
 
-		//METALLURGICPERFECTION_TRANSMUTATION
-		ArrayList<ResearchPage> transmutePages = new ArrayList<ResearchPage>();
-		transmutePages.add(new ResearchPage("witchinggadgets_research_page.METALLURGICPERFECTION_TRANSMUTATION.1"));
-		for(String ore : ItemClusters.subNames)
-			if(recipeList.containsKey("METALLURGICPERFECTION_TRANSMUTATION_"+ore))
-				transmutePages.add( new ResearchPage((CrucibleRecipe)recipeList.get("METALLURGICPERFECTION_TRANSMUTATION_"+ore)) );
-		pages = transmutePages.toArray(new ResearchPage[0]);
-		researchAspects = new AspectList().add(Aspect.METAL,20).add(Aspect.ORDER, 10).add(Aspect.EXCHANGE, 10);
-		ArrayList<String> transmuteParents = new ArrayList<String>();
-		transmuteParents.add("WGFAKETRANSIRON");
-		transmuteParents.add("TRANSGOLD");
-		if(Utilities.researchExists("ALCHEMY", "TRANSCOPPER"))
-			transmuteParents.add("TRANSCOPPER");
-		if(Utilities.researchExists("ALCHEMY", "TRANSTIN"))
-			transmuteParents.add("TRANSTIN");
-		if(Utilities.researchExists("ALCHEMY", "TRANSSILVER"))
-			transmuteParents.add("TRANSSILVER");
-		if(Utilities.researchExists("ALCHEMY", "TRANSLEAD"))
-			transmuteParents.add("TRANSLEAD");
-		getResearchItem("METALLURGICPERFECTION_TRANSMUTATION", "WITCHGADG", researchAspects, -3, -1, 1, new ResourceLocation("witchinggadgets:textures/gui/research/icon_mp_trans.png")).setConcealed().setSecondary().setSpecial().setParents(transmuteParents.toArray(new String[0])).setPages(pages).registerResearchItem();
+			//METALLURGICPERFECTION_TRANSMUTATION
+			ArrayList<ResearchPage> transmutePages = new ArrayList<ResearchPage>();
+			transmutePages.add(new ResearchPage("witchinggadgets_research_page.METALLURGICPERFECTION_TRANSMUTATION.1"));
+			for(String ore : ItemClusters.subNames)
+				if(recipeList.containsKey("METALLURGICPERFECTION_TRANSMUTATION_"+ore))
+					transmutePages.add( new ResearchPage((CrucibleRecipe)recipeList.get("METALLURGICPERFECTION_TRANSMUTATION_"+ore)) );
+			pages = transmutePages.toArray(new ResearchPage[0]);
+			researchAspects = new AspectList().add(Aspect.METAL,20).add(Aspect.ORDER, 10).add(Aspect.EXCHANGE, 10);
+			ArrayList<String> transmuteParents = new ArrayList<String>();
+			transmuteParents.add("WGFAKETRANSIRON");
+			transmuteParents.add("TRANSGOLD");
+			if(Utilities.researchExists("ALCHEMY", "TRANSCOPPER"))
+				transmuteParents.add("TRANSCOPPER");
+			if(Utilities.researchExists("ALCHEMY", "TRANSTIN"))
+				transmuteParents.add("TRANSTIN");
+			if(Utilities.researchExists("ALCHEMY", "TRANSSILVER"))
+				transmuteParents.add("TRANSSILVER");
+			if(Utilities.researchExists("ALCHEMY", "TRANSLEAD"))
+				transmuteParents.add("TRANSLEAD");
+			getResearchItem("METALLURGICPERFECTION_TRANSMUTATION", "WITCHGADG", researchAspects, -3, -1, 1, new ResourceLocation("witchinggadgets:textures/gui/research/icon_mp_trans.png")).setConcealed().setSecondary().setSpecial().setParents(transmuteParents.toArray(new String[0])).setPages(pages).registerResearchItem();
+		}
 
 		//ORIGINAL INFERNALFURNACE
 		getFakeResearchItem("INFERNALFURNACE", "ARTIFICE", 3,-5, new ResourceLocation("thaumcraft", "textures/misc/r_infernalfurnace.png")).registerResearchItem();
@@ -646,7 +652,7 @@ public class WGResearch
 
 		//GEMCUTTING
 		researchAspects = new AspectList().add(Aspect.CRYSTAL,1).add(Aspect.ORDER, 1).add(Aspect.MAGIC, 1).add(Aspect.CRAFT, 1);
-		pages = new ResearchPage[]{ new ResearchPage("witchinggadgets_research_page.GEMCUTTING.1"), new ResearchPage((ShapedOreRecipe) recipeList.get("GEMCUTTING_TOOLS")), new ResearchPage((List) recipeList.get("GEMCUTTING")), new ResearchPage("witchinggadgets_research_page.GEMCUTTING.2"), new ResearchPage("witchinggadgets_research_page.GEMCUTTING.3"), new ResearchPage("witchinggadgets_research_page.GEMCUTTING.4"), new ResearchPage("witchinggadgets_research_page.GEMCUTTING.5"), new ResearchPage("witchinggadgets_research_page.GEMCUTTING.6")};
+		pages = new ResearchPage[]{ new ResearchPage("witchinggadgets_research_page.GEMCUTTING.1"), new ResearchPage((ShapedOreRecipe) recipeList.get("GEMCUTTING_TOOLS")), new ResearchPage((List) recipeList.get("GEMCUTTING")), new ResearchPage("witchinggadgets_research_page.GEMCUTTING.2"), new ResearchPage("witchinggadgets_research_page.GEMCUTTING.3"), new ResearchPage("witchinggadgets_research_page.GEMCUTTING.4"), new ResearchPage("witchinggadgets_research_page.GEMCUTTING.5"), new ResearchPage("witchinggadgets_research_page.GEMCUTTING.6"), new ResearchPage("witchinggadgets_research_page.GEMCUTTING.7"+(!Config.allowMirrors?".noMirrors":""))};
 		getResearchItem("GEMCUTTING", "WITCHGADG", researchAspects, 1, -2, 2, new ItemStack(WGContent.BlockWoodenDevice,1,3)).setPages(pages).registerResearchItem();
 		//CRYSTALCAPSULE
 		researchAspects = new AspectList().add(Aspect.CRYSTAL, 3).add(Aspect.ORDER, 2).add(Aspect.VOID, 4);

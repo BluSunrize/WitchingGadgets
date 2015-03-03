@@ -1,12 +1,13 @@
 package witchinggadgets.common.util.network;
 
-import witchinggadgets.WitchingGadgets;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
+import witchinggadgets.WitchingGadgets;
 
 public class PacketPrimordialGlove extends AbstractPacket
 {
@@ -58,8 +59,12 @@ public class PacketPrimordialGlove extends AbstractPacket
 		if(!(ent instanceof EntityPlayer))
 			return;
 		EntityPlayer player = (EntityPlayer) ent;
-		if(type==0)
+		if(type==0 && player.getCurrentEquippedItem()!=null)
+		{
+			if(!player.getCurrentEquippedItem().hasTagCompound())
+				player.getCurrentEquippedItem().setTagCompound(new NBTTagCompound());
 			player.getCurrentEquippedItem().getTagCompound().setInteger("selected", selected);
+		}
 		else if(type==1)
 			player.openGui(WitchingGadgets.instance, 7, world, (int)player.posX,(int)player.posY,(int)player.posZ);
 	}

@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -18,6 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.IIcon;
@@ -30,6 +32,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.Thaumcraft;
+import thaumcraft.common.config.Config;
 import thaumcraft.common.lib.utils.EntityUtils;
 import thaumcraft.common.tiles.TileMirror;
 import thaumcraft.common.tiles.TileMirrorEssentia;
@@ -247,27 +250,42 @@ public class ItemInfusedGem extends Item implements IInfusedGem
 				}
 				dmg = true;
 			}
-			if(aspect.equals(Aspect.ENTROPY) && mop!=null && mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK)
+			if(aspect.equals(Aspect.ENTROPY))
 			{
-				TileEntity tile = world.getTileEntity(targetX,targetY,targetZ);
-				if(tile instanceof TileMirror || tile instanceof TileMirrorEssentia)
+				if(Config.allowMirrors)
 				{
-					boolean link = tile instanceof TileMirror? ((TileMirror)world.getTileEntity(targetX,targetY,targetZ)).linked : ((TileMirrorEssentia)world.getTileEntity(targetX,targetY,targetZ)).linked;
-					if(link)
+					if(mop!=null && mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK)
 					{
-						int dim = tile instanceof TileMirror? ((TileMirror)world.getTileEntity(targetX,targetY,targetZ)).linkDim : ((TileMirrorEssentia)world.getTileEntity(targetX,targetY,targetZ)).linkDim;
-						int tx= tile instanceof TileMirror? ((TileMirror)world.getTileEntity(targetX,targetY,targetZ)).linkX : ((TileMirrorEssentia)world.getTileEntity(targetX,targetY,targetZ)).linkX;
-						int ty= tile instanceof TileMirror? ((TileMirror)world.getTileEntity(targetX,targetY,targetZ)).linkY : ((TileMirrorEssentia)world.getTileEntity(targetX,targetY,targetZ)).linkY;
-						int tz= tile instanceof TileMirror? ((TileMirror)world.getTileEntity(targetX,targetY,targetZ)).linkZ : ((TileMirrorEssentia)world.getTileEntity(targetX,targetY,targetZ)).linkZ;
-						ForgeDirection fd = ForgeDirection.getOrientation(world.getBlockMetadata(tx, ty, tz)%6);
-						float rot = fd.ordinal()==2?180: fd.ordinal()==4?90: fd.ordinal()==5?270 : 0;
-						if(player.dimension!=dim)
-							player.travelToDimension(dim);
-						player.setLocationAndAngles(tx+.5+fd.offsetX*.5, ty+fd.offsetY, tz+.5+fd.offsetZ*.5, rot, player.rotationPitch);
-						dmg = true;
+						TileEntity tile = world.getTileEntity(targetX,targetY,targetZ);
+						if(tile instanceof TileMirror || tile instanceof TileMirrorEssentia)
+						{
+							boolean link = tile instanceof TileMirror? ((TileMirror)world.getTileEntity(targetX,targetY,targetZ)).linked : ((TileMirrorEssentia)world.getTileEntity(targetX,targetY,targetZ)).linked;
+							if(link)
+							{
+								int dim = tile instanceof TileMirror? ((TileMirror)world.getTileEntity(targetX,targetY,targetZ)).linkDim : ((TileMirrorEssentia)world.getTileEntity(targetX,targetY,targetZ)).linkDim;
+								int tx= tile instanceof TileMirror? ((TileMirror)world.getTileEntity(targetX,targetY,targetZ)).linkX : ((TileMirrorEssentia)world.getTileEntity(targetX,targetY,targetZ)).linkX;
+								int ty= tile instanceof TileMirror? ((TileMirror)world.getTileEntity(targetX,targetY,targetZ)).linkY : ((TileMirrorEssentia)world.getTileEntity(targetX,targetY,targetZ)).linkY;
+								int tz= tile instanceof TileMirror? ((TileMirror)world.getTileEntity(targetX,targetY,targetZ)).linkZ : ((TileMirrorEssentia)world.getTileEntity(targetX,targetY,targetZ)).linkZ;
+								ForgeDirection fd = ForgeDirection.getOrientation(world.getBlockMetadata(tx, ty, tz)%6);
+								float rot = fd.ordinal()==2?180: fd.ordinal()==4?90: fd.ordinal()==5?270 : 0;
+								if(player.dimension!=dim)
+									player.travelToDimension(dim);
+								player.setLocationAndAngles(tx+.5+fd.offsetX*.5, ty+fd.offsetY, tz+.5+fd.offsetZ*.5, rot, player.rotationPitch);
+								dmg = true;
+							}
+						}
 					}
+				}else
+				{
+					AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(player.posX-4,player.posY-2,player.posZ-4, player.posX+4,player.posY+2,player.posZ+4);
+					for(EntityLivingBase entT : (List<EntityLivingBase>)world.getEntitiesWithinAABB(EntityLivingBase.class, aabb))
+						if(entT!=null && !entT.equals(player))
+						{
+							entT.addVelocity((entT.posX-player.posX)*.4, .4, (entT.posZ-player.posZ)*.4);
+							entT.addPotionEffect(new PotionEffect(Potion.blindness.id,15,0));
+						}
+					dmg = true;
 				}
-
 			}
 			return dmg;
 		}
@@ -293,8 +311,8 @@ public class ItemInfusedGem extends Item implements IInfusedGem
 	public int getConsumedCharge(String cut, Aspect aspect, EntityPlayer player)
 	{
 		if(cut == GemCut.OVAL.toString())
-			return aspect==Aspect.FIRE||aspect==Aspect.AIR||aspect==Aspect.EARTH?1: aspect==Aspect.WATER||aspect==Aspect.ORDER?2: aspect==Aspect.ENTROPY?16: 0;
-		return 32;
+			return aspect==Aspect.FIRE||aspect==Aspect.AIR||aspect==Aspect.EARTH?1: aspect==Aspect.WATER||aspect==Aspect.ORDER?2: aspect==Aspect.ENTROPY?(Config.allowMirrors?16:2): 0;
+			return 32;
 	}
 
 
@@ -304,7 +322,7 @@ public class ItemInfusedGem extends Item implements IInfusedGem
 	{
 		if(stack.hasTagCompound() && stack.getTagCompound().getByte("GemCut")>1)
 			stack.getTagCompound().setByte("GemCut",(byte)1);
-		
+
 		int brittle = EnchantmentHelper.getEnchantmentLevel(WGContent.enc_gemstoneBrittle.effectId, stack);
 		if(entity instanceof EntityPlayer)
 			if(world.rand.nextInt(1000)<brittle || (getCut(stack)==GemCut.POINT&&stack.getItemDamage()!=0))
@@ -495,9 +513,9 @@ public class ItemInfusedGem extends Item implements IInfusedGem
 	public enum GemCut
 	{
 		POINT,
-//		TABLE,
-//		STEP,
-//		ROSE,
+		//		TABLE,
+		//		STEP,
+		//		ROSE,
 		OVAL;
 
 		public static GemCut getValue(byte b) 
