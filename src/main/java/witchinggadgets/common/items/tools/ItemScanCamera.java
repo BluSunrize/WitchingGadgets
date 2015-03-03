@@ -38,36 +38,36 @@ public class ItemScanCamera extends Item {
 	{
 		this.itemIcon = iconRegister.registerIcon("thaumcraft:blank");
 	}
-	
+
 	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
 	{
-			ItemStack photo = new ItemStack(WGContent.ItemMaterial,1,9);
-			photo.setTagCompound(new NBTTagCompound());
-			ScanResult scan = doScan(stack, world, player, 0);
-			if(scan != null && ScanManager.validScan(ScanManager.getScanAspects(scan, world), player))
+		ItemStack photo = new ItemStack(WGContent.ItemMaterial,1,9);
+		photo.setTagCompound(new NBTTagCompound());
+		ScanResult scan = doScan(stack, world, player, 0);
+		if(scan != null && ScanManager.validScan(ScanManager.getScanAspects(scan, world), player))
+		{
+			NBTTagCompound scanTag = Utilities.writeScanResultToNBT(scan);
+			photo.getTagCompound().setTag("scanResult", scanTag);
+			boolean takePhoto = false;
+			for(int slot = 0;slot<player.inventory.mainInventory.length;slot++)
 			{
-				NBTTagCompound scanTag = Utilities.writeScanResultToNBT(scan);
-				photo.getTagCompound().setTag("scanResult", scanTag);
-				boolean takePhoto = false;
-				for(int slot = 0;slot<player.inventory.mainInventory.length;slot++)
+				ItemStack item = player.inventory.mainInventory[slot];
+				if(item != null && item.getItem() == ConfigItems.itemResource	&& item.getItemDamage() == 10)
 				{
-					ItemStack item = player.inventory.mainInventory[slot];
-					if(item != null && item.getItem() == ConfigItems.itemResource	&& item.getItemDamage() == 10)
-					{
-						player.inventory.decrStackSize(slot, 1);
-						takePhoto = true;
-						break;
-					}
-				}
-				if(takePhoto)
-				{
-					if(player.inventory.addItemStackToInventory(photo))
-						player.dropPlayerItemWithRandomChoice(photo, false);
-					player.worldObj.playSound(player.posX, player.posY, player.posZ, "thaumcraft:cameradone", 0.3F, 1.9F + player.worldObj.rand.nextFloat() * 0.2F, false);
-					player.worldObj.playSound(player.posX, player.posY, player.posZ, "thaumcraft:cameraticks", 0.3F, 1.9F + player.worldObj.rand.nextFloat() * 0.2F, false);
+					player.inventory.decrStackSize(slot, 1);
+					takePhoto = true;
+					break;
 				}
 			}
+			if(takePhoto)
+			{
+				if(player.inventory.addItemStackToInventory(photo))
+					player.dropPlayerItemWithRandomChoice(photo, false);
+				player.worldObj.playSound(player.posX, player.posY, player.posZ, "thaumcraft:cameradone", 0.3F, 1.9F + player.worldObj.rand.nextFloat() * 0.2F, false);
+				player.worldObj.playSound(player.posX, player.posY, player.posZ, "thaumcraft:cameraticks", 0.3F, 1.9F + player.worldObj.rand.nextFloat() * 0.2F, false);
+			}
+		}
 		return stack;
 	}
 
@@ -106,7 +106,17 @@ public class ItemScanCamera extends Item {
 			{
 				int bi = Block.getIdFromBlock(p.worldObj.getBlock(mop.blockX, mop.blockY, mop.blockZ));
 				int md = b.getDamageValue(world, mop.blockX, mop.blockY, mop.blockZ);
-				ItemStack is = b.getPickBlock(mop, p.worldObj, mop.blockX, mop.blockY, mop.blockZ, p);
+				ItemStack is = null;
+				try{
+					b.getPickBlock(mop, p.worldObj, mop.blockX, mop.blockY, mop.blockZ, p);
+				}catch(Exception e)
+				{}
+				if(is==null)
+				try{
+					b.getPickBlock(mop, p.worldObj, mop.blockX, mop.blockY, mop.blockZ);
+				}catch(Exception e)
+				{}
+
 				ScanResult sr = null;
 				try
 				{

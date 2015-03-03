@@ -178,7 +178,7 @@ public class ItemInfusedGem extends Item implements IInfusedGem
 			if(aspect.equals(Aspect.WATER))
 			{
 				if(mop!=null && mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK)
-					if(world.isAirBlock(targetX,targetY,targetZ) || !world.getBlock(targetX, targetY, targetZ).getMaterial().isSolid())
+					if(world.isAirBlock(targetX,targetY,targetZ) || world.getBlock(targetX, targetY, targetZ).isReplaceable(world, targetX, targetY, targetZ))
 					{
 						if(world.provider.isHellWorld)
 						{

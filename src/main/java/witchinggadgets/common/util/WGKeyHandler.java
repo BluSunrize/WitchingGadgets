@@ -6,6 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraftforge.common.ForgeHooks;
 import travellersgear.api.TravellersGearAPI;
+import witchinggadgets.common.WGConfig;
 import witchinggadgets.common.WGContent;
 import witchinggadgets.common.items.tools.ItemPrimordialGlove;
 import witchinggadgets.common.util.network.PacketPrimordialGlove;
@@ -76,7 +77,7 @@ public class WGKeyHandler
 				else if(keyDown[2])
 					keyDown[2] = false;
 			}
-			float step = .15f;
+			float step = WGConfig.radialSpeed;
 			if(thaumcraftFKey!=null && thaumcraftFKey.getIsKeyPressed() && !keyDown[1])
 			{
 				if(player.isSneaking() && player.getCurrentEquippedItem()!=null && player.getCurrentEquippedItem().getItem() instanceof ItemPrimordialGlove)
@@ -95,7 +96,6 @@ public class WGKeyHandler
 					if(gemRadial>=1)	
 						gemLock=true;
 				}
-				//System.out.println("radial: "+gemRadial);
 			}
 			else
 			{

@@ -10,6 +10,7 @@ import thaumcraft.client.lib.UtilsFX;
 import witchinggadgets.client.ClientUtilities;
 import witchinggadgets.common.blocks.tiles.TileEntityCuttingTable;
 import witchinggadgets.common.gui.ContainerCuttingTable;
+import witchinggadgets.common.items.ItemInfusedGem;
 import witchinggadgets.common.util.network.PacketTileUpdate;
 import witchinggadgets.common.util.network.WGPacketPipeline;
 
@@ -33,8 +34,8 @@ public class GuiCuttingTable extends GuiContainer
 		this.drawTexturedModalRect(guiLeft,guiTop, 0, 0, xSize, ySize);
 
 		ClientUtilities.bindTexture("witchinggadgets:textures/gui/research/gemcuts_transparent.png");
-		int xOff = this.tile.targetGemCut%3 * 80;
-		int yOff = this.tile.targetGemCut/3 * 80;
+		int xOff = this.tile.targetGemCut==0?0:80;
+		int yOff = this.tile.targetGemCut==0?0:80;
 		Tessellator tes = Tessellator.instance;
 		GL11.glEnable(3042);
 		tes.startDrawingQuads();
@@ -57,15 +58,15 @@ public class GuiCuttingTable extends GuiContainer
 		{
 			int old = this.tile.targetGemCut;
 			if(mX>106 && mX<117)
-				this.tile.targetGemCut = (byte) (old==0?4:0);
-//				this.tile.targetGemCut++;
+//				this.tile.targetGemCut = (byte) (old==0?1:0);
+				this.tile.targetGemCut++;
 			if(mX>59 && mX<70)
-				this.tile.targetGemCut = (byte) (old==0?4:0);
-//				this.tile.targetGemCut--;
-//			if(this.tile.targetGemCut < 0)
-//				this.tile.targetGemCut = (byte) (ItemInfusedGem.GemCut.values().length-1);
-//			else if(this.tile.targetGemCut >= ItemInfusedGem.GemCut.values().length)
-//				this.tile.targetGemCut=0;
+//				this.tile.targetGemCut = (byte) (old==0?1:0);
+				this.tile.targetGemCut--;
+			if(this.tile.targetGemCut < 0)
+				this.tile.targetGemCut = (byte) (ItemInfusedGem.GemCut.values().length-1);
+			else if(this.tile.targetGemCut >= ItemInfusedGem.GemCut.values().length)
+				this.tile.targetGemCut=0;
 			
 			if(this.tile.targetGemCut != old)
 				WGPacketPipeline.INSTANCE.sendToServer(new PacketTileUpdate(this.tile));

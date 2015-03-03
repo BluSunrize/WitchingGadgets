@@ -33,6 +33,7 @@ import thaumcraft.api.wands.WandTriggerRegistry;
 import thaumcraft.common.config.Config;
 import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.config.ConfigItems;
+import thaumcraft.common.lib.utils.Utils;
 import witchinggadgets.WitchingGadgets;
 import witchinggadgets.common.blocks.tiles.TileEntityBlastfurnace;
 import witchinggadgets.common.items.ItemClusters;
@@ -306,14 +307,16 @@ public class WGResearch
 
 		for(int iOre=0; iOre<ItemClusters.subNames.length; iOre++)
 		{
-			alchemyAspects = new AspectList().add(Aspect.METAL,1).add(Aspect.ORDER,1);
-			if(!OreDictionary.getOres("ore"+ItemClusters.subNames[iOre]).isEmpty() && !OreDictionary.getOres("ingot"+ItemClusters.subNames[iOre]).isEmpty())
-			{
-				if(WGConfig.allowClusters)
-					registerAlchemyRecipe("METALLURGICPERFECTION_CLUSTERS","_"+ItemClusters.subNames[iOre], new ItemStack(WGContent.ItemCluster, 1, iOre), "ore"+ItemClusters.subNames[iOre], alchemyAspects);
-				setupCluster(ItemClusters.subNames[iOre]);
-			}
 			if(WGConfig.allowClusters)
+			{
+				alchemyAspects = new AspectList().add(Aspect.METAL,1).add(Aspect.ORDER,1);
+				if(!OreDictionary.getOres("ore"+ItemClusters.subNames[iOre]).isEmpty() && !OreDictionary.getOres("ingot"+ItemClusters.subNames[iOre]).isEmpty())
+				{
+					registerAlchemyRecipe("METALLURGICPERFECTION_CLUSTERS","_"+ItemClusters.subNames[iOre], new ItemStack(WGContent.ItemCluster, 1, iOre), "ore"+ItemClusters.subNames[iOre], alchemyAspects);
+					setupCluster(ItemClusters.subNames[iOre]);
+				}
+			}
+			if(WGConfig.allowTransmutations)
 			{
 				boolean bb = !OreDictionary.getOres("nugget"+ItemClusters.subNames[iOre]).isEmpty() && !OreDictionary.getOres("ingot"+ItemClusters.subNames[iOre]).isEmpty();
 				if(bb)
@@ -321,7 +324,7 @@ public class WGResearch
 					ItemStack ingot = OreDictionary.getOres("ingot"+ItemClusters.subNames[iOre]).get(0);
 					alchemyAspects = ThaumcraftApi.objectTags.get( Arrays.asList(new Object[] { ingot.getItem(), Integer.valueOf(ingot.getItemDamage()) }) );
 					if(alchemyAspects==null)
-						alchemyAspects=new AspectList();
+						alchemyAspects = new AspectList();
 					alchemyAspects.remove(Aspect.METAL);
 					alchemyAspects.add(Aspect.METAL, 2);
 					ItemStack nuggets = Utilities.copyStackWithSize(OreDictionary.getOres("nugget"+ItemClusters.subNames[iOre]).get(0), 3);
@@ -596,7 +599,9 @@ public class WGResearch
 				clusterParents.add("PURELEAD");
 			clusterParents.add("PURECINNABAR");
 			getResearchItem("METALLURGICPERFECTION_CLUSTERS", "WITCHGADG", researchAspects, -6, -1, 1, new ResourceLocation("witchinggadgets:textures/gui/research/icon_mp_cluster.png")).setConcealed().setSecondary().setSpecial().setParents(clusterParents.toArray(new String[0])).setPages(pages).registerResearchItem();
-
+		}
+		if(WGConfig.allowTransmutations)
+		{
 			//ORIGINAL TRANSIRON
 			getFakeResearchItem("TRANSIRON", "ALCHEMY", -4,-2, new ItemStack(ConfigItems.itemNugget, 1, 0)).registerResearchItem();
 
@@ -857,7 +862,12 @@ public class WGResearch
 			if(!OreDictionary.getOres(ingot).isEmpty())
 			{
 				ItemStack ingots = OreDictionary.getOres(ingot).get(0);
-				FurnaceRecipes.smelting().func_151394_a(clusterStack, Utilities.copyStackWithSize(ingots,2), 1.0F);
+				if(clusterStack!=null)
+				{
+					FurnaceRecipes.smelting().func_151394_a(clusterStack, Utilities.copyStackWithSize(ingots,2), 1.0F);
+					if(!OreDictionary.getOres(ore).isEmpty())
+						Utils.addSpecialMiningResult(OreDictionary.getOres(ore).get(0), clusterStack, 1f);
+				}
 				addBlastTrippling(name);
 			}
 			if(WGModCompat.loaded_TCon && WGConfig.smelteryResultForClusters>0 && FluidRegistry.getFluid(fluid)!=null)

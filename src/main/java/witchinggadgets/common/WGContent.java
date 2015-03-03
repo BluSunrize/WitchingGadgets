@@ -1,5 +1,6 @@
 package witchinggadgets.common;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
 
@@ -128,12 +129,12 @@ public class WGContent
 	public static Item ItemPrimordialHammer;
 	public static Item ItemPrimordialAxe;
 	public static Item ItemPrimordialSword;
-	
+
 	public static Item ItemPrimordialHelm;
 	public static Item ItemPrimordialChest;
 	public static Item ItemPrimordialLegs;
 	public static Item ItemPrimordialBoots;
-	
+
 	public static Item ItemInfusedGem;
 	public static Item ItemMagicalBaubles;
 	public static Item ItemScanCamera;
@@ -181,7 +182,7 @@ public class WGContent
 		if(id >= 0)
 			pot_cinderCoat = new WGPotion(id, true, 0x8f3f1f, 0, false, 3).setPotionName("wg.potionCinderCoat");
 
-		
+
 		int eid = Utilities.getNextEnchantmentId(64);
 		if(eid >= 0)
 		{
@@ -346,16 +347,16 @@ public class WGContent
 
 		ItemCrystalCapsule = new ItemCrystalCapsule().setUnlocalizedName("WG_CrystalFlask");
 		GameRegistry.registerItem(ItemCrystalCapsule, ItemCrystalCapsule.getUnlocalizedName());
-		ItemCluster = new ItemClusters().setUnlocalizedName("WG_Cluster");
-		GameRegistry.registerItem(ItemCluster, ItemCluster.getUnlocalizedName());
-
+		if(WGConfig.allowClusters)
+		{
+			ItemCluster = new ItemClusters().setUnlocalizedName("WG_Cluster");
+			GameRegistry.registerItem(ItemCluster, ItemCluster.getUnlocalizedName());
+		}
 		//ItemMagicBed = new ItemMagicBed(WGConfig.ItemMagicBedID).setUnlocalizedName("WG_MagicBed");
 		//GameRegistry.registerItem(ItemMagicBed, ItemMagicBed.getUnlocalizedName());
 		OreDictionary.registerOre("crystalNetherQuartz", new ItemStack(Items.quartz));
 		OreDictionary.registerOre("scribingTools", new ItemStack(ConfigItems.itemInkwell,1,OreDictionary.WILDCARD_VALUE));
 
-		for(int iOre=0; iOre<ItemClusters.subNames.length; iOre++)
-			OreDictionary.registerOre("cluster"+ItemClusters.subNames[iOre], new ItemStack(ItemCluster,1,iOre));
 	}
 	private static void initializeItems()
 	{
@@ -377,19 +378,18 @@ public class WGContent
 
 		EntityRegistry.registerModEntity(EntityItemReforming.class, "reformingItem", 0, WitchingGadgets.instance, 64, 1, true);
 
+		if(WGConfig.allowClusters)
+		{
+			for(int iOre=0; iOre<ItemClusters.subNames.length; iOre++)
+				OreDictionary.registerOre("cluster"+ItemClusters.subNames[iOre], new ItemStack(ItemCluster,1,iOre));
+		}
+
 		//FMLInterModComms.sendMessage("TravellersGear", "registerTravellersGear_0", new ItemStack(ItemCloak));
 	}
 	private static void postInitItems()
 	{
 		ChestGenHooks.getInfo("towerChestContents").addItem(new WeightedRandomChestContent(new ItemStack(ItemMaterial,1,8),1,1,8));
 		ChestGenHooks.getInfo(ChestGenHooks.VILLAGE_BLACKSMITH).addItem(new WeightedRandomChestContent(new ItemStack(ItemMaterial,1,8),1,1,8));
-
-		//		cloakRegistry.put(Cloak.standard.getUnlocalizedName(), Cloak.standard);
-		//		if(WGModCompat.tfRavensFeather!=null)
-		//			cloakRegistry.put(Cloak.raven.getUnlocalizedName(), Cloak.raven);
-		//		cloakRegistry.put(Cloak.storage.getUnlocalizedName(), Cloak.storage);
-		//		cloakRegistry.put(Cloak.invisible.getUnlocalizedName(), Cloak.invisible);
-		//		cloakRegistry.put(Cloak.wolf.getUnlocalizedName(), Cloak.wolf);
 
 		ItemStack emptyCapsule = new ItemStack(ItemCrystalCapsule);
 		for(Map.Entry<String,Fluid> f : FluidRegistry.getRegisteredFluids().entrySet())
@@ -450,7 +450,7 @@ public class WGContent
 		ThaumcraftApi.registerObjectTag(new ItemStack(ItemMaterial,1,9),addAspects);
 		addAspects = new AspectList().add(Aspect.AIR,2).add(Aspect.WATER,2).add(Aspect.ORDER,2).add(Aspect.SENSES,2).add(Aspect.MIND,2);
 		ThaumcraftApi.registerObjectTag(new ItemStack(ItemMaterial,1,10),addAspects);
-		
+
 		addAspects = new AspectList().add(Aspect.CRYSTAL,4).add(Aspect.VOID,4);
 		ThaumcraftApi.registerObjectTag(new ItemStack(ItemMaterial,1,12),addAspects);
 
@@ -459,110 +459,110 @@ public class WGContent
 		addAspects = new AspectList().add(Aspect.MIND,3).add(Aspect.HUNGER,2).add(Aspect.FLESH,2);
 		ThaumcraftApi.registerObjectTag(new ItemStack(ItemMagicFoodstuffs,1,2),addAspects);
 
-		//Biomes o' Plenty
-		ThaumcraftApi.registerObjectTag("gemAmber", new AspectList().add(Aspect.TRAP, 2).add(Aspect.CRYSTAL, 2));
-		ThaumcraftApi.registerObjectTag("gemPeridot", new AspectList().add(Aspect.CRYSTAL, 2).add(Aspect.GREED, 2));
-		ThaumcraftApi.registerObjectTag("gemTopaz", new AspectList().add(Aspect.CRYSTAL, 2).add(Aspect.GREED, 2));
-		ThaumcraftApi.registerObjectTag("gemTanzanite", new AspectList().add(Aspect.CRYSTAL, 2).add(Aspect.GREED, 2));
-		ThaumcraftApi.registerObjectTag("gemMalachite", new AspectList().add(Aspect.CRYSTAL, 2).add(Aspect.GREED, 2));
-
-		//Botania
-		addOreAspects("Manasteel", new AspectList().add(Aspect.MAGIC, 1), false);
-		addOreAspects("Terrasteel", new AspectList().add(Aspect.EARTH, 1).add(Aspect.MAGIC, 1), false);
-		addOreAspects("ElvenElementium", new AspectList().add(Aspect.AURA, 1).add(Aspect.MAGIC, 2), true);
-		ThaumcraftApi.registerObjectTag("livingstone", new AspectList().add(Aspect.EARTH,4).add(Aspect.LIFE,2));
-		ThaumcraftApi.registerObjectTag("livingwood", new AspectList().add(Aspect.TREE,4).add(Aspect.LIFE,2));
-		ThaumcraftApi.registerObjectTag("dreamwood", new AspectList().add(Aspect.MAGIC,1).add(Aspect.TREE,4).add(Aspect.AURA,2));
-		ThaumcraftApi.registerObjectTag("manaPearl", new AspectList().add(Aspect.MAGIC,6).add(Aspect.ELDRITCH,4).add(Aspect.TRAVEL,4));
-		ThaumcraftApi.registerObjectTag("manaDiamond", new AspectList().add(Aspect.MAGIC,4).add(Aspect.CRYSTAL,4).add(Aspect.GREED,4));
-		ThaumcraftApi.registerObjectTag("eternalLifeEssence", new AspectList().add(Aspect.MAGIC,4).add(Aspect.AURA,4));
-		ThaumcraftApi.registerObjectTag("eternalLifeEssence", new AspectList().add(Aspect.MAGIC,8).add(Aspect.AURA,8).add(Aspect.LIFE,8));
-		ThaumcraftApi.registerObjectTag("elvenPixieDust", new AspectList().add(Aspect.MAGIC,6).add(Aspect.AURA,4).add(Aspect.ELDRITCH,4));
-		ThaumcraftApi.registerObjectTag("elvenDragonstone", new AspectList().add(Aspect.MAGIC,6).add(Aspect.AURA,4).add(Aspect.CRYSTAL,6));
-		ThaumcraftApi.registerObjectTag("shardPrismarine", new AspectList().add(Aspect.MAGIC,2).add(Aspect.WATER,4).add(Aspect.CRYSTAL,2));
-		String[] colours = {"White","Orange","Magenta","LightBlue","Yellow","Lime","Pink","Gray",
-				"LightGray","Cyan","Purple","Blue","Brown","Green","Red","Black"};
-		for(String c : colours)
-		{
-			ThaumcraftApi.registerObjectTag("mysticFlower"+c, new AspectList().add(Aspect.SENSES,2).add(Aspect.PLANT,2));
-			ThaumcraftApi.registerObjectTag("petal"+c, new AspectList().add(Aspect.SENSES,1).add(Aspect.PLANT,1));
-			ThaumcraftApi.registerObjectTag("manaPetal"+c, new AspectList().add(Aspect.MAGIC,1).add(Aspect.SENSES,1).add(Aspect.PLANT,1));
-		}
-		ThaumcraftApi.registerObjectTag("rune"+"Water"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.WATER,6));
-		ThaumcraftApi.registerObjectTag("rune"+"Fire"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.FIRE,6));
-		ThaumcraftApi.registerObjectTag("rune"+"Earth"+"B", new AspectList().add(Aspect.EARTH,8).add(Aspect.METAL,2));
-		ThaumcraftApi.registerObjectTag("rune"+"Air"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.AIR,6));
-		ThaumcraftApi.registerObjectTag("rune"+"Spring"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.WATER,3).add(Aspect.FIRE,3).add(Aspect.PLANT, 3));
-		ThaumcraftApi.registerObjectTag("rune"+"Summer"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.EARTH,3).add(Aspect.AIR,3).add(Aspect.ENTROPY, 3));
-		ThaumcraftApi.registerObjectTag("rune"+"Autumn"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.FIRE,3).add(Aspect.AIR,3).add(Aspect.PLANT, 3));
-		ThaumcraftApi.registerObjectTag("rune"+"Winter"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.WATER,3).add(Aspect.EARTH,3).add(Aspect.COLD, 3));
-		ThaumcraftApi.registerObjectTag("rune"+"Mana"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,8).add(Aspect.MAGIC,6));
+//		//Biomes o' Plenty
+//		ThaumcraftApi.registerObjectTag("gemAmber", new AspectList().add(Aspect.TRAP, 2).add(Aspect.CRYSTAL, 2));
+//		ThaumcraftApi.registerObjectTag("gemPeridot", new AspectList().add(Aspect.CRYSTAL, 2).add(Aspect.GREED, 2));
+//		ThaumcraftApi.registerObjectTag("gemTopaz", new AspectList().add(Aspect.CRYSTAL, 2).add(Aspect.GREED, 2));
+//		ThaumcraftApi.registerObjectTag("gemTanzanite", new AspectList().add(Aspect.CRYSTAL, 2).add(Aspect.GREED, 2));
+//		ThaumcraftApi.registerObjectTag("gemMalachite", new AspectList().add(Aspect.CRYSTAL, 2).add(Aspect.GREED, 2));
+//
+//		//Botania
+//		addOreAspects("Manasteel", new AspectList().add(Aspect.MAGIC, 1), false);
+//		addOreAspects("Terrasteel", new AspectList().add(Aspect.EARTH, 1).add(Aspect.MAGIC, 1), false);
+//		addOreAspects("ElvenElementium", new AspectList().add(Aspect.AURA, 1).add(Aspect.MAGIC, 2), true);
+//		ThaumcraftApi.registerObjectTag("livingstone", new AspectList().add(Aspect.EARTH,4).add(Aspect.LIFE,2));
+//		ThaumcraftApi.registerObjectTag("livingwood", new AspectList().add(Aspect.TREE,4).add(Aspect.LIFE,2));
+//		ThaumcraftApi.registerObjectTag("dreamwood", new AspectList().add(Aspect.MAGIC,1).add(Aspect.TREE,4).add(Aspect.AURA,2));
+//		ThaumcraftApi.registerObjectTag("manaPearl", new AspectList().add(Aspect.MAGIC,6).add(Aspect.ELDRITCH,4).add(Aspect.TRAVEL,4));
+//		ThaumcraftApi.registerObjectTag("manaDiamond", new AspectList().add(Aspect.MAGIC,4).add(Aspect.CRYSTAL,4).add(Aspect.GREED,4));
+//		ThaumcraftApi.registerObjectTag("eternalLifeEssence", new AspectList().add(Aspect.MAGIC,4).add(Aspect.AURA,4));
+//		ThaumcraftApi.registerObjectTag("eternalLifeEssence", new AspectList().add(Aspect.MAGIC,8).add(Aspect.AURA,8).add(Aspect.LIFE,8));
+//		ThaumcraftApi.registerObjectTag("elvenPixieDust", new AspectList().add(Aspect.MAGIC,6).add(Aspect.AURA,4).add(Aspect.ELDRITCH,4));
+//		ThaumcraftApi.registerObjectTag("elvenDragonstone", new AspectList().add(Aspect.MAGIC,6).add(Aspect.AURA,4).add(Aspect.CRYSTAL,6));
+//		ThaumcraftApi.registerObjectTag("shardPrismarine", new AspectList().add(Aspect.MAGIC,2).add(Aspect.WATER,4).add(Aspect.CRYSTAL,2));
+//		String[] colours = {"White","Orange","Magenta","LightBlue","Yellow","Lime","Pink","Gray",
+//				"LightGray","Cyan","Purple","Blue","Brown","Green","Red","Black"};
+//		for(String c : colours)
+//		{
+//			ThaumcraftApi.registerObjectTag("mysticFlower"+c, new AspectList().add(Aspect.SENSES,2).add(Aspect.PLANT,2));
+//			ThaumcraftApi.registerObjectTag("petal"+c, new AspectList().add(Aspect.SENSES,1).add(Aspect.PLANT,1));
+//			ThaumcraftApi.registerObjectTag("manaPetal"+c, new AspectList().add(Aspect.MAGIC,1).add(Aspect.SENSES,1).add(Aspect.PLANT,1));
+//		}
+//		ThaumcraftApi.registerObjectTag("rune"+"Water"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.WATER,6));
+//		ThaumcraftApi.registerObjectTag("rune"+"Fire"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.FIRE,6));
+//		ThaumcraftApi.registerObjectTag("rune"+"Earth"+"B", new AspectList().add(Aspect.EARTH,8).add(Aspect.METAL,2));
+//		ThaumcraftApi.registerObjectTag("rune"+"Air"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.AIR,6));
+//		ThaumcraftApi.registerObjectTag("rune"+"Spring"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.WATER,3).add(Aspect.FIRE,3).add(Aspect.PLANT, 3));
+//		ThaumcraftApi.registerObjectTag("rune"+"Summer"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.EARTH,3).add(Aspect.AIR,3).add(Aspect.ENTROPY, 3));
+//		ThaumcraftApi.registerObjectTag("rune"+"Autumn"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.FIRE,3).add(Aspect.AIR,3).add(Aspect.PLANT, 3));
+//		ThaumcraftApi.registerObjectTag("rune"+"Winter"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.WATER,3).add(Aspect.EARTH,3).add(Aspect.COLD, 3));
+//		ThaumcraftApi.registerObjectTag("rune"+"Mana"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,8).add(Aspect.MAGIC,6));
+//
+//		ThaumcraftApi.registerObjectTag("rune"+"Lust"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.CRYSTAL,4).add(Aspect.AIR,6).add(Aspect.EARTH,3).add(Aspect.getAspect("luxuria"),4));
+//		ThaumcraftApi.registerObjectTag("rune"+"Gluttony"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.CRYSTAL,4).add(Aspect.FIRE,3).add(Aspect.EARTH,3).add(Aspect.WATER,3).add(Aspect.getAspect("gula"),4));
+//		ThaumcraftApi.registerObjectTag("rune"+"Greed"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.CRYSTAL,4).add(Aspect.WATER,6).add(Aspect.FIRE,3).add(Aspect.GREED,4));
+//		ThaumcraftApi.registerObjectTag("rune"+"Sloth"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.CRYSTAL,4).add(Aspect.AIR,6).add(Aspect.FIRE,3).add(Aspect.getAspect("desidia"),4));
+//		ThaumcraftApi.registerObjectTag("rune"+"Wrath"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.CRYSTAL,4).add(Aspect.EARTH,6).add(Aspect.WATER,3).add(Aspect.getAspect("ira"),4));
+//		ThaumcraftApi.registerObjectTag("rune"+"Envy"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.CRYSTAL,4).add(Aspect.WATER,6).add(Aspect.EARTH,3).add(Aspect.getAspect("invidia"),4));
+//		ThaumcraftApi.registerObjectTag("rune"+"Pride"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.CRYSTAL,4).add(Aspect.EARTH,3).add(Aspect.AIR,3).add(Aspect.FIRE,3).add(Aspect.getAspect("superbia"),4));
+//
+//		//Tcon
+//		addOreAspects("Aluminum", new AspectList().add(Aspect.AIR, 1), false);
+//		addOreAspects("Aluminium", new AspectList().add(Aspect.AIR, 1), false);
+//		addOreAspects("AluminumBrass", new AspectList().add(Aspect.CRAFT, 1), false);
+//		addOreAspects("AluminiumBrass", new AspectList().add(Aspect.CRAFT, 1), false);
+//		addOreAspects("Alumite", new AspectList().add(Aspect.TOOL, 1).add(Aspect.AIR, 1), false);
+//		addOreAspects("Cobalt", new AspectList().add(Aspect.MOTION, 1).add(Aspect.FIRE, 1), true);
+//		addOreAspects("Ardite", new AspectList().add(Aspect.EARTH, 1).add(Aspect.FIRE, 1), true);
+//		addOreAspects("Manyullyn", new AspectList().add(Aspect.MAGIC, 2).add(Aspect.FIRE, 1), true);
+//		addOreAspects("PigIron", new AspectList().add(Aspect.FLESH, 1), false);
+//
+//		//Metallurgy
+//		addOreAspects("Hepatizon", new AspectList().add(Aspect.GREED, 1).add(Aspect.TOOL, 1), false);
+//		addOreAspects("DamascusSteel", new AspectList().add(Aspect.ORDER, 1).add(Aspect.TOOL, 1), false);
+//		addOreAspects("Angmallen", new AspectList().add(Aspect.GREED, 1), false);
+//		addOreAspects("Manganese", new AspectList().add(Aspect.ORDER, 1), false);
+//
+//		addOreAspects("Zinc", new AspectList().add(Aspect.ORDER, 1), false);
+//		addOreAspects("Brass", new AspectList().add(Aspect.CRAFT, 1), false);
+//		addOreAspects("Electrum", new AspectList().add(Aspect.ENERGY, 1), false);
+//		addOreAspects("Platinum", new AspectList().add(Aspect.GREED, 1), false);
+//
+//		addOreAspects("Ignatius", new AspectList().add(Aspect.FIRE, 2), false);
+//		addOreAspects("ShadowIron", new AspectList().add(Aspect.DARKNESS, 1).add(Aspect.FIRE, 1), false);
+//		addOreAspects("Lemurite", new AspectList().add(Aspect.ORDER, 1).add(Aspect.FIRE, 1), false);
+//		addOreAspects("ShadowSteel", new AspectList().add(Aspect.DARKNESS, 1).add(Aspect.ORDER, 1).add(Aspect.FIRE, 1), true);
+//		addOreAspects("Midasium", new AspectList().add(Aspect.GREED, 1).add(Aspect.FIRE, 1), false);
+//		addOreAspects("Vyroxeres", new AspectList().add(Aspect.POISON, 1).add(Aspect.FIRE, 1), false);
+//		addOreAspects("Ceruclase", new AspectList().add(Aspect.WATER, 1).add(Aspect.FIRE, 1), false);
+//		addOreAspects("Alduorite", new AspectList().add(Aspect.ORDER, 1).add(Aspect.FIRE, 1), false);
+//		addOreAspects("Inolashite", new AspectList().add(Aspect.COLD, 2).add(Aspect.FIRE, 1), true);
+//		addOreAspects("Kalendrite", new AspectList().add(Aspect.SOUL, 1).add(Aspect.FIRE, 1), false);
+//		addOreAspects("Amordrine", new AspectList().add(Aspect.SOUL, 1).add(Aspect.GREED, 1).add(Aspect.FIRE, 1), true);
+//		addOreAspects("Vulcanite", new AspectList().add(Aspect.FIRE, 2), false);
+//		addOreAspects("Sanguinite", new AspectList().add(Aspect.HUNGER, 1).add(Aspect.FIRE, 1), false);
+//
+//		addOreAspects("Prometheum", new AspectList().add(Aspect.EARTH, 1), false);
+//		addOreAspects("DeepIron", new AspectList().add(Aspect.ENTROPY, 1), false);
+//		addOreAspects("Infuscolium", new AspectList().add(Aspect.ENERGY, 1), false);
+//		addOreAspects("BlackSteel", new AspectList().add(Aspect.ENTROPY, 1).add(Aspect.ENERGY, 1), true);
+//		addOreAspects("Oureclase", new AspectList().add(Aspect.ENERGY, 1), false);
+//		addOreAspects("AstralSilver", new AspectList().add(Aspect.GREED, 1), false);
+//		addOreAspects("Carmot", new AspectList().add(Aspect.GREED, 2), false);
+//		addOreAspects("Mithril", new AspectList().add(Aspect.MOTION, 1).add(Aspect.MAGIC, 1), false);
+//		addOreAspects("Rubracium", new AspectList().add(Aspect.VOID, 1), false);
+//		addOreAspects("Quicksilver", new AspectList().add(Aspect.VOID, 1).add(Aspect.MOTION, 1), true);
+//		addOreAspects("Haderoth", new AspectList().add(Aspect.MOTION, 1).add(Aspect.GREED, 1), true);
+//		addOreAspects("Orichalcum", new AspectList().add(Aspect.LIFE, 1), false);
+//		addOreAspects("Celenegil", new AspectList().add(Aspect.LIFE, 1).add(Aspect.GREED, 1), true);
+//		addOreAspects("Adamantine", new AspectList().add(Aspect.MIND, 1), false);
+//		addOreAspects("Atlarus", new AspectList().add(Aspect.FLESH, 1), false);
+//		addOreAspects("Tartarite", new AspectList().add(Aspect.FLESH, 1).add(Aspect.HUNGER, 1), false);
+//
+//		addOreAspects("Eximite", new AspectList().add(Aspect.ELDRITCH, 2), true);
+//		addOreAspects("Meutoite", new AspectList().add(Aspect.VOID, 2), true);
+//		addOreAspects("Desichalkos", new AspectList().add(Aspect.ELDRITCH, 2).add(Aspect.VOID, 2), true);
 		
-		ThaumcraftApi.registerObjectTag("rune"+"Lust"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.CRYSTAL,4).add(Aspect.AIR,6).add(Aspect.EARTH,3).add(Aspect.getAspect("luxuria"),4));
-		ThaumcraftApi.registerObjectTag("rune"+"Gluttony"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.CRYSTAL,4).add(Aspect.FIRE,3).add(Aspect.EARTH,3).add(Aspect.WATER,3).add(Aspect.getAspect("gula"),4));
-		ThaumcraftApi.registerObjectTag("rune"+"Greed"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.CRYSTAL,4).add(Aspect.WATER,6).add(Aspect.FIRE,3).add(Aspect.GREED,4));
-		ThaumcraftApi.registerObjectTag("rune"+"Sloth"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.CRYSTAL,4).add(Aspect.AIR,6).add(Aspect.FIRE,3).add(Aspect.getAspect("desidia"),4));
-		ThaumcraftApi.registerObjectTag("rune"+"Wrath"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.CRYSTAL,4).add(Aspect.EARTH,6).add(Aspect.WATER,3).add(Aspect.getAspect("ira"),4));
-		ThaumcraftApi.registerObjectTag("rune"+"Envy"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.CRYSTAL,4).add(Aspect.WATER,6).add(Aspect.EARTH,3).add(Aspect.getAspect("invidia"),4));
-		ThaumcraftApi.registerObjectTag("rune"+"Pride"+"B", new AspectList().add(Aspect.EARTH,2).add(Aspect.METAL,2).add(Aspect.CRYSTAL,4).add(Aspect.EARTH,3).add(Aspect.AIR,3).add(Aspect.FIRE,3).add(Aspect.getAspect("superbia"),4));
-		
-		//Tcon
-		addOreAspects("Aluminum", new AspectList().add(Aspect.AIR, 1), false);
-		addOreAspects("Aluminium", new AspectList().add(Aspect.AIR, 1), false);
-		addOreAspects("AluminumBrass", new AspectList().add(Aspect.CRAFT, 1), false);
-		addOreAspects("AluminiumBrass", new AspectList().add(Aspect.CRAFT, 1), false);
-		addOreAspects("Alumite", new AspectList().add(Aspect.TOOL, 1).add(Aspect.AIR, 1), false);
-		addOreAspects("Cobalt", new AspectList().add(Aspect.MOTION, 1).add(Aspect.FIRE, 1), true);
-		addOreAspects("Ardite", new AspectList().add(Aspect.EARTH, 1).add(Aspect.FIRE, 1), true);
-		addOreAspects("Manyullyn", new AspectList().add(Aspect.MAGIC, 2).add(Aspect.FIRE, 1), true);
-		addOreAspects("PigIron", new AspectList().add(Aspect.FLESH, 1), false);
-
-		//Metallurgy
-		addOreAspects("Hepatizon", new AspectList().add(Aspect.GREED, 1).add(Aspect.TOOL, 1), false);
-		addOreAspects("DamascusSteel", new AspectList().add(Aspect.ORDER, 1).add(Aspect.TOOL, 1), false);
-		addOreAspects("Angmallen", new AspectList().add(Aspect.GREED, 1), false);
-		addOreAspects("Manganese", new AspectList().add(Aspect.ORDER, 1), false);
-
-		addOreAspects("Zinc", new AspectList().add(Aspect.ORDER, 1), false);
-		addOreAspects("Brass", new AspectList().add(Aspect.CRAFT, 1), false);
-		addOreAspects("Electrum", new AspectList().add(Aspect.ENERGY, 1), false);
-		addOreAspects("Platinum", new AspectList().add(Aspect.GREED, 1), false);
-
-		addOreAspects("Ignatius", new AspectList().add(Aspect.FIRE, 2), false);
-		addOreAspects("ShadowIron", new AspectList().add(Aspect.DARKNESS, 1).add(Aspect.FIRE, 1), false);
-		addOreAspects("Lemurite", new AspectList().add(Aspect.ORDER, 1).add(Aspect.FIRE, 1), false);
-		addOreAspects("ShadowSteel", new AspectList().add(Aspect.DARKNESS, 1).add(Aspect.ORDER, 1).add(Aspect.FIRE, 1), true);
-		addOreAspects("Midasium", new AspectList().add(Aspect.GREED, 1).add(Aspect.FIRE, 1), false);
-		addOreAspects("Vyroxeres", new AspectList().add(Aspect.POISON, 1).add(Aspect.FIRE, 1), false);
-		addOreAspects("Ceruclase", new AspectList().add(Aspect.WATER, 1).add(Aspect.FIRE, 1), false);
-		addOreAspects("Alduorite", new AspectList().add(Aspect.ORDER, 1).add(Aspect.FIRE, 1), false);
-		addOreAspects("Inolashite", new AspectList().add(Aspect.COLD, 2).add(Aspect.FIRE, 1), true);
-		addOreAspects("Kalendrite", new AspectList().add(Aspect.SOUL, 1).add(Aspect.FIRE, 1), false);
-		addOreAspects("Amordrine", new AspectList().add(Aspect.SOUL, 1).add(Aspect.GREED, 1).add(Aspect.FIRE, 1), true);
-		addOreAspects("Vulcanite", new AspectList().add(Aspect.FIRE, 2), false);
-		addOreAspects("Sanguinite", new AspectList().add(Aspect.HUNGER, 1).add(Aspect.FIRE, 1), false);
-
-		addOreAspects("Prometheum", new AspectList().add(Aspect.EARTH, 1), false);
-		addOreAspects("DeepIron", new AspectList().add(Aspect.ENTROPY, 1), false);
-		addOreAspects("Infuscolium", new AspectList().add(Aspect.ENERGY, 1), false);
-		addOreAspects("BlackSteel", new AspectList().add(Aspect.ENTROPY, 1).add(Aspect.ENERGY, 1), true);
-		addOreAspects("Oureclase", new AspectList().add(Aspect.ENERGY, 1), false);
-		addOreAspects("AstralSilver", new AspectList().add(Aspect.GREED, 1), false);
-		addOreAspects("Carmot", new AspectList().add(Aspect.GREED, 2), false);
-		addOreAspects("Mithril", new AspectList().add(Aspect.MOTION, 1).add(Aspect.MAGIC, 1), false);
-		addOreAspects("Rubracium", new AspectList().add(Aspect.VOID, 1), false);
-		addOreAspects("Quicksilver", new AspectList().add(Aspect.VOID, 1).add(Aspect.MOTION, 1), true);
-		addOreAspects("Haderoth", new AspectList().add(Aspect.MOTION, 1).add(Aspect.GREED, 1), true);
-		addOreAspects("Orichalcum", new AspectList().add(Aspect.LIFE, 1), false);
-		addOreAspects("Celenegil", new AspectList().add(Aspect.LIFE, 1).add(Aspect.GREED, 1), true);
-		addOreAspects("Adamantine", new AspectList().add(Aspect.MIND, 1), false);
-		addOreAspects("Atlarus", new AspectList().add(Aspect.FLESH, 1), false);
-		addOreAspects("Tartarite", new AspectList().add(Aspect.FLESH, 1).add(Aspect.HUNGER, 1), false);
-
-		addOreAspects("Eximite", new AspectList().add(Aspect.ELDRITCH, 2), true);
-		addOreAspects("Meutoite", new AspectList().add(Aspect.VOID, 2), true);
-		addOreAspects("Desichalkos", new AspectList().add(Aspect.ELDRITCH, 2).add(Aspect.VOID, 2), true);
-
 		WGResearch.setupResearchPages();
 		WGResearch.registerRecipes();
 		WGResearch.registerResearch();
@@ -571,7 +571,7 @@ public class WGContent
 
 	static void addOreAspects(String ore, AspectList aspects, boolean isRareOre)
 	{
-		if(!OreDictionary.getOres("ore"+ore).isEmpty())
+		if(!OreDictionary.getOres("ore"+ore).isEmpty() && !oreHasAspects("ore"+ore))
 		{
 			AspectList al = new AspectList().add(Aspect.METAL, Math.max((isRareOre?3:2), (isRareOre?4:3)-aspects.visSize())).add(Aspect.EARTH, 1);
 			for(Aspect aa : aspects.getAspects())
@@ -579,29 +579,35 @@ public class WGContent
 
 			ThaumcraftApi.registerObjectTag("ore"+ore, al);
 		}
-		if(!OreDictionary.getOres("ingot"+ore).isEmpty())
+		if(!OreDictionary.getOres("ingot"+ore).isEmpty() && !oreHasAspects("ingot"+ore))
 		{
 			AspectList al = new AspectList().add(Aspect.METAL, Math.max((isRareOre?3:2), (isRareOre?5:4)-aspects.visSize()));
 			for(Aspect aa : aspects.getAspects())
 				al.merge(aa, aspects.getAmount(aa));
 			ThaumcraftApi.registerObjectTag("ingot"+ore, al);
 		}
-		if(!OreDictionary.getOres("nugget"+ore).isEmpty())
+		if(!OreDictionary.getOres("nugget"+ore).isEmpty() && !oreHasAspects("nugget"+ore))
 			ThaumcraftApi.registerObjectTag("nugget"+ore, new AspectList().add(Aspect.METAL, 1));
-		if(!OreDictionary.getOres("dust"+ore).isEmpty())
+		if(!OreDictionary.getOres("dust"+ore).isEmpty() && !oreHasAspects("dust"+ore))
 		{
 			AspectList al = new AspectList().add(Aspect.METAL, Math.max((isRareOre?3:2), (isRareOre?4:3)-aspects.visSize())).add(Aspect.ENTROPY, 1);
 			for(Aspect aa : aspects.getAspects())
 				al.merge(aa, 1);
 			ThaumcraftApi.registerObjectTag("dust"+ore, al);
 		}
-		if(!OreDictionary.getOres("block"+ore).isEmpty())
+		if(!OreDictionary.getOres("block"+ore).isEmpty() && !oreHasAspects("block"+ore))
 		{
 			AspectList al = new AspectList().add(Aspect.METAL, Math.max((isRareOre?6:5), (isRareOre?7:6)-aspects.visSize())).add(Aspect.ENTROPY, 1);
 			for(Aspect aa : aspects.getAspects())
 				al.merge(aa, 1);
 			ThaumcraftApi.registerObjectTag("block"+ore, al);
 		}
-
+	}
+	static boolean oreHasAspects(String ore)
+	{
+		for(ItemStack stack : OreDictionary.getOres(ore))
+			if(stack!=null)
+				return ThaumcraftApi.objectTags.get(Arrays.asList(new Object[] { stack.getItem(), Integer.valueOf(stack.getItemDamage()) }))!=null;
+		return false;
 	}
 }

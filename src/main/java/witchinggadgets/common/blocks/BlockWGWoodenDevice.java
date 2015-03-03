@@ -100,8 +100,9 @@ public class BlockWGWoodenDevice extends BlockContainer implements IWandable
 
 	@Override
 	public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int side)
-	{
-		if(world.getBlockMetadata(x, y, z)==3)
+	{  
+		int meta = world.getBlockMetadata(x-(side==4?-1:side==5?1:0), y-(side==0?-1:side==1?1:0), z-(side==2?-1:side==3?1:0));
+		if(meta==3||meta==4)
 			return true;
 		return super.shouldSideBeRendered(world, x, y, z, side);
 	}
@@ -137,7 +138,7 @@ public class BlockWGWoodenDevice extends BlockContainer implements IWandable
 		if(meta==4)
 		{
 			FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(player.inventory.getCurrentItem());
-			if (fs != null)
+			if(fs != null && !world.isRemote)
 			{
 				TileEntitySaunaStove tile = (TileEntitySaunaStove)world.getTileEntity(x,y,z);
 				if( tile.tank.getFluidAmount() < tile.tank.getCapacity() && tile.tank.getFluid() == null || tile.tank.getFluid().isFluidEqual(fs))
@@ -149,13 +150,17 @@ public class BlockWGWoodenDevice extends BlockContainer implements IWandable
 						if(fcd.filledContainer.isItemEqual(player.inventory.getCurrentItem()))
 							emptyContainer = fcd.emptyContainer.copy();
 
+					System.out.println("empty container: "+emptyContainer);
 					player.inventory.decrStackSize(player.inventory.currentItem, 1);
-					if(emptyContainer != null &&  !player.inventory.addItemStackToInventory(emptyContainer))
-						player.dropPlayerItemWithRandomChoice(emptyContainer, false);
+					if(emptyContainer != null)
+					{
+						boolean b = player.inventory.addItemStackToInventory(emptyContainer);
+						System.out.println("Added: "+b);
+						if(!b)
+							player.dropPlayerItemWithRandomChoice(emptyContainer, false);
+					}
 
 					player.inventoryContainer.detectAndSendChanges();
-					//tile.markDirty();
-					System.out.println((world.isRemote?"Client":"Server")+" Side: Tank has "+tile.tank.getFluidAmount()+" mB");
 					world.markBlockForUpdate(x, y, z);
 					world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "game.neutral.swim", 0.33F, 1.0F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.3F);
 				}
@@ -219,8 +224,6 @@ public class BlockWGWoodenDevice extends BlockContainer implements IWandable
 		int playerViewQuarter = MathHelper.floor_double(entityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
 		int meta = world.getBlockMetadata(x, y, z);
 		int f = playerViewQuarter==0 ? 2:playerViewQuarter==1 ? 5:playerViewQuarter==2 ? 3: 4;
-		System.out.println("i_f = "+f);
-		System.out.println("fd = "+ForgeDirection.getOrientation(f));
 
 		if(meta == 0)
 			((TileEntitySpinningWheel)world.getTileEntity(x,y,z)).facing = f;

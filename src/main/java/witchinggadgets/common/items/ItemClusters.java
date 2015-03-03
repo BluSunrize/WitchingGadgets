@@ -60,9 +60,10 @@ public class ItemClusters extends Item
 
 	public static ItemStack getCluster(String ore)
 	{
-		for(int sn=0; sn<subNames.length; sn++)
-			if(subNames[sn].equalsIgnoreCase(ore))
-				return new ItemStack(WGContent.ItemCluster,1,sn);
+		if(WGConfig.allowClusters)
+			for(int sn=0; sn<subNames.length; sn++)
+				if(subNames[sn].equalsIgnoreCase(ore))
+					return new ItemStack(WGContent.ItemCluster,1,sn);
 		return null;
 	}
 

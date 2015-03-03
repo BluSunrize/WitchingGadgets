@@ -31,16 +31,12 @@ public class BlockRenderWoodenDevice implements ISimpleBlockRenderingHandler
 		try{
 			if(metadata == 0)
 			{
-				GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
-				GL11.glTranslatef(-0.25F, 0.5F, -0.25F);
+				GL11.glRotatef(180.0F, 0.0F, 1.0F, 0.0F);
+				GL11.glTranslatef(-.5F, 0F, -1F);
 				TileEntityRendererDispatcher.instance.renderTileEntityAt(new TileEntitySpinningWheel(), 0.0D, 0.0D, 0.0D, 0.0F);
 			}
 			if(metadata == 1)
 			{
-				//				GL11.glScaled(.5625,.5625,.5625);
-				//				GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
-				//				GL11.glTranslatef(-3.125F, 0.75F, 0.5F);
-				//				TileEntityRendererDispatcher.instance.renderTileEntityAt(new TileEntityLoom(), 0.0D, 0.0D, 0.0D, 0.0F);
 			}
 			if(metadata == 2)
 			{

@@ -29,7 +29,7 @@ public class InfusedGemHandler
 			l.add(Aspect.ENTROPY,1);
 			l.add(Aspect.FIRE,1);
 		}
-		if(Utilities.compareToOreName(gem, "crystalNetherQuartz"))
+		if(Utilities.compareToOreName(gem, "crystalCertusQuartz"))
 		{
 			l.add(Aspect.ORDER,1);
 			l.add(Aspect.AIR,1);

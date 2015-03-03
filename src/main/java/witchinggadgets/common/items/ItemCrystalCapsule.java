@@ -45,7 +45,7 @@ public class ItemCrystalCapsule extends Item implements IFluidContainerItem
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
 	{
 		MovingObjectPosition localMovingObjectPosition = getMovingObjectPositionFromPlayer(world, player, false);
-		if ((localMovingObjectPosition == null) || (localMovingObjectPosition.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK))
+		if((localMovingObjectPosition == null) || (localMovingObjectPosition.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK))
 			return stack;
 
 		int x = localMovingObjectPosition.blockX;
@@ -75,15 +75,15 @@ public class ItemCrystalCapsule extends Item implements IFluidContainerItem
 			return stack;
 
 		ItemStack used = useCapsule(world, x, y, z, stack);
-		if (!player.inventory.addItemStackToInventory(used))
+		if(stack.equals(used))
+			return stack;
+		if(!player.inventory.addItemStackToInventory(used))
 			player.dropPlayerItemWithRandomChoice(used, false);
-
 		return stack;
 	}
 
 	ItemStack useCapsule(World world, int x, int y, int z, ItemStack stack)
 	{
-		//		System.out.println("use in "+world+", at "+x+", "+y+", "+z+" on Block "+world.getBlock(x, y, z)+" "+(world.getBlock(x, y, z)!=null?world.getBlock(x, y, z).getLocalizedName():""));
 		if(stack.hasTagCompound() && stack.getTagCompound().hasKey("fluid"))
 		{
 			Fluid f = FluidRegistry.getFluid(stack.getTagCompound().getString("fluid"));
@@ -92,12 +92,10 @@ public class ItemCrystalCapsule extends Item implements IFluidContainerItem
 			world.setBlock(x, y, z, f.getBlock());
 			stack.stackSize-=1;
 			world.notifyBlockOfNeighborChange(x, y, z, world.getBlock(x,y,z));
-//			world.scheduleBlockUpdate(x,y,z, world.getBlock(x,y,z), 10);
 			return this.getContainerItem(stack);
 		}
 		else
 		{
-			//			System.out.println(world.getBlock(x, y, z));
 			Fluid f = FluidRegistry.lookupFluidForBlock(world.getBlock(x, y, z));
 			if(f==null && world.getBlock(x, y, z) instanceof BlockDynamicLiquid && world.getBlockMetadata(x, y, z)==0)
 				if(world.getBlock(x, y, z).getMaterial().equals(Material.water))
@@ -110,12 +108,12 @@ public class ItemCrystalCapsule extends Item implements IFluidContainerItem
 				return stack;
 			if(f==null)
 				return stack;
-			stack.stackSize-=1;
 			ItemStack filled = this.getContainerItem(stack);
 			if(!filled.hasTagCompound())
 				filled.setTagCompound(new NBTTagCompound());
 			filled.getTagCompound().setString("fluid", FluidRegistry.getFluidName(new FluidStack(f,1000)));
 			world.setBlockToAir(x, y, z);
+			stack.stackSize-=1;
 			return filled;
 		}
 	}
