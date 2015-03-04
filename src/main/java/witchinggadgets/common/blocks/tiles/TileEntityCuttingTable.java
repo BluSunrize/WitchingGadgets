@@ -112,8 +112,6 @@ public class TileEntityCuttingTable extends TileEntityWGBase implements IInvento
 		acceptedAspects.add(Aspect.WATER);
 		acceptedAspects.add(Aspect.ORDER);
 		acceptedAspects.add(Aspect.ENTROPY);
-		acceptedAspects.add(Aspect.LIGHT);
-		acceptedAspects.add(Aspect.HEAL);
 	}
 	public boolean canAcceptAspect(Aspect a)
 	{

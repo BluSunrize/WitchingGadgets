@@ -69,7 +69,7 @@ public class ItemMagicalBaubles extends Item implements IBauble, ITravellersGear
 		list.add(StatCollector.translateToLocalFormatted(Lib.DESCRIPTION+"gearSlot."+type));
 		if(stack.hasTagCompound() && stack.getTagCompound().hasKey("title"))
 			list.add(StatCollector.translateToLocalFormatted(stack.getTagCompound().getString("title")));
-		
+
 		if(Loader.isModLoaded("Botania"))
 		{
 			ItemStack cosmetic = getCosmeticItem(stack);
@@ -244,7 +244,7 @@ public class ItemMagicalBaubles extends Item implements IBauble, ITravellersGear
 		ring.getTagCompound().setString("Aspect", ItemInfusedGem.getAspect(gem).getTag());
 		return ring;
 	}
-	
+
 	@Optional.Method(modid = "Botania")
 	public ItemStack getCosmeticItem(ItemStack stack)
 	{
@@ -258,7 +258,12 @@ public class ItemMagicalBaubles extends Item implements IBauble, ITravellersGear
 	{
 		if(!stack.hasTagCompound())
 			stack.setTagCompound(new NBTTagCompound());
-		NBTTagCompound cosTag = cosmetic.writeToNBT(new NBTTagCompound());
-		stack.getTagCompound().setTag("botaniaCosmeticOverride",cosTag);
+		if(cosmetic==null)
+			stack.getTagCompound().removeTag("botaniaCosmeticOverride");
+		else
+		{
+			NBTTagCompound cosTag = cosmetic.writeToNBT(new NBTTagCompound());
+			stack.getTagCompound().setTag("botaniaCosmeticOverride",cosTag);
+		}
 	}
 }

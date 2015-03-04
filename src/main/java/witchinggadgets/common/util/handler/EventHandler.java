@@ -136,9 +136,9 @@ public class EventHandler
 	@SubscribeEvent
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
-//		for(ItemStack cloak : Utilities.getActiveMagicalCloak(event.entityPlayer))
-//			if(cloak!=null && cloak.hasTagCompound() && cloak.getTagCompound().getBoolean("isSpectral"))
-//				event.setCanceled(true);
+		for(ItemStack cloak : Utilities.getActiveMagicalCloak(event.entityPlayer))
+			if(cloak!=null && cloak.hasTagCompound() && cloak.getTagCompound().getBoolean("isSpectral"))
+				event.setCanceled(true);
 		if(Loader.isModLoaded("ForgeMultipart"))
 			WGMultiPartHandler.handleWorldInteraction(event);
 	}

@@ -8,7 +8,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,7 +15,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.event.world.NoteBlockEvent;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -135,15 +133,6 @@ public class ItemPrimordialGlove extends Item implements IPrimordialCrafting
 	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
 	{
-		//		if(!world.isRemote)
-		//		{
-		if(player.isSneaking())
-		{
-			NoteBlockEvent.Play e = new NoteBlockEvent.Play(world, (int)player.posX,(int)player.posY,(int)player.posZ, 0, 3, 0);
-			net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(e);
-			return stack;
-		}
-
 		int sel = stack.hasTagCompound()?stack.getTagCompound().getInteger("selected"):0;
 		ItemStack[] gems = getSetGems(stack);
 		boolean b = false;
@@ -168,8 +157,7 @@ public class ItemPrimordialGlove extends Item implements IPrimordialCrafting
 		{
 			player.openGui(WitchingGadgets.instance, 7, world, (int)player.posX,(int)player.posY,(int)player.posZ);
 		}
-		//		}
-	return super.onItemRightClick(stack, world, player);
+		return super.onItemRightClick(stack, world, player);
 	}
 
 	@Override
@@ -184,20 +172,6 @@ public class ItemPrimordialGlove extends Item implements IPrimordialCrafting
 	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
 	{
 		TileEntity tile = world.getTileEntity(x, y, z);
-		//		if(tile instanceof TileMirror)
-		//		{
-		//			TileMirror tm = (TileMirror)world.getTileEntity(x, y, z);
-		//			if(tm.linked)
-		//			{
-		//				int tx=tm.linkX;
-		//				int ty=tm.linkY;
-		//				int tz=tm.linkZ;
-		//				ForgeDirection fd = ForgeDirection.getOrientation(world.getBlockMetadata(tx, ty, tz)%6);
-		//				float rot = fd.ordinal()==2?180: fd.ordinal()==4?90: fd.ordinal()==5?270 : 0;
-		//				player.setLocationAndAngles(tx+.5+fd.offsetX*.5, ty+fd.offsetY, tz+.5+fd.offsetZ*.5, rot, player.rotationPitch);
-		//			}
-		//			return !world.isRemote;
-		//		}
 		if(tile!=null && tile instanceof INode && !(tile instanceof TileJarNode))
 		{
 			INode node = (INode) tile;
@@ -223,83 +197,7 @@ public class ItemPrimordialGlove extends Item implements IPrimordialCrafting
 			world.setBlockToAir(x, y, z);
 			return true;
 		}
-		//		else
-		//		{
-		//			if(!world.isRemote)
-		//			{
-		//				int sel = stack.hasTagCompound()?stack.getTagCompound().getInteger("selected"):0;
-		//				ItemStack[] gems = getSetGems(stack);
-		//				boolean b = false;
-		//				if(gems!=null && sel>=0 && sel<gems.length && gems[sel]!=null)
-		//				{
-		//					System.out.println(gems[sel]);
-		//					ItemStack gem = gems[sel];
-		//					if(gem.getItem() instanceof IInfusedGem && gem.getItemDamage()==0)
-		//					{
-		//						int brittle = EnchantmentHelper.getEnchantmentLevel(WGContent.enc_gemstoneBrittle.effectId, gem);
-		//						int potency = EnchantmentHelper.getEnchantmentLevel(WGContent.enc_gemstonePotency.effectId, gem);
-		//						b = ((IInfusedGem)gem.getItem()).performEffect(ItemInfusedGem.getCut(gem).toString(), ItemInfusedGem.getAspect(gem), potency, brittle, player);
-		//
-		//						if(b && !player.capabilities.isCreativeMode)
-		//						{
-		//							gem.getItem().setDamage(gem, gem.getMaxDamage());
-		//							System.out.println("New Damage "+gem.getItemDamage());
-		//							gems[sel] = gem;
-		//							setSetGems(stack, gems);
-		//						}
-		//
-		//					}
-		//				}
-		//				return b;
-		////				if(player.isSneaking() && !b)
-		////				{
-		////					player.openGui(WitchingGadgets.instance, 7, world, (int)player.posX,(int)player.posY,(int)player.posZ);
-		////				}
-		//			}
-		//			
-		////			onItemRightClick(stack, world, player);
-		//		}
-
 		return false;
-	}
-
-	@Override
-	public int getMaxItemUseDuration(ItemStack stack)
-	{
-		return 72000;
-	}
-	@Override
-	public void onUsingTick(ItemStack stack, EntityPlayer player, int count)
-	{
-
-		//		if(!player.worldObj.isRemote && getMaxItemUseDuration(stack)-count>=100 && stack.getTagCompound()!=null && stack.getTagCompound().hasKey("IIUX") && player.worldObj.getTileEntity(stack.getTagCompound().getInteger("IIUX"),stack.getTagCompound().getInteger("IIUY"),stack.getTagCompound().getInteger("IIUZ")) instanceof INode)
-		//		{
-		//			INode node = (INode)player.worldObj.getTileEntity(stack.getTagCompound().getInteger("IIUX"),stack.getTagCompound().getInteger("IIUY"),stack.getTagCompound().getInteger("IIUZ"));
-		//			setContainedNode(stack, node.getNodeType(), node.getNodeModifier(), node.getAspects());
-		//			player.worldObj.setBlockToAir(stack.getTagCompound().getInteger("IIUX"),stack.getTagCompound().getInteger("IIUY"),stack.getTagCompound().getInteger("IIUZ"));
-		//		}
-	}
-	@Override
-	public void onPlayerStoppedUsing(ItemStack stack, World world, EntityPlayer player, int timeUsed)
-	{
-		if (stack.getTagCompound() == null)
-			stack.setTagCompound(new NBTTagCompound());
-		stack.getTagCompound().removeTag("IIUX");
-		stack.getTagCompound().removeTag("IIUY");
-		stack.getTagCompound().removeTag("IIUZ");
-	}
-	@Override
-	public EnumAction getItemUseAction(ItemStack stack)
-	{
-		return EnumAction.bow;
-	}
-
-	@Override
-	public int getMaxDamage(ItemStack stack)
-	{
-		if(!stack.hasTagCompound())
-			return 0;
-		return stack.getTagCompound().getInteger("visCapacity");
 	}
 
 	public ItemStack setContainedNode(ItemStack bracelet, NodeType type, NodeModifier modifier, AspectList aspects)
