@@ -50,14 +50,22 @@ public class ItemPrimordialHammer extends ItemPickaxe implements IPrimordialCraf
 	{
 		super(mat);
 	}
-	
+
+	@Override
+	public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean equipped)
+	{
+		super.onUpdate(stack, world, entity, slot, equipped);
+		if ((stack.isItemDamaged()) && (entity != null) && (entity.ticksExisted % 40 == 0) && ((entity instanceof EntityLivingBase)))
+			stack.damageItem(-1, (EntityLivingBase)entity);
+	}
+
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity target)
 	{
 		if(target instanceof EntityLivingBase)
 		{
 			((EntityLivingBase) target).addPotionEffect(new PotionEffect(Potion.confusion.id,20));
-			
+
 			if(getAbility(stack)==0)
 			{
 				for(EntityLivingBase e : (List<EntityLivingBase>)player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(target.posX-2,target.posY-2,target.posZ-2, target.posX+2,target.posY+2,target.posZ+2)))
@@ -163,7 +171,7 @@ public class ItemPrimordialHammer extends ItemPickaxe implements IPrimordialCraf
 	{
 		return 2;
 	}
-	
+
 	@Override
 	public String getItemStackDisplayName(ItemStack stack)
 	{
@@ -219,37 +227,38 @@ public class ItemPrimordialHammer extends ItemPickaxe implements IPrimordialCraf
 		range[0] = side==4||side==5?0: 1;
 		range[1] = side==0||side==1?0: 1;
 		range[2] = side==2||side==3?0: 1;
-		for(int yy=-range[1]; yy<=range[1]; yy++)
-			for(int zz=-range[2]; zz<=range[2]; zz++)
-				for(int xx=-range[0]; xx<=range[0]; xx++)
-				{
-					int x = ix+xx;
-					int y = iy+yy;
-					int z = iz+zz;
-					if(!world.blockExists(x, y, z))
-						continue;
-					Block block = world.getBlock(x, y, z);
-					int meta = world.getBlockMetadata(x, y, z);
-					Material mat = world.getBlock(x, y, z).getMaterial();
-
-					if(!world.isRemote && block != null && !block.isAir(world, x, y, z) && block.getPlayerRelativeBlockHardness(player, world, x, y, z) != 0)
+		if(!player.isSneaking())
+			for(int yy=-range[1]; yy<=range[1]; yy++)
+				for(int zz=-range[2]; zz<=range[2]; zz++)
+					for(int xx=-range[0]; xx<=range[0]; xx++)
 					{
-						if(!block.canHarvestBlock(player, meta) || !Utilities.isRightMaterial(mat, validMats))
+						int x = ix+xx;
+						int y = iy+yy;
+						int z = iz+zz;
+						if(!world.blockExists(x, y, z))
 							continue;
-						if(!player.capabilities.isCreativeMode && block != Blocks.bedrock)
+						Block block = world.getBlock(x, y, z);
+						int meta = world.getBlockMetadata(x, y, z);
+						Material mat = world.getBlock(x, y, z).getMaterial();
+
+						if(!world.isRemote && block != null && !block.isAir(world, x, y, z) && block.getPlayerRelativeBlockHardness(player, world, x, y, z) != 0)
 						{
-							int localMeta = world.getBlockMetadata(x, y, z);
-							if (block.removedByPlayer(world, player, x, y, z, true))
-								block.onBlockDestroyedByPlayer(world, x, y, z, localMeta);
-							block.harvestBlock(world, player, x, y, z, localMeta);
-							block.onBlockHarvested(world, x, y, z, localMeta, player);
-						} 
-						else
-							world.setBlockToAir(x, y, z);
-						if(!world.isRemote)
-							world.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(block) + (meta << 12));
+							if(!block.canHarvestBlock(player, meta) || !Utilities.isRightMaterial(mat, validMats))
+								continue;
+							if(!player.capabilities.isCreativeMode && block != Blocks.bedrock)
+							{
+								int localMeta = world.getBlockMetadata(x, y, z);
+								if (block.removedByPlayer(world, player, x, y, z, true))
+									block.onBlockDestroyedByPlayer(world, x, y, z, localMeta);
+								block.harvestBlock(world, player, x, y, z, localMeta);
+								block.onBlockHarvested(world, x, y, z, localMeta, player);
+							} 
+							else
+								world.setBlockToAir(x, y, z);
+							if(!world.isRemote)
+								world.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(block) + (meta << 12));
+						}
 					}
-				}
 		return false;
 	}
 
@@ -274,20 +283,20 @@ public class ItemPrimordialHammer extends ItemPickaxe implements IPrimordialCraf
 
 	@Override
 	public EnumAction getItemUseAction(ItemStack stack)
-    {
-        return EnumAction.block;
-    }
+	{
+		return EnumAction.block;
+	}
 	@Override
-    public int getMaxItemUseDuration(ItemStack stack)
-    {
-        return 72000;
-    }
+	public int getMaxItemUseDuration(ItemStack stack)
+	{
+		return 72000;
+	}
 	@Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
-    {
-        player.setItemInUse(stack, this.getMaxItemUseDuration(stack));
-        return stack;
-    }
+	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
+	{
+		player.setItemInUse(stack, this.getMaxItemUseDuration(stack));
+		return stack;
+	}
 	@Override
 	public boolean getIsRepairable(ItemStack stack1, ItemStack stack2)
 	{

@@ -51,8 +51,6 @@ public class InfusedGemHandler
 			l.add(Aspect.ORDER,1);
 			l.add(Aspect.ENTROPY,1);
 		}
-		if(l.size()<1)
-			return null;
 		return l.getPrimalAspects();
 	}
 	public static Aspect[] getNaturalAversions(ItemStack gem)
@@ -81,8 +79,6 @@ public class InfusedGemHandler
 			l.add(Aspect.WATER,1);
 		if(Utilities.compareToOreName(gem, "gemPeridot") || Utilities.compareToOreName(gem, "gemMalachite") || Utilities.compareToOreName(gem, "gemSapphire") || Utilities.compareToOreName(gem, "gemTanzanite"))
 			l.add(Aspect.FIRE,1);
-		if(l.size()<1)
-			return null;
 		return l.getPrimalAspects();
 	}
 	

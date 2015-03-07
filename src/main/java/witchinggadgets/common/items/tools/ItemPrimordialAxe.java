@@ -54,7 +54,15 @@ public class ItemPrimordialAxe extends ItemAxe implements IPrimordialCrafting, I
 		super(mat);
 	}
 
-    @Override
+	@Override
+	public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean equipped)
+	{
+		super.onUpdate(stack, world, entity, slot, equipped);
+		if ((stack.isItemDamaged()) && (entity != null) && (entity.ticksExisted % 40 == 0) && ((entity instanceof EntityLivingBase)))
+			stack.damageItem(-1, (EntityLivingBase)entity);
+	}
+
+	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity target)
 	{
 		if(target instanceof EntityLivingBase)
@@ -64,11 +72,11 @@ public class ItemPrimordialAxe extends ItemAxe implements IPrimordialCrafting, I
 				{
 					ItemStack armor = ((EntityLivingBase) target).getEquipmentInSlot(i);
 					if(armor.getItem() instanceof ISpecialArmor)
-                        ((ISpecialArmor)armor.getItem()).damageArmor((EntityLivingBase)target, armor, DamageSource.causePlayerDamage(player), 4, EntityLiving.getArmorPosition(armor)-1);
-                    else
-                        stack.damageItem(5, (EntityLivingBase) target);
-                    if (stack.stackSize <= 0)
-                    	((EntityLivingBase) target).setCurrentItemOrArmor(i,null);
+						((ISpecialArmor)armor.getItem()).damageArmor((EntityLivingBase)target, armor, DamageSource.causePlayerDamage(player), 4, EntityLiving.getArmorPosition(armor)-1);
+					else
+						stack.damageItem(5, (EntityLivingBase) target);
+					if (stack.stackSize <= 0)
+						((EntityLivingBase) target).setCurrentItemOrArmor(i,null);
 				}
 			if(getAbility(stack)==0)
 			{

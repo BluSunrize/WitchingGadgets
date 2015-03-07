@@ -47,6 +47,7 @@ public class TileRenderCuttingTable extends TileEntitySpecialRenderer
 		ClientUtilities.bindTexture("witchinggadgets:textures/models/cuttingTable.png");
 		model.render(null,0,0,0,0,0, .0625f);
 		GL11.glBlendFunc(770, 771);
+		
 		for(byte i=0;i<3;i++)
 			if(tile.getStackInSlot(1+i)!=null && tile.getStackInSlot(1+i).hasTagCompound())
 			{
@@ -98,7 +99,7 @@ public class TileRenderCuttingTable extends TileEntitySpecialRenderer
 			//CARPET
 			temp = new ModelRenderer(this, -32, 0);
 			temp.addBox(0.0F, 0.0F, 0.0F, 16, 0, 16);
-			temp.setRotationPoint(-8.0F, 14.01F, -8.0F);
+			temp.setRotationPoint(-8.0F, 14.05F, -8.0F);
 			temp.setTextureSize(64, 32);
 			temp.mirror = true;
 			parts.add(temp);

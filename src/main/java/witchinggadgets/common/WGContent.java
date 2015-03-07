@@ -185,10 +185,7 @@ public class WGContent
 
 		int eid = Utilities.getNextEnchantmentId(64);
 		if(eid >= 0)
-		{
 			enc_gemstonePotency = new WGEnchantGemPotency(eid, 4);
-			Enchantment.addToBookList(enc_gemstonePotency);
-		}
 		eid = Utilities.getNextEnchantmentId(eid);
 		if(eid >= 0)
 			enc_gemstoneBrittle = new WGEnchantGemBrittle(eid, 1);
@@ -354,6 +351,7 @@ public class WGContent
 		}
 		//ItemMagicBed = new ItemMagicBed(WGConfig.ItemMagicBedID).setUnlocalizedName("WG_MagicBed");
 		//GameRegistry.registerItem(ItemMagicBed, ItemMagicBed.getUnlocalizedName());
+		OreDictionary.registerOre("travelgearCloakBase", new ItemStack(ItemCloak,1,0));
 		OreDictionary.registerOre("crystalNetherQuartz", new ItemStack(Items.quartz));
 		OreDictionary.registerOre("scribingTools", new ItemStack(ConfigItems.itemInkwell,1,OreDictionary.WILDCARD_VALUE));
 

@@ -13,6 +13,7 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import witchinggadgets.common.WGContent;
 import witchinggadgets.common.items.ItemInfusedGem;
+import witchinggadgets.common.items.ItemInfusedGem.GemCut;
 import witchinggadgets.common.util.handler.InfusedGemHandler;
 
 public class TileEntityCuttingTable extends TileEntityWGBase implements IInventory
@@ -80,10 +81,22 @@ public class TileEntityCuttingTable extends TileEntityWGBase implements IInvento
 		Aspect aspect = getInfusingAspect();
 		if(aspect != null)
 		{
+			int amplifier = (this.inventory[1]!=null?1:0)+(this.inventory[2]!=null?1:0)+(this.inventory[3]!=null?1:0);
+			int brittle = ItemInfusedGem.GemCut.getValue(targetGemCut)==GemCut.OVAL?1:0;
 			stack = ItemInfusedGem.createGem(aspect, ItemInfusedGem.GemCut.getValue(targetGemCut), false);
-			if( Arrays.asList(InfusedGemHandler.getNaturalAffinities(inventory[0])).contains(aspect) )
+			if(amplifier>0)
 			{
-				stack.addEnchantment(WGContent.enc_gemstonePotency, 1);
+				if(Arrays.asList(InfusedGemHandler.getNaturalAffinities(inventory[0])).contains(aspect))
+				{
+					if(amplifier-brittle>0)
+					stack.addEnchantment(WGContent.enc_gemstonePotency, amplifier-brittle);
+				}
+				else
+				{
+					if(Arrays.asList(InfusedGemHandler.getNaturalAversions(inventory[0])).contains(aspect))
+						amplifier++;
+					stack.addEnchantment(WGContent.enc_gemstoneBrittle, amplifier);
+				}
 			}
 			return stack;
 		}

@@ -64,8 +64,18 @@ public class ItemPrimordialArmor extends ItemFortressArmor implements IActiveAbi
 	}
 
 	@Override
+	public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean equipped)
+	{
+		super.onUpdate(stack, world, entity, slot, equipped);
+		if ((!world.isRemote) && (stack.isItemDamaged()) && (entity.ticksExisted % 40 == 0) && ((entity instanceof EntityLivingBase)))
+			stack.damageItem(-1, (EntityLivingBase)entity);
+	}
+	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack stack)
 	{
+		if ((!world.isRemote) && (stack.getItemDamage() > 0) && (player.ticksExisted % 20 == 0))
+			stack.damageItem(-1, player);
+
 		if(this.armorType==3)
 		{
 			if(!player.capabilities.isFlying && player.moveForward>0.0F)

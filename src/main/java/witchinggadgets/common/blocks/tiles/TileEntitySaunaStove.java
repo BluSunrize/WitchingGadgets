@@ -124,7 +124,6 @@ public class TileEntitySaunaStove extends TileEntityWGBase implements IFluidHand
 	int outlineMaxZ=zCoord;
 	public void checkArea()
 	{
-		//		System.out.println("Checkign Area, checked: "+closedList.size());
 		ChunkCoordinates next = null;
 		final int closedListMax = 1200;
 		int timeout = 0;

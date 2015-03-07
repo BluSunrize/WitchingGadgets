@@ -3,6 +3,7 @@ package witchinggadgets.client.gui;
 import java.util.ArrayList;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -77,6 +78,7 @@ public class GuiPrimordialGlove extends GuiContainer
 					nodeInfo.add("  "+StatCollector.translateToLocal("wg.gui.shiftForAspectList"));
 
 				UtilsFX.drawCustomTooltip(this, itemRender, this.fontRendererObj, nodeInfo, par1-k, par2-l, 7);
+				RenderHelper.enableStandardItemLighting();
 			}
 		}
 	}

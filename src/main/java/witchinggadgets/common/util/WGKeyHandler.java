@@ -9,8 +9,6 @@ import travellersgear.api.TravellersGearAPI;
 import witchinggadgets.common.WGConfig;
 import witchinggadgets.common.WGContent;
 import witchinggadgets.common.items.tools.ItemPrimordialGlove;
-import witchinggadgets.common.util.network.PacketPrimordialGlove;
-import witchinggadgets.common.util.network.WGPacketPipeline;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -80,8 +78,6 @@ public class WGKeyHandler
 			float step = WGConfig.radialSpeed;
 			if(thaumcraftFKey!=null && thaumcraftFKey.getIsKeyPressed() && !keyDown[1])
 			{
-				if(player.isSneaking() && player.getCurrentEquippedItem()!=null && player.getCurrentEquippedItem().getItem() instanceof ItemPrimordialGlove)
-					WGPacketPipeline.INSTANCE.sendToServer(new PacketPrimordialGlove(Minecraft.getMinecraft().thePlayer, (byte)1, 0));
 				if(gemLock)
 				{
 					gemLock=false;
@@ -94,12 +90,15 @@ public class WGKeyHandler
 					if(gemRadial>1)
 						gemRadial=1f;
 					if(gemRadial>=1)	
+					{
 						gemLock=true;
+						keyDown[1] = true;
+					}
 				}
 			}
 			else
 			{
-				if(keyDown[1])
+				if(keyDown[1] && !thaumcraftFKey.getIsKeyPressed())
 					keyDown[1]=false;
 				if(!gemLock)
 				{

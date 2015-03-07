@@ -161,19 +161,15 @@ public class WGResearch
 
 		craftingAspects = new AspectList().add(Aspect.EARTH,10);
 		registerArcaneRecipe("TERRAFORMER","_PLAINS",new ItemStack(WGContent.BlockMetalDevice,1,2), craftingAspects, " S ","IBI","ITI", 'B',new ItemStack(Blocks.grass), 'I',"ingotIron", 'S',new ItemStack(ConfigItems.itemShard,1,6), 'T',new ItemStack(ConfigBlocks.blockTube));
-		ThaumcraftApi.addWarpToItem(new ItemStack(WGContent.BlockMetalDevice,1,2), 2);
 
 		craftingAspects = new AspectList().add(Aspect.WATER,10).add(Aspect.ORDER, 10);
 		registerArcaneRecipe("TERRAFORMFOCUS_COLDTAIGA","",new ItemStack(WGContent.BlockMetalDevice,1,3), craftingAspects, " S ","IBI","ITI", 'B',new ItemStack(Blocks.ice), 'I',"ingotIron", 'S',new ItemStack(ConfigItems.itemShard,1,6), 'T',new ItemStack(ConfigBlocks.blockTube));
-		ThaumcraftApi.addWarpToItem(new ItemStack(WGContent.BlockMetalDevice,1,3), 2);
 
 		craftingAspects = new AspectList().add(Aspect.FIRE,10).add(Aspect.EARTH, 10);
 		registerArcaneRecipe("TERRAFORMFOCUS_DESERT","",new ItemStack(WGContent.BlockMetalDevice,1,4), craftingAspects, " S ","IBI","ITI", 'B',new ItemStack(Blocks.sand), 'I',"ingotIron", 'S',new ItemStack(ConfigItems.itemShard,1,6), 'T',new ItemStack(ConfigBlocks.blockTube));
-		ThaumcraftApi.addWarpToItem(new ItemStack(WGContent.BlockMetalDevice,1,4), 2);
 
 		craftingAspects = new AspectList().add(Aspect.WATER,10).add(Aspect.EARTH, 10);
 		registerArcaneRecipe("TERRAFORMFOCUS_JUNGLE","",new ItemStack(WGContent.BlockMetalDevice,1,5), craftingAspects, " S ","IBI","ITI", 'B',new ItemStack(Blocks.log,1,3), 'I',"ingotIron", 'S',new ItemStack(ConfigItems.itemShard,1,6), 'T',new ItemStack(ConfigBlocks.blockTube));
-		ThaumcraftApi.addWarpToItem(new ItemStack(WGContent.BlockMetalDevice,1,5), 2);
 
 		craftingAspects = new AspectList().add(Aspect.FIRE,10).add(Aspect.ENTROPY, 10);
 		registerArcaneRecipe("TERRAFORMFOCUS_HELL","",new ItemStack(WGContent.BlockMetalDevice,1,6), craftingAspects, " S ","IBI","ITI", 'B',new ItemStack(Blocks.nether_brick), 'I',"ingotIron", 'S',new ItemStack(ConfigItems.itemShard,1,6), 'T',new ItemStack(ConfigBlocks.blockTube));

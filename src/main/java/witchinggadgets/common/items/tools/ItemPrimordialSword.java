@@ -20,6 +20,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -44,6 +45,14 @@ public class ItemPrimordialSword extends ItemSword implements IPrimordialCraftin
 		super(mat);
 	}
 
+	@Override
+	public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean equipped)
+	{
+		super.onUpdate(stack, world, entity, slot, equipped);
+		if ((stack.isItemDamaged()) && (entity != null) && (entity.ticksExisted % 40 == 0) && ((entity instanceof EntityLivingBase)))
+			stack.damageItem(-1, (EntityLivingBase)entity);
+	}
+	
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity target)
 	{

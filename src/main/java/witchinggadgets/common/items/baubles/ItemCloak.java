@@ -382,7 +382,6 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, 
 	@Override
 	public void onUserTargeted(LivingSetAttackTargetEvent event, ItemStack stack)
 	{
-		System.out.println("Targeted by: "+event.entityLiving);
 		if(stack.hasTagCompound() && stack.getTagCompound().getBoolean("isSpectral"))
 		{
 			boolean goggles = event.entityLiving.getEquipmentInSlot(4)!=null && (event.entityLiving.getEquipmentInSlot(4).getItem() instanceof IRevealer || event.entityLiving.getEquipmentInSlot(4).getItem() instanceof IGoggles);

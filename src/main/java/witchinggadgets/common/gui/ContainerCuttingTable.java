@@ -49,6 +49,9 @@ public class ContainerCuttingTable extends Container
 			{
 				//System.out.println("On Crafting ("+(player.worldObj.isRemote?"Client":"Server")+" World), "+stack);
 				this.inventory.decrStackSize(0, 1);
+				this.inventory.decrStackSize(1, 1);
+				this.inventory.decrStackSize(2, 1);
+				this.inventory.decrStackSize(3, 1);
 			}
 			//			@Override
 			//		    protected void onCrafting(ItemStack stack, int i)

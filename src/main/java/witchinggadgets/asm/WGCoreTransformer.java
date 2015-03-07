@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -51,6 +52,11 @@ public class WGCoreTransformer implements IClassTransformer
 			byte[] newCode = patchFocusPouch_Interface(className, origCode);
 			return patchFocusPouch_Methods(className, newCode);
 		}
+		if (className.equals("thaumcraft.common.lib.world.WorldGenEldritchRing"))
+			return patchThaumcraftWorldgen(origCode, deobf, "EldritchRing");
+		if (className.equals("thaumcraft.common.lib.world.WorldGenHilltopStones"))
+			return patchThaumcraftWorldgen(origCode, deobf, "HilltopStones");
+		
 		if(className.equals(deobf?"net.minecraft.enchantment.EnchantmentHelper":"a"))
 		{
 			byte[] newCode = patchGetFortuneModifier(origCode, deobf);
@@ -326,14 +332,61 @@ public class WGCoreTransformer implements IClassTransformer
 					if(val_Dur>0)
 						val_Dur /= (ordo+1);
 					f_potionDuration.setInt(effect, val_Dur);
-					
-					
 				}catch(Exception e)
 				{
 					e.printStackTrace();
 				}
 			}
-			
 		}
+	}
+	
+	
+	
+	private byte[] patchThaumcraftWorldgen(byte[] origCode, boolean deobf, String ident)
+	{
+		WitchingGadgets.logger.log(Level.INFO, "[CORE] Patching Thaumcraft's Worldgen");
+
+		final String methodToPatch = "GetValidSpawnBlocks";
+		final String desc = "()[Lnet/minecraft/block/Block;";
+
+		ClassReader cr = new ClassReader(origCode);
+
+		ClassNode classNode=new ClassNode();
+		cr.accept(classNode, 0);
+		for(MethodNode methodNode : classNode.methods)
+			if(methodNode.name.equals(methodToPatch) && methodNode.desc.equals(desc))
+			{
+				Iterator<AbstractInsnNode> insnNodes=methodNode.instructions.iterator();
+				while(insnNodes.hasNext())
+				{
+					AbstractInsnNode insn=insnNodes.next();
+					if(insn.getOpcode()==Opcodes.ARETURN)
+					{
+						InsnList endList=new InsnList();
+						endList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "witchinggadgets/asm/WGCoreTransformer", "worldGen_getValid"+ident, desc, false));
+						methodNode.instructions.insertBefore(insn, endList);
+					}
+				}
+			}
+		ClassWriter cw=new ClassWriter(ClassWriter.COMPUTE_MAXS);
+		classNode.accept(cw);
+		
+//		MethodVisitor mv = cw.visitMethod(Opcodes.ACC_PROTECTED, methodToPatch, desc, null, null);
+//		mv.visitCode();
+//		mv.visitMethodInsn(Opcodes.INVOKESTATIC, "witchinggadgets/asm/WGCoreTransformer", "worldGen_getValid"+ident, desc, false);
+//		mv.visitInsn(Opcodes.ARETURN);
+//		mv.visitMaxs(0, 1);
+//		mv.visitEnd();
+//
+//		cr.accept(cw, 0);
+		return cw.toByteArray();	
+	}
+	public static Block[] worldGen_getValidHilltopStones()
+	{
+		return WGConfig.coremod_worldgenValidBase_HilltopStones;
+	}
+	public static Block[] worldGen_getValidEldritchRing()
+	{
+		return WGConfig.coremod_worldgenValidBase_EldritchRing;
 	}
 }

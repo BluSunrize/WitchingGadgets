@@ -80,7 +80,7 @@ public class ItemKama extends ItemCloak implements IBauble
 	{
 		if(stack.hasTagCompound() && stack.getTagCompound().getBoolean("noGlide"))
 			list.add(StatCollector.translateToLocal(Lib.DESCRIPTION+"noGlide"));
-		list.add(StatCollector.translateToLocalFormatted(Lib.DESCRIPTION+"gearSlot.tg."+getSlot(stack)));
+		list.add(StatCollector.translateToLocalFormatted(Lib.DESCRIPTION+"gearSlot.bauble."+getBaubleType(stack)));
 	}
 	
 	@Override

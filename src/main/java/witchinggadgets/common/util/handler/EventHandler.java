@@ -115,22 +115,23 @@ public class EventHandler
 		if(event.entityLiving instanceof EntityCreature)
 		{
 			EntityPlayer player = (EntityPlayer) event.target;
-			if(EnchantmentHelper.getEnchantmentLevel(WGContent.enc_stealth.effectId,player.getCurrentArmor(0))>0 || EnchantmentHelper.getEnchantmentLevel(WGContent.enc_stealth.effectId,player.getCurrentArmor(1))>0)
-			{
-				float chance = EnchantmentHelper.getEnchantmentLevel(WGContent.enc_stealth.effectId,player.getCurrentArmor(0))*.2f + EnchantmentHelper.getEnchantmentLevel(WGContent.enc_stealth.effectId,player.getCurrentArmor(1))*.2f;
-				Vec3 targetVec = event.entityLiving.getLookVec();
-				Vec3 attackVec = player.getLookVec();
-				if(Math.signum(targetVec.xCoord)!=Math.signum(attackVec.xCoord) || Math.signum(targetVec.zCoord)!=Math.signum(attackVec.zCoord))
-					chance-=.5f;
-				if(player.getRNG().nextFloat()<chance)
-					((EntityCreature)event.entityLiving).setAttackTarget(null);
-				else
+			if(player.isSneaking())
+				if(EnchantmentHelper.getEnchantmentLevel(WGContent.enc_stealth.effectId,player.getCurrentArmor(0))>0 || EnchantmentHelper.getEnchantmentLevel(WGContent.enc_stealth.effectId,player.getCurrentArmor(1))>0)
 				{
-					for(EntityCreature e : (List<EntityCreature>)player.worldObj.getEntitiesWithinAABB(EntityCreature.class, AxisAlignedBB.getBoundingBox(player.posX-5,player.posY-5,player.posZ-5, player.posX+5,player.posY+5,player.posZ+5)))
-						if(e!=null && !(e instanceof IBossDisplayData) && player.equals(e.getAttackTarget()))
-							e.setAttackTarget(player);
+					float chance = EnchantmentHelper.getEnchantmentLevel(WGContent.enc_stealth.effectId,player.getCurrentArmor(0))*.1f + EnchantmentHelper.getEnchantmentLevel(WGContent.enc_stealth.effectId,player.getCurrentArmor(1))*.1f;
+					Vec3 targetVec = event.entityLiving.getLookVec();
+					Vec3 attackVec = player.getLookVec();
+					if(Math.signum(targetVec.xCoord)!=Math.signum(attackVec.xCoord) || Math.signum(targetVec.zCoord)!=Math.signum(attackVec.zCoord))
+						chance-=.1f;
+					if(player.getRNG().nextFloat()<chance)
+						((EntityCreature)event.entityLiving).setAttackTarget(null);
+					else
+					{
+						for(EntityCreature e : (List<EntityCreature>)player.worldObj.getEntitiesWithinAABB(EntityCreature.class, AxisAlignedBB.getBoundingBox(player.posX-5,player.posY-5,player.posZ-5, player.posX+5,player.posY+5,player.posZ+5)))
+							if(e!=null && !(e instanceof IBossDisplayData) && player.equals(e.getAttackTarget()))
+								e.setAttackTarget(player);
+					}
 				}
-			}
 		}
 	}
 	@SubscribeEvent

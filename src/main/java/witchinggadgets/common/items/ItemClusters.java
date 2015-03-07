@@ -100,7 +100,13 @@ public class ItemClusters extends Item
 	@Override
 	public String getItemStackDisplayName(ItemStack stack)
 	{
-		String ss = !OreDictionary.getOres("ingot"+subNames[stack.getItemDamage()]).isEmpty()? OreDictionary.getOres("ingot"+subNames[stack.getItemDamage()]).get(0).getDisplayName().substring(0, OreDictionary.getOres("ingot"+subNames[stack.getItemDamage()]).get(0).getDisplayName().lastIndexOf(" "))+" "  :"";
+		String ss = "";
+		if(!OreDictionary.getOres("ingot"+subNames[stack.getItemDamage()]).isEmpty())
+		{
+			ItemStack ingot = OreDictionary.getOres("ingot"+subNames[stack.getItemDamage()]).get(0);
+			int limit = ingot.getDisplayName().lastIndexOf(" ");
+			ss = ingot.getDisplayName().substring(0, Math.max(0, limit))+" ";
+		}
 		return ss + super.getItemStackDisplayName(stack);
 	}
 

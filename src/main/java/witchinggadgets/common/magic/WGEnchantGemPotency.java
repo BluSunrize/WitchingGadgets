@@ -3,7 +3,6 @@ package witchinggadgets.common.magic;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.item.ItemStack;
-import witchinggadgets.api.IInfusedGem;
 
 public class WGEnchantGemPotency extends Enchantment
 {
@@ -34,12 +33,12 @@ public class WGEnchantGemPotency extends Enchantment
 	@Override
 	public boolean canApply(ItemStack stack)
 	{
-		return (stack!=null && stack.getItem() instanceof IInfusedGem && ((IInfusedGem)stack.getItem()).isGemEnchantable(stack));
+		return false;
 	}
 
 	@Override
 	public boolean canApplyAtEnchantingTable(ItemStack stack)
 	{
-		return canApply(stack);
+		return false;
 	}
 }
