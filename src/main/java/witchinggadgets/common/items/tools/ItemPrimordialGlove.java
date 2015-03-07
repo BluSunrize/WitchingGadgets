@@ -22,7 +22,7 @@ import thaumcraft.api.nodes.INode;
 import thaumcraft.api.nodes.NodeModifier;
 import thaumcraft.api.nodes.NodeType;
 import thaumcraft.common.lib.research.ResearchManager;
-import thaumcraft.common.tiles.TileJarNode;
+import thaumcraft.common.tiles.TileNode;
 import witchinggadgets.WitchingGadgets;
 import witchinggadgets.api.IInfusedGem;
 import witchinggadgets.api.IPrimordialCrafting;
@@ -172,7 +172,7 @@ public class ItemPrimordialGlove extends Item implements IPrimordialCrafting
 	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
 	{
 		TileEntity tile = world.getTileEntity(x, y, z);
-		if(!world.isRemote && tile!=null && tile instanceof INode && !(tile instanceof TileJarNode))
+		if(!world.isRemote && tile!=null && tile.getClass().equals(TileNode.class))
 		{
 			INode node = (INode) tile;
 			AspectList primals = new AspectList();

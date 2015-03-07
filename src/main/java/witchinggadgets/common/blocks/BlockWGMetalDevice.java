@@ -44,6 +44,12 @@ public class BlockWGMetalDevice extends BlockContainer implements ITerraformFocu
 	}
 
 	@Override
+	public boolean isBeaconBase(IBlockAccess worldObj, int x, int y, int z, int beaconX, int beaconY, int beaconZ)
+    {
+        return worldObj.getBlockMetadata(x, y, z)==7;
+    }
+	
+	@Override
 	public int damageDropped(int meta)
 	{
 		return meta;

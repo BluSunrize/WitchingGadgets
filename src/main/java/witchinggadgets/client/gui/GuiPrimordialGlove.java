@@ -107,7 +107,7 @@ public class GuiPrimordialGlove extends GuiContainer
 
 				Tessellator tes = Tessellator.instance;
 				int count = 0;
-				float average = aspects.visSize()/aspects.size();
+				float average = aspects.visSize()/(aspects.size()>0?aspects.size():1);
 				for(Aspect a : aspects.aspects.keySet())
 				{
 					//float radius = 16* (aspects.getAmount(a)/average)  * ((.5f-1)+((System.currentTimeMillis()%64)/64f));
