@@ -184,8 +184,11 @@ wg.chat.infusionWarning.noPartnerItem=Pedestal at %1$s, %2$s, %3$s should have a
 wg.chat.infusionWarning.noPartnerPedestal=Pedestal at %1$s, %2$s, %3$s lacks a symmetrical partner
 wg.chat.infusionWarning.noPartnerStabilizer=Stabilizer at %1$s, %2$s, %3$s lacks a symmetrical partner
 wg.chat.infusionInfo.stabilityTotal=Total Stability booster: %1$s
-wg.chat.infusionWarning.essentiaMod=This Infusion Enchantment will consume %1$s times the amount of essentia displayed in the Thaumonomicon.
-		
+wg.chat.infusionInfo.instability=Total Instability of this Infusion: %1$s
+wg.chat.infusionInfo.essentiaMod=This Infusion Enchantment will consume %1$s times the amount of essentia displayed in the Thaumonomicon:
+wg.chat.infusionInfo.essentiaRunicMod=The essentia costs for this Runic Augmentation are to the power of %1$s:
+
+
 wg.potionKnockbackRes=Knockback Res.
 wg.potionDissolve=Dissolving
 wg.potionCinderCoat=Cinder Coat
@@ -261,7 +264,7 @@ witchinggadgets_research_page.ARCANEAUTOCRAFTER.2=Simply set your preferred reci
 #
 witchinggadgets_research_name.CALCULATOR=Arcane Abacus
 witchinggadgets_research_text.CALCULATOR=[WG] 3-4 = Warp?
-witchinggadgets_research_page.CALCULATOR.1=As a skilled thaumaturge, close to achieving eldritch knowledge, you are an expert on chaos. ...It might also stem from your lack of mathematical knowledge. But who would bother themselves with sciences of the common man when there are enchantments that do it for you?<BR>The Arcane Abacus will take some of the mundane mathematics off your hands. Use it on a Node that contains compound aspects and it will calculate it to primal values. Use it on an Infusion Matrix to check the stability value and point out misplaced stabilizers.
+witchinggadgets_research_page.CALCULATOR.1=As a skilled thaumaturge, close to achieving eldritch knowledge, you are an expert on chaos. ...It might also stem from your lack of mathematical knowledge. But who would bother themselves with sciences of the common man when there are enchantments that do it for you?<BR>The Arcane Abacus will take some of the mundane mathematics off your hands. Use it on a Node that contains compound aspects and it will calculate it to primal values. Use it on an Infusion Matrix to gain info on stability, positioning of stabilizers, instability of the current infusion or possible increases in essentia cost.
 witchinggadgets_research_page.CALCULATOR.2=§oThe highest infusion instability known to man *cough*Thaumic Tinkerer*cough* is 15. Stabilizing your altar beyond that is pointless.
 #
 witchinggadgets_research_name.LABYRINTHSTRING=Guiding Thread

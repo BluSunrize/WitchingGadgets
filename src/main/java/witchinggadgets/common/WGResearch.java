@@ -657,7 +657,7 @@ public class WGResearch
 		getResearchItem("TERRAFORMFOCUS_MUSHROOM", "WITCHGADG", researchAspects, 9, -8, 2, new ItemStack(WGContent.BlockMetalDevice,1,9)).setSecondary().setPages(pages).setParents("TERRAFORMER").registerResearchItem();
 		researchAspects = new AspectList().add(Aspect.TAINT,8).add(Aspect.MAGIC,4).add(Aspect.EXCHANGE, 2).add(Aspect.ENERGY, 1);
 		pages = new ResearchPage[]{ new ResearchPage("witchinggadgets_research_page.TERRAFORMFOCUS_TAINT.1"), new ResearchPage((InfusionRecipe) recipeList.get("TERRAFORMFOCUS_TAINT"))};
-		getResearchItem("TERRAFORMFOCUS_TAINT", "WITCHGADG", researchAspects, 9, -7, 2, new ItemStack(WGContent.BlockMetalDevice,1,8)).addWarp(3).setSecondary().setPages(pages).setParents("TERRAFORMER").registerResearchItem();
+		getResearchItem("TERRAFORMFOCUS_TAINT", "WITCHGADG", researchAspects, 9, -7, 2, new ItemStack(WGContent.BlockMetalDevice,1,8)).addWarp(3).setSecondary().setPages(pages).setParents("TERRAFORMER","BOTTLETAINT").registerResearchItem();
 
 
 		//GEMCUTTING

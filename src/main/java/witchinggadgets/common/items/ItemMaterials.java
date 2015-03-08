@@ -3,13 +3,14 @@ package witchinggadgets.common.items;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.ChunkCoordinates;
@@ -34,11 +36,14 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.crafting.IInfusionStabiliser;
 import thaumcraft.api.crafting.InfusionEnchantmentRecipe;
+import thaumcraft.api.crafting.InfusionRecipe;
 import thaumcraft.api.nodes.INode;
 import thaumcraft.api.research.ScanResult;
 import thaumcraft.common.Thaumcraft;
 import thaumcraft.common.config.ConfigItems;
+import thaumcraft.common.lib.crafting.InfusionRunicAugmentRecipe;
 import thaumcraft.common.lib.crafting.ThaumcraftCraftingManager;
+import thaumcraft.common.lib.events.EventHandlerRunic;
 import thaumcraft.common.lib.network.PacketHandler;
 import thaumcraft.common.lib.network.playerdata.PacketScannedToServer;
 import thaumcraft.common.lib.research.ResearchManager;
@@ -387,12 +392,38 @@ public class ItemMaterials extends Item
 						central = ((TilePedestal)te).getStackInSlot(0).copy();
 				if(central!=null)
 				{
+					InfusionRecipe infRecipe = ThaumcraftCraftingManager.findMatchingInfusionRecipe(components, central, player);
 					InfusionEnchantmentRecipe enchRecipe = ThaumcraftCraftingManager.findMatchingInfusionEnchantmentRecipe(components, central, player);
 					if(enchRecipe!=null)
 					{
-						float essmod = 1+enchRecipe.getEssentiaMod(central)-EnchantmentHelper.getEnchantmentLevel(enchRecipe.enchantment.effectId, central);
+						player.addChatMessage(new ChatComponentTranslation(Lib.CHAT+"infusionInfo.instability",enchRecipe.calcInstability(central)).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.DARK_PURPLE)) );
+						float essmod = 1+enchRecipe.getEssentiaMod(central);
+						System.out.println(enchRecipe.getEssentiaMod(central));
 						if(essmod>1)
+						{
+							String plaintext = "";
+							Iterator<Entry<Aspect, Integer>> it = enchRecipe.aspects.aspects.entrySet().iterator();
+							while(it.hasNext())
+							{
+								Entry<Aspect, Integer> e = it.next();
+								plaintext += (int)(e.getValue()*essmod)+ " " +e.getKey().getName() + (it.hasNext()?", ":"");
+							}
 							player.addChatMessage(new ChatComponentTranslation(Lib.CHAT+"infusionInfo.essentiaMod",essmod).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.GREEN)) );
+							player.addChatMessage(new ChatComponentText(plaintext).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.GRAY)) );
+						}
+					}
+					if(infRecipe!=null)
+					{
+						player.addChatMessage(new ChatComponentTranslation(Lib.CHAT+"infusionInfo.instability",infRecipe.getInstability(central)).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.DARK_PURPLE)) );
+						if(infRecipe instanceof InfusionRunicAugmentRecipe)
+						{
+							int vis = (int)(32.0D * Math.pow(2.0D, EventHandlerRunic.getFinalCharge(central)));
+							String plaintext = "";
+							if (vis > 0)
+								plaintext += vis+" "+Aspect.ENERGY.getName()+ ", " +(vis/2)+" " +Aspect.MAGIC.getName()+ ", " + (vis/2)+" "+Aspect.ARMOR.getName();
+							player.addChatMessage(new ChatComponentTranslation(Lib.CHAT+"infusionInfo.essentiaRunicMod",EventHandlerRunic.getFinalCharge(central)).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.GREEN)) );
+							player.addChatMessage(new ChatComponentText(plaintext).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.GRAY)) );
+						}
 					}
 				}
 
