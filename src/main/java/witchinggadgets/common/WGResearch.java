@@ -173,8 +173,11 @@ public class WGResearch
 
 		craftingAspects = new AspectList().add(Aspect.FIRE,10).add(Aspect.ENTROPY, 10);
 		registerArcaneRecipe("TERRAFORMFOCUS_HELL","",new ItemStack(WGContent.BlockMetalDevice,1,6), craftingAspects, " S ","IBI","ITI", 'B',new ItemStack(Blocks.nether_brick), 'I',"ingotIron", 'S',new ItemStack(ConfigItems.itemShard,1,6), 'T',new ItemStack(ConfigBlocks.blockTube));
-		ThaumcraftApi.addWarpToItem(new ItemStack(WGContent.BlockMetalDevice,1,6), 2);
-
+		ThaumcraftApi.addWarpToItem(new ItemStack(WGContent.BlockMetalDevice,1,6), 1);
+		
+		craftingAspects = new AspectList().add(Aspect.EARTH,10).add(Aspect.WATER, 10);
+		registerArcaneRecipe("TERRAFORMFOCUS_MUSHROOM","",new ItemStack(WGContent.BlockMetalDevice,1,9), craftingAspects, " S ","IBI","ITI", 'B',new ItemStack(Blocks.mycelium), 'I',"ingotIron", 'S',new ItemStack(ConfigItems.itemShard,1,6), 'T',new ItemStack(ConfigBlocks.blockTube));
+		
 		/**
 		 * INFUSION
 		 */
@@ -198,6 +201,10 @@ public class WGResearch
 		infusionAspects = new AspectList().add(Aspect.ORDER, 16).add(Aspect.EXCHANGE, 8).add(Aspect.EARTH, 16);
 		registerInfusionRecipe("TERRAFORMER","",new ItemStack(WGContent.BlockMetalDevice,1,1),3,infusionAspects,new ItemStack(ConfigBlocks.blockMetalDevice,1,9),new ItemStack[] {new ItemStack(ConfigItems.itemShard,1,6), new ItemStack(Items.iron_ingot), new ItemStack(ConfigBlocks.blockTube), new ItemStack(ConfigBlocks.blockCustomPlant,1,1), new ItemStack(ConfigBlocks.blockTube), new ItemStack(Items.iron_ingot) });
 
+		infusionAspects = new AspectList().add(Aspect.TAINT, 32).add(Aspect.EXCHANGE, 8);
+		registerInfusionRecipe("TERRAFORMFOCUS_TAINT","",new ItemStack(WGContent.BlockMetalDevice,1,8),3,infusionAspects,new ItemStack(ConfigBlocks.blockTaint,1,0),new ItemStack[] {new ItemStack(ConfigItems.itemShard,1,6),new ItemStack(Items.iron_ingot),new ItemStack(Items.iron_ingot),new ItemStack(ConfigBlocks.blockTube,1,0),new ItemStack(Items.iron_ingot),new ItemStack(Items.iron_ingot)});
+		ThaumcraftApi.addWarpToItem(new ItemStack(WGContent.BlockMetalDevice,1,8), 2);
+
 		infusionAspects = new AspectList().add(Aspect.VOID, 8).add(Aspect.ELDRITCH, 4).add(Aspect.MAGIC, 4);
 		registerInfusionRecipe("ENDERBAG","",new ItemStack(WGContent.ItemBag,1,2),3,infusionAspects,new ItemStack(WGContent.ItemBag,1,0),new ItemStack[] {new ItemStack(Blocks.ender_chest), new ItemStack(WGContent.ItemMaterial,1,3), new ItemStack(WGContent.ItemMaterial,1,5), new ItemStack(Items.ender_eye), new ItemStack(WGContent.ItemMaterial,1,5), new ItemStack(WGContent.ItemMaterial,1,3)});
 
@@ -210,19 +217,15 @@ public class WGResearch
 
 		infusionAspects = new AspectList().add(Aspect.MAGIC,32).add(Aspect.CRYSTAL,16).add(Aspect.TOOL,8).add(Aspect.AIR,8).add(Aspect.FIRE,8).add(Aspect.WATER,8).add(Aspect.EARTH,8).add(Aspect.ORDER,8).add(Aspect.ENTROPY,8);
 		registerInfusionRecipe("PRIMORDIALGLOVE","",new ItemStack(WGContent.ItemPrimordialGlove),6,infusionAspects,new ItemStack(ConfigBlocks.blockStoneDevice,1,11),new ItemStack[] {new ItemStack(WGContent.ItemMaterial,1,5), new ItemStack(ConfigItems.itemResource,1,17), new ItemStack(ConfigItems.itemResource,1,16), new ItemStack(ConfigItems.itemEldritchObject,1,3), new ItemStack(ConfigItems.itemResource,1,16), new ItemStack(ConfigItems.itemResource,1,17) });
-		//ThaumcraftApi.addWarpToItem(new ItemStack(WGContent.ItemPrimordialGlove), 1);
 
 		infusionAspects = new AspectList().add(Aspect.MAGIC,64).add(Aspect.METAL,128).add(Aspect.WEAPON,64).add(Aspect.AIR,32).add(Aspect.FIRE,32).add(Aspect.WATER,32).add(Aspect.EARTH,32).add(Aspect.ORDER,32).add(Aspect.ENTROPY,32);
 		registerInfusionRecipe("PRIMORDIALWEAPONRY","_CLAYMORE",new ItemStack(WGContent.ItemPrimordialSword),10,infusionAspects,new ItemStack(WGContent.BlockMetalDevice,1,7),new ItemStack[] {new ItemStack(ConfigItems.itemWispEssence), new ItemStack(ConfigItems.itemSwordVoid), new ItemStack(ConfigItems.itemWispEssence), new ItemStack(ConfigItems.itemEldritchObject,1,3), new ItemStack(ConfigItems.itemWispEssence), new ItemStack(ConfigItems.itemResource,1,15), new ItemStack(ConfigItems.itemWandRod,1,0), new ItemStack(ConfigItems.itemResource,1,15), new ItemStack(ConfigItems.itemWispEssence), new ItemStack(ConfigItems.itemEldritchObject,1,3), new ItemStack(ConfigItems.itemWispEssence),new ItemStack(ConfigItems.itemSwordVoid) });
-		//ThaumcraftApi.addWarpToItem(new ItemStack(WGContent.ItemPrimordialSword), 2);
 
 		infusionAspects = new AspectList().add(Aspect.MAGIC,64).add(Aspect.METAL,128).add(Aspect.TOOL,32).add(Aspect.WEAPON,32).add(Aspect.AIR,32).add(Aspect.FIRE,32).add(Aspect.WATER,32).add(Aspect.EARTH,32).add(Aspect.ORDER,32).add(Aspect.ENTROPY,32);
 		registerInfusionRecipe("PRIMORDIALWEAPONRY","_HAMMER",new ItemStack(WGContent.ItemPrimordialHammer),10,infusionAspects,new ItemStack(WGContent.BlockMetalDevice,1,7),new ItemStack[] {new ItemStack(ConfigItems.itemWispEssence), new ItemStack(ConfigItems.itemPickVoid), new ItemStack(ConfigItems.itemWispEssence), new ItemStack(ConfigItems.itemEldritchObject,1,3), new ItemStack(ConfigItems.itemWispEssence), new ItemStack(ConfigItems.itemResource,1,15), new ItemStack(ConfigItems.itemWandRod,1,0), new ItemStack(ConfigItems.itemResource,1,15), new ItemStack(ConfigItems.itemWispEssence), new ItemStack(ConfigItems.itemEldritchObject,1,3), new ItemStack(ConfigItems.itemWispEssence),new ItemStack(ConfigItems.itemSwordVoid) });
-		//ThaumcraftApi.addWarpToItem(new ItemStack(WGContent.ItemPrimordialHammer), 2);
 
 		infusionAspects = new AspectList().add(Aspect.MAGIC,64).add(Aspect.METAL,128).add(Aspect.TOOL,32).add(Aspect.WEAPON,32).add(Aspect.AIR,32).add(Aspect.FIRE,32).add(Aspect.WATER,32).add(Aspect.EARTH,32).add(Aspect.ORDER,32).add(Aspect.ENTROPY,32);
 		registerInfusionRecipe("PRIMORDIALWEAPONRY","_GREATAXE",new ItemStack(WGContent.ItemPrimordialAxe),10,infusionAspects,new ItemStack(WGContent.BlockMetalDevice,1,7),new ItemStack[] {new ItemStack(ConfigItems.itemWispEssence), new ItemStack(ConfigItems.itemAxeVoid), new ItemStack(ConfigItems.itemWispEssence), new ItemStack(ConfigItems.itemEldritchObject,1,3), new ItemStack(ConfigItems.itemWispEssence), new ItemStack(ConfigItems.itemResource,1,15), new ItemStack(ConfigItems.itemWandRod,1,0), new ItemStack(ConfigItems.itemResource,1,15), new ItemStack(ConfigItems.itemWispEssence), new ItemStack(ConfigItems.itemEldritchObject,1,3), new ItemStack(ConfigItems.itemWispEssence),new ItemStack(ConfigItems.itemAxeVoid) });
-		//ThaumcraftApi.addWarpToItem(new ItemStack(WGContent.ItemPrimordialAxe), 2);
 
 
 
@@ -637,18 +640,24 @@ public class WGResearch
 		pages = new ResearchPage[]{ new ResearchPage("witchinggadgets_research_page.TERRAFORMER.1"), new ResearchPage((InfusionRecipe) recipeList.get("TERRAFORMER")), new ResearchPage("witchinggadgets_research_page.TERRAFORMER.2"), new ResearchPage((IArcaneRecipe) recipeList.get("TERRAFORMER_PLAINS"))};
 		getResearchItem("TERRAFORMER", "WITCHGADG", researchAspects, 6, -7, 2, new ItemStack(WGContent.BlockMetalDevice,1,1)).setPages(pages).setParents("WGFAKECENTRIFUGE").registerResearchItem();
 
-		researchAspects = new AspectList().add(Aspect.COLD,4).add(Aspect.ORDER,4).add(Aspect.EXCHANGE, 2).add(Aspect.ENERGY, 1);
+		researchAspects = new AspectList().add(Aspect.COLD,8).add(Aspect.ORDER,4).add(Aspect.EXCHANGE, 2).add(Aspect.ENERGY, 1);
 		pages = new ResearchPage[]{ new ResearchPage("witchinggadgets_research_page.TERRAFORMFOCUS_COLDTAIGA.1"), new ResearchPage((IArcaneRecipe) recipeList.get("TERRAFORMFOCUS_COLDTAIGA"))};
 		getResearchItem("TERRAFORMFOCUS_COLDTAIGA", "WITCHGADG", researchAspects, 6, -9, 2, new ItemStack(WGContent.BlockMetalDevice,1,3)).setSecondary().setPages(pages).setParents("TERRAFORMER").registerResearchItem();
-		researchAspects = new AspectList().add(Aspect.FIRE,4).add(Aspect.ENTROPY,4).add(Aspect.EXCHANGE, 2).add(Aspect.ENERGY, 1);
+		researchAspects = new AspectList().add(Aspect.FIRE,4).add(Aspect.ENTROPY,8).add(Aspect.EXCHANGE, 2).add(Aspect.ENERGY, 1);
 		pages = new ResearchPage[]{ new ResearchPage("witchinggadgets_research_page.TERRAFORMFOCUS_DESERT.1"), new ResearchPage((IArcaneRecipe) recipeList.get("TERRAFORMFOCUS_DESERT"))};
 		getResearchItem("TERRAFORMFOCUS_DESERT", "WITCHGADG", researchAspects, 5, -8, 2, new ItemStack(WGContent.BlockMetalDevice,1,4)).setSecondary().setPages(pages).setParents("TERRAFORMER").registerResearchItem();
-		researchAspects = new AspectList().add(Aspect.TREE,4).add(Aspect.PLANT,4).add(Aspect.EXCHANGE, 2).add(Aspect.ENERGY, 1);
+		researchAspects = new AspectList().add(Aspect.TREE,8).add(Aspect.PLANT,4).add(Aspect.EXCHANGE, 2).add(Aspect.ENERGY, 1);
 		pages = new ResearchPage[]{ new ResearchPage("witchinggadgets_research_page.TERRAFORMFOCUS_JUNGLE.1"), new ResearchPage((IArcaneRecipe) recipeList.get("TERRAFORMFOCUS_JUNGLE"))};
 		getResearchItem("TERRAFORMFOCUS_JUNGLE", "WITCHGADG", researchAspects, 7, -9, 2, new ItemStack(WGContent.BlockMetalDevice,1,5)).setSecondary().setPages(pages).setParents("TERRAFORMER").registerResearchItem();
-		researchAspects = new AspectList().add(Aspect.DARKNESS,4).add(Aspect.FIRE,4).add(Aspect.EXCHANGE, 2).add(Aspect.ENERGY, 1);
+		researchAspects = new AspectList().add(Aspect.DARKNESS,8).add(Aspect.FIRE,4).add(Aspect.EXCHANGE, 2).add(Aspect.ENERGY, 1);
 		pages = new ResearchPage[]{ new ResearchPage("witchinggadgets_research_page.TERRAFORMFOCUS_HELL.1"), new ResearchPage((IArcaneRecipe) recipeList.get("TERRAFORMFOCUS_HELL"))};
-		getResearchItem("TERRAFORMFOCUS_HELL", "WITCHGADG", researchAspects, 8, -8, 2, new ItemStack(WGContent.BlockMetalDevice,1,6)).addWarp(2).setSecondary().setPages(pages).setParents("TERRAFORMER").registerResearchItem();
+		getResearchItem("TERRAFORMFOCUS_HELL", "WITCHGADG", researchAspects, 8, -9, 2, new ItemStack(WGContent.BlockMetalDevice,1,6)).addWarp(2).setSecondary().setPages(pages).setParents("TERRAFORMER").registerResearchItem();
+		researchAspects = new AspectList().add(Aspect.PLANT,8).add(Aspect.EARTH,4).add(Aspect.EXCHANGE, 2).add(Aspect.ENERGY, 1);
+		pages = new ResearchPage[]{ new ResearchPage("witchinggadgets_research_page.TERRAFORMFOCUS_MUSHROOM.1"), new ResearchPage((IArcaneRecipe) recipeList.get("TERRAFORMFOCUS_MUSHROOM"))};
+		getResearchItem("TERRAFORMFOCUS_MUSHROOM", "WITCHGADG", researchAspects, 9, -8, 2, new ItemStack(WGContent.BlockMetalDevice,1,9)).setSecondary().setPages(pages).setParents("TERRAFORMER").registerResearchItem();
+		researchAspects = new AspectList().add(Aspect.TAINT,8).add(Aspect.MAGIC,4).add(Aspect.EXCHANGE, 2).add(Aspect.ENERGY, 1);
+		pages = new ResearchPage[]{ new ResearchPage("witchinggadgets_research_page.TERRAFORMFOCUS_TAINT.1"), new ResearchPage((InfusionRecipe) recipeList.get("TERRAFORMFOCUS_TAINT"))};
+		getResearchItem("TERRAFORMFOCUS_TAINT", "WITCHGADG", researchAspects, 9, -7, 2, new ItemStack(WGContent.BlockMetalDevice,1,8)).addWarp(3).setSecondary().setPages(pages).setParents("TERRAFORMER").registerResearchItem();
 
 
 		//GEMCUTTING

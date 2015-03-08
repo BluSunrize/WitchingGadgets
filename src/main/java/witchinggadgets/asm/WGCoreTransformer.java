@@ -41,30 +41,31 @@ import baubles.api.BaublesApi;
 
 public class WGCoreTransformer implements IClassTransformer
 {
+	static boolean isDeobfEnvironment;
 	@Override
 	public byte[] transform(String className, String newClassName, byte[] origCode)
 	{
-		boolean deobf = (Boolean)Launch.blackboard.get("fml.deobfuscatedEnvironment");
+		isDeobfEnvironment = (Boolean)Launch.blackboard.get("fml.deobfuscatedEnvironment");
 		if (className.equals("thaumcraft.common.items.armor.ItemBootsTraveller"))
-			return patchBoots(className, origCode, deobf);
+			return patchBoots(className, origCode, isDeobfEnvironment);
 		if (className.equals("thaumcraft.common.items.wands.ItemFocusPouchBauble"))
 		{
 			byte[] newCode = patchFocusPouch_Interface(className, origCode);
-			return patchFocusPouch_Methods(className, newCode);
+			return patchFocusPouch_Methods(className, newCode,isDeobfEnvironment);
 		}
 		if (className.equals("thaumcraft.common.lib.world.WorldGenEldritchRing"))
-			return patchThaumcraftWorldgen(origCode, deobf, "EldritchRing");
+			return patchThaumcraftWorldgen(origCode, isDeobfEnvironment, "EldritchRing");
 		if (className.equals("thaumcraft.common.lib.world.WorldGenHilltopStones"))
-			return patchThaumcraftWorldgen(origCode, deobf, "HilltopStones");
-		
-		if(className.equals(deobf?"net.minecraft.enchantment.EnchantmentHelper":"a"))
+			return patchThaumcraftWorldgen(origCode, isDeobfEnvironment, "HilltopStones");
+
+		if(className.equals(isDeobfEnvironment?"net.minecraft.enchantment.EnchantmentHelper":"afv"))
 		{
-			byte[] newCode = patchGetFortuneModifier(origCode, deobf);
+			byte[] newCode = patchGetFortuneModifier(origCode, isDeobfEnvironment);
 			return newCode;
 		}
-		if(className.equals(deobf?"net.minecraft.entity.EntityLivingBase":"sv"))
+		if(className.equals(isDeobfEnvironment?"net.minecraft.entity.EntityLivingBase":"sv"))
 		{
-			byte[] newCode = patchOnNewPotionEffect(origCode, deobf);
+			byte[] newCode = patchOnNewPotionEffect(origCode, isDeobfEnvironment);
 			return newCode;
 		}
 
@@ -77,17 +78,18 @@ public class WGCoreTransformer implements IClassTransformer
 		WitchingGadgets.logger.log(Level.INFO, "[CORE] Patching Boots");
 
 		final String methodToPatch = "getIsRepairable";
-		final String methodToPatch_obf = "func_82789_a";
+		final String methodToPatch_obf = "a";
 		String name = deobf?methodToPatch:methodToPatch_obf;
+		String desc = deobf?"(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z":"(Ladd;Ladd;)Z";
 
 		ClassReader cr = new ClassReader(origCode);
 		ClassWriter cw = new ClassWriter(cr, 0);
 
-		MethodVisitor mv = cw.visitMethod(Opcodes.ACC_PUBLIC, name, "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z", null, null);
+		MethodVisitor mv = cw.visitMethod(Opcodes.ACC_PUBLIC, name, desc, null, null);
 		mv.visitCode();
 		mv.visitVarInsn(Opcodes.ALOAD, 1);
 		mv.visitVarInsn(Opcodes.ALOAD, 2);
-		mv.visitMethodInsn(Opcodes.INVOKESTATIC, "witchinggadgets/asm/WGCoreTransformer", "boots_getIsRepairable", "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z", false);
+		mv.visitMethodInsn(Opcodes.INVOKESTATIC, "witchinggadgets/asm/WGCoreTransformer", "boots_getIsRepairable", desc, false);
 		mv.visitInsn(Opcodes.IRETURN);
 		mv.visitMaxs(2, 1);
 		mv.visitEnd();
@@ -122,14 +124,15 @@ public class WGCoreTransformer implements IClassTransformer
 
 		return cw.toByteArray();
 	}
-	private byte[] patchFocusPouch_Methods(String className, byte[] origCode)
+	private byte[] patchFocusPouch_Methods(String className, byte[] origCode, boolean deobf)
 	{
 		WitchingGadgets.logger.log(Level.INFO, "[CORE] Patching Pouch - Methods");
 		final String methodToPatch1 = "canActivate";
 		ClassReader cr = new ClassReader(origCode);
 		ClassWriter cw = new ClassWriter(cr, 0);
+		String desc1 = deobf?"(Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/item/ItemStack;Z)Z":"(Lyz;Ladd;Z)Z";
 
-		MethodVisitor mv = cw.visitMethod(Opcodes.ACC_PUBLIC,methodToPatch1, "(Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/item/ItemStack;Z)Z", null, null);
+		MethodVisitor mv = cw.visitMethod(Opcodes.ACC_PUBLIC,methodToPatch1, desc1, null, null);
 		mv.visitCode();
 		mv.visitFieldInsn(Opcodes.GETSTATIC, "witchinggadgets/common/WGConfig", "coremod_allowFocusPouchActive", "Z");
 		mv.visitInsn(Opcodes.IRETURN);
@@ -137,11 +140,12 @@ public class WGCoreTransformer implements IClassTransformer
 		mv.visitEnd();
 
 		final String methodToPatch2 = "activate";
-		mv = cw.visitMethod(Opcodes.ACC_PUBLIC,methodToPatch2, "(Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/item/ItemStack;)V", null, null);
+		String desc2 = deobf?"(Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/item/ItemStack;)V":"(Lyz;Ladd;)V";
+		mv = cw.visitMethod(Opcodes.ACC_PUBLIC,methodToPatch2, desc2, null, null);
 		mv.visitCode();
 		mv.visitVarInsn(Opcodes.ALOAD, 1);
 		mv.visitVarInsn(Opcodes.ALOAD, 2);
-		mv.visitMethodInsn(Opcodes.INVOKESTATIC, "witchinggadgets/asm/WGCoreTransformer", "pouch_activate", "(Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/item/ItemStack;)V", false);
+		mv.visitMethodInsn(Opcodes.INVOKESTATIC, "witchinggadgets/asm/WGCoreTransformer", "pouch_activate", desc2, false);
 		mv.visitInsn(Opcodes.RETURN);
 		mv.visitMaxs(2, 1);
 		mv.visitEnd();
@@ -159,15 +163,15 @@ public class WGCoreTransformer implements IClassTransformer
 
 	private byte[] patchGetFortuneModifier(byte[] origCode, boolean deobf)
 	{
-		WitchingGadgets.logger.log(Level.INFO, "[CORE] Patching getEnchantmentLevel");
+		WitchingGadgets.logger.log(Level.INFO, "[CORE] Patching getFortuneModifier & getLootingModifier");
 
 		final String methodToPatch1 = "getFortuneModifier";
-		final String methodToPatch_obf1 = "func_77517_e";
-		final String desc = "(Lnet/minecraft/entity/EntityLivingBase;)I";
+		final String methodToPatch_obf1 = "f";
+		final String desc = "(Lsv;)I";
 		String name1 = deobf?methodToPatch1:methodToPatch_obf1;
 
 		final String methodToPatch2 = "getLootingModifier";
-		final String methodToPatch_obf2 = "func_77519_f";
+		final String methodToPatch_obf2 = "i";
 		String name2 = deobf?methodToPatch2:methodToPatch_obf2;
 
 
@@ -177,6 +181,7 @@ public class WGCoreTransformer implements IClassTransformer
 		cr.accept(classNode, 0);
 
 		for(MethodNode methodNode : classNode.methods)
+		{
 			if(methodNode.name.equals(name1) && methodNode.desc.equals(desc))
 			{
 				Iterator<AbstractInsnNode> insnNodes=methodNode.instructions.iterator();
@@ -215,6 +220,7 @@ public class WGCoreTransformer implements IClassTransformer
 					}
 				}
 			}
+		}
 		ClassWriter cw=new ClassWriter(ClassWriter.COMPUTE_MAXS);
 		classNode.accept(cw);
 
@@ -256,8 +262,9 @@ public class WGCoreTransformer implements IClassTransformer
 		WitchingGadgets.logger.log(Level.INFO, "[CORE] Patching onNewPotionEffect");
 
 		final String methodToPatch = "onNewPotionEffect";
-		final String methodToPatch_obf = "func_70670_a";
-		final String desc = "(Lnet/minecraft/potion/PotionEffect;)V";
+		final String methodToPatch_obf = "a";
+		final String desc1 = deobf?"(Lnet/minecraft/potion/PotionEffect;)V":"(Lrw;)V";
+		final String desc2 = deobf?"(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/potion/PotionEffect;)V":"(Lsv;Lrw;)V";
 		String name1 = deobf?methodToPatch:methodToPatch_obf;
 
 		ClassReader cr = new ClassReader(origCode);
@@ -265,7 +272,7 @@ public class WGCoreTransformer implements IClassTransformer
 		ClassNode classNode=new ClassNode();
 		cr.accept(classNode, 0);
 		for(MethodNode methodNode : classNode.methods)
-			if(methodNode.name.equals(name1) && methodNode.desc.equals(desc))
+			if(methodNode.name.equals(name1) && methodNode.desc.equals(desc1))
 			{
 				Iterator<AbstractInsnNode> insnNodes=methodNode.instructions.iterator();
 				while(insnNodes.hasNext())
@@ -280,7 +287,7 @@ public class WGCoreTransformer implements IClassTransformer
 						InsnList endList=new InsnList();
 						endList.add(new VarInsnNode(Opcodes.ALOAD, 0));
 						endList.add(new VarInsnNode(Opcodes.ALOAD, 1));
-						endList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "witchinggadgets/asm/WGCoreTransformer", "living_onPotionApplied", "(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/potion/PotionEffect;)V", false));
+						endList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "witchinggadgets/asm/WGCoreTransformer", "living_onPotionApplied", desc2, false));
 						methodNode.instructions.insertBefore(insn, endList);
 					}
 				}
@@ -315,11 +322,11 @@ public class WGCoreTransformer implements IClassTransformer
 
 				try{
 					if(f_potionAmplifier==null)
-						f_potionAmplifier = PotionEffect.class.getDeclaredField("amplifier");
+						f_potionAmplifier = PotionEffect.class.getDeclaredField(isDeobfEnvironment?"amplifier":"c");
 					if(!f_potionAmplifier.isAccessible())
 						f_potionAmplifier.setAccessible(true);
 					if(f_potionDuration==null)
-						f_potionDuration = PotionEffect.class.getDeclaredField("duration");
+						f_potionDuration = PotionEffect.class.getDeclaredField(isDeobfEnvironment?"duration":"b");
 					if(!f_potionDuration.isAccessible())
 						f_potionDuration.setAccessible(true);
 
@@ -339,15 +346,15 @@ public class WGCoreTransformer implements IClassTransformer
 			}
 		}
 	}
-	
-	
-	
+
+
+
 	private byte[] patchThaumcraftWorldgen(byte[] origCode, boolean deobf, String ident)
 	{
 		WitchingGadgets.logger.log(Level.INFO, "[CORE] Patching Thaumcraft's Worldgen");
 
 		final String methodToPatch = "GetValidSpawnBlocks";
-		final String desc = "()[Lnet/minecraft/block/Block;";
+		final String desc = deobf?"()[Lnet/minecraft/block/Block;":"()[Laji;";
 
 		ClassReader cr = new ClassReader(origCode);
 
@@ -370,15 +377,7 @@ public class WGCoreTransformer implements IClassTransformer
 			}
 		ClassWriter cw=new ClassWriter(ClassWriter.COMPUTE_MAXS);
 		classNode.accept(cw);
-		
-//		MethodVisitor mv = cw.visitMethod(Opcodes.ACC_PROTECTED, methodToPatch, desc, null, null);
-//		mv.visitCode();
-//		mv.visitMethodInsn(Opcodes.INVOKESTATIC, "witchinggadgets/asm/WGCoreTransformer", "worldGen_getValid"+ident, desc, false);
-//		mv.visitInsn(Opcodes.ARETURN);
-//		mv.visitMaxs(0, 1);
-//		mv.visitEnd();
-//
-//		cr.accept(cw, 0);
+
 		return cw.toByteArray();	
 	}
 	public static Block[] worldGen_getValidHilltopStones()

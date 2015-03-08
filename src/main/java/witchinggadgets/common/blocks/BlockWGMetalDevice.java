@@ -21,6 +21,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.util.ForgeDirection;
 import thaumcraft.api.aspects.Aspect;
+import thaumcraft.common.config.ConfigBlocks;
+import thaumcraft.common.lib.world.ThaumcraftWorldGenerator;
 import witchinggadgets.WitchingGadgets;
 import witchinggadgets.api.ITerraformFocus;
 import witchinggadgets.client.render.BlockRenderMetalDevice;
@@ -32,7 +34,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockWGMetalDevice extends BlockContainer implements ITerraformFocus
 {
-	public static String[] subNames = {"essentiaPump","terraformer","tfFocusPlains","tfFocusColdTaiga","tfFocusDesert","tfFocusJungle","tfFocusHell","voidmetalBlock"};
+	public static String[] subNames = {"essentiaPump","terraformer","tfFocusPlains","tfFocusColdTaiga","tfFocusDesert","tfFocusJungle","tfFocusHell","voidmetalBlock","tfFocusTaint","tfFocusMushroom"};
 	IIcon[] icons = new IIcon[subNames.length];
 
 	public BlockWGMetalDevice()
@@ -59,7 +61,7 @@ public class BlockWGMetalDevice extends BlockContainer implements ITerraformFocu
 	{	
 		for(int i=0;i<icons.length;i++)
 		{
-			if(i<7)
+			if(i<7||i>7)
 				icons[i] = iconRegister.registerIcon("thaumcraft:metalbase");
 			else
 				icons[i] = iconRegister.registerIcon("witchinggadgets:"+subNames[i]);
@@ -123,7 +125,6 @@ public class BlockWGMetalDevice extends BlockContainer implements ITerraformFocu
 		if(world.getTileEntity(x, y, z) instanceof TileEntityEssentiaPump)
 		{
 			ForgeDirection fd = ((TileEntityEssentiaPump)world.getTileEntity(x, y, z)).facing;
-//			System.out.println(fd);
 			this.setBlockBounds(fd==ForgeDirection.EAST?.25f:0,fd==ForgeDirection.UP?.25f:0,fd==ForgeDirection.SOUTH?.25f:0, fd==ForgeDirection.WEST?.75f:1,fd==ForgeDirection.DOWN?.75f:1,fd==ForgeDirection.SOUTH?.75f:1);
 		}
 		else if(world.getBlockMetadata(x, y, z)>=2&&world.getBlockMetadata(x, y, z)<=6)
@@ -149,6 +150,9 @@ public class BlockWGMetalDevice extends BlockContainer implements ITerraformFocu
 			return new TileEntityTerraformFocus();
 		case 7:
 			return null;
+		case 8:
+		case 9:
+			return new TileEntityTerraformFocus();
 		}
 		return null;
 	}
@@ -201,6 +205,10 @@ public class BlockWGMetalDevice extends BlockContainer implements ITerraformFocu
 				return Aspect.TREE;
 			if(subNames[meta].equalsIgnoreCase("tfFocusHell"))
 				return Aspect.DARKNESS;
+			if(subNames[meta].equalsIgnoreCase("tfFocusTaint"))
+				return Aspect.TAINT;
+			if(subNames[meta].equalsIgnoreCase("tfFocusMushroom"))
+				return Aspect.SLIME;
 		}
 		return null;
 	}
@@ -220,6 +228,10 @@ public class BlockWGMetalDevice extends BlockContainer implements ITerraformFocu
 				return Aspect.TREE;
 			if(subNames[meta].equalsIgnoreCase("tfFocusHell"))
 				return Aspect.DARKNESS;
+			if(subNames[meta].equalsIgnoreCase("tfFocusTaint"))
+				return Aspect.TAINT;
+			if(subNames[meta].equalsIgnoreCase("tfFocusMushroom"))
+				return Aspect.SLIME;
 		}
 		return null;
 	}
@@ -240,6 +252,10 @@ public class BlockWGMetalDevice extends BlockContainer implements ITerraformFocu
 				return BiomeGenBase.jungle;
 			if(subNames[meta].equalsIgnoreCase("tfFocusHell"))
 				return BiomeGenBase.hell;
+			if(subNames[meta].equalsIgnoreCase("tfFocusTaint"))
+				return ThaumcraftWorldGenerator.biomeTaint;
+			if(subNames[meta].equalsIgnoreCase("tfFocusMushroom"))
+				return BiomeGenBase.mushroomIsland;
 		}
 		return null;
 	}
@@ -259,6 +275,10 @@ public class BlockWGMetalDevice extends BlockContainer implements ITerraformFocu
 				return new ItemStack(Blocks.log,1,3);
 			if(subNames[meta].equalsIgnoreCase("tfFocusHell"))
 				return new ItemStack(Blocks.nether_brick);
+			if(subNames[meta].equalsIgnoreCase("tfFocusTaint"))
+				return new ItemStack(ConfigBlocks.blockTaint);
+			if(subNames[meta].equalsIgnoreCase("tfFocusMushroom"))
+				return new ItemStack(Blocks.mycelium);
 		}
 		return null;
 	}

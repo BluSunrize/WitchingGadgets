@@ -218,37 +218,40 @@ public class ItemInfusedGem extends Item implements IInfusedGem
 				int z = (int) Math.floor(player.posZ);
 
 				String node = Utilities.findCloseNode(world, new ChunkCoordinates(x,y,z));
-				int nX = TileNode.locations.get(node).get(1);
-				int nY = TileNode.locations.get(node).get(2);
-				int nZ = TileNode.locations.get(node).get(3);
-
-				float fnX = nX+.5f;
-				float fnY = nY+.5f;
-				float fnZ = nZ+.5f;
-				double xOff = fnX - player.posX;
-				double zOff = fnZ - player.posZ;
-				double yOff = fnY - (player.posY + (double)player.getEyeHeight());
-				double d3 = (double)MathHelper.sqrt_double(xOff * xOff + zOff * zOff);
-				float yaw = (float)(Math.atan2(zOff, xOff) * 180.0D / Math.PI) - 90.0F;
-				float f3 = MathHelper.wrapAngleTo180_float(yaw - player.rotationYaw);
-				yaw = player.rotationYaw + f3;
-				float pitch = (float)(-(Math.atan2(yOff, d3) * 180.0D / Math.PI));
-				f3 = MathHelper.wrapAngleTo180_float(pitch - player.rotationPitch);
-				pitch = player.rotationPitch + f3;
-				player.rotationPitch = pitch;
-				player.rotationYaw = yaw;
-
-				if(world.isRemote)
+				if(TileNode.locations.get(node)!=null)
 				{
-					AspectList al = world.getTileEntity(nX,nY,nZ) instanceof TileNode? ((TileNode)world.getTileEntity(nX,nY,nZ)).getAspects(): new AspectList();
-					int col = 0xffffff;
-					for(Aspect a : al.getAspects())
-						if(a!=null)
-							col = ClientUtilities.blendColoursToInt(col, a.getColor());
-					double[] hand = ClientUtilities.getPlayerHandPos(player, true);
-					WitchingGadgets.proxy.createTargetedWispFx(player.worldObj, hand[0],hand[1],hand[2], fnX,fnY,fnZ, col, .5f, 0, true,true);
+					int nX = TileNode.locations.get(node).get(1);
+					int nY = TileNode.locations.get(node).get(2);
+					int nZ = TileNode.locations.get(node).get(3);
+
+					float fnX = nX+.5f;
+					float fnY = nY+.5f;
+					float fnZ = nZ+.5f;
+					double xOff = fnX - player.posX;
+					double zOff = fnZ - player.posZ;
+					double yOff = fnY - (player.posY + (double)player.getEyeHeight());
+					double d3 = (double)MathHelper.sqrt_double(xOff * xOff + zOff * zOff);
+					float yaw = (float)(Math.atan2(zOff, xOff) * 180.0D / Math.PI) - 90.0F;
+					float f3 = MathHelper.wrapAngleTo180_float(yaw - player.rotationYaw);
+					yaw = player.rotationYaw + f3;
+					float pitch = (float)(-(Math.atan2(yOff, d3) * 180.0D / Math.PI));
+					f3 = MathHelper.wrapAngleTo180_float(pitch - player.rotationPitch);
+					pitch = player.rotationPitch + f3;
+					player.rotationPitch = pitch;
+					player.rotationYaw = yaw;
+
+					if(world.isRemote)
+					{
+						AspectList al = world.getTileEntity(nX,nY,nZ) instanceof TileNode? ((TileNode)world.getTileEntity(nX,nY,nZ)).getAspects(): new AspectList();
+						int col = 0xffffff;
+						for(Aspect a : al.getAspects())
+							if(a!=null)
+								col = ClientUtilities.blendColoursToInt(col, a.getColor());
+						double[] hand = ClientUtilities.getPlayerHandPos(player, true);
+						WitchingGadgets.proxy.createTargetedWispFx(player.worldObj, hand[0],hand[1],hand[2], fnX,fnY,fnZ, col, .5f, 0, true,true);
+					}
+					dmg = true;
 				}
-				dmg = true;
 			}
 			if(aspect.equals(Aspect.ENTROPY))
 			{

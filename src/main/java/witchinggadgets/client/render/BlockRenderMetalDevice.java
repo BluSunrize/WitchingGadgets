@@ -52,7 +52,7 @@ public class BlockRenderMetalDevice implements ISimpleBlockRenderingHandler
 					GL11.glTranslatef(-.5f, -.5F, -.5f);
 					TileEntityRendererDispatcher.instance.renderTileEntityAt(new TileEntityTerraformer(), 0.0D, 0.0D, 0.0D, 0.0F);
 				}
-				else if(metadata>=2&&metadata<=6)
+				else if((metadata>=2&&metadata<=6)||metadata>7)
 				{
 					GL11.glTranslatef(-.5f, -.5F, -.5f);
 					TileEntityTerraformFocus tetf = new TileEntityTerraformFocus();

@@ -27,6 +27,8 @@ tile.WG_MetalDevice.tfFocusDesert.name=Terrestrial Focus: Desert
 tile.WG_MetalDevice.tfFocusJungle.name=Terrestrial Focus: Jungle
 tile.WG_MetalDevice.tfFocusHell.name=Terrestrial Focus: Hell
 tile.WG_MetalDevice.voidmetalBlock.name=Void metal Block
+tile.WG_MetalDevice.tfFocusTaint.name=Terrestrial Focus: Tainted Lands
+tile.WG_MetalDevice.tfFocusMushroom.name=Terrestrial Focus: Mushroom Island
 
 tile.WG_RoseVine.name=Rose Vines
 tile.WG_CustomAir.name=Glimmer of Light
@@ -396,6 +398,12 @@ witchinggadgets_research_page.TERRAFORMFOCUS_JUNGLE.1=The animal friendly thauma
 witchinggadgets_research_name.TERRAFORMFOCUS_HELL=Terrestrial Focus: Hell
 witchinggadgets_research_text.TERRAFORMFOCUS_HELL=[WG] Screw the Nether
 witchinggadgets_research_page.TERRAFORMFOCUS_HELL.1=Let's be honest. Even those driven mad by the warp in their head don't want to live in a place of lava and brimstone.<BR>...<BR>What?! You do?! Well suit yourself. Supply the focus with Tenebrae essentia and enjoy hell on earth.
+witchinggadgets_research_name.TERRAFORMFOCUS_MUSHROOM=Terrestrial Focus: Mushroom Island
+witchinggadgets_research_text.TERRAFORMFOCUS_MUSHROOM=[WG] Moooo-shroom!
+witchinggadgets_research_page.TERRAFORMFOCUS_MUSHROOM.1=The colors maybe offputting and the cows look funny, but with it's guaranteed monster-protection, Mushroom Islands make the ideal vacation spot. And now you can bring that feeling to your doorstep, simply by supplying this focus with §aLimus§0 essentia
+witchinggadgets_research_name.TERRAFORMFOCUS_TAINT=Terrestrial Focus: Tainted Lands
+witchinggadgets_research_text.TERRAFORMFOCUS_TAINT=[WG] Take my tears, and that's not nearly all!
+witchinggadgets_research_page.TERRAFORMFOCUS_TAINT.1=That's it. You pretty much qualify as insane by this point. Creating artificially tainted land? And not only with some bottled up taint, but full scale terraforming?<BR>Oh, you're doing it for research purposes? That's fine then. Simply supply this focus with some §5Vitium§0 essentia and go crazy.
 
 #MIRRORPUMP
 witchinggadgets_research_name.MIRRORPUMP=Essentia Pump

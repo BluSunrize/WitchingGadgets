@@ -5,6 +5,7 @@ import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraftforge.common.config.Configuration;
+import witchinggadgets.common.util.Utilities;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -21,14 +22,14 @@ public class WGConfig
 	public static boolean coremod_allowPotionApplicationMod;
 	public static Block[] coremod_worldgenValidBase_HilltopStones;
 	public static Block[] coremod_worldgenValidBase_EldritchRing;
-	
+
 	public static int smelteryResultForClusters;
 	public static float radialSpeed;
 
+	static Configuration config;
 	public static void loadConfig(FMLPreInitializationEvent event)
 	{
-		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
-
+		config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
 
 		// Random Config Options
@@ -43,7 +44,7 @@ public class WGConfig
 		coremod_allowFocusPouchActive = config.get("Other Options", "Allow FocusPouch active ability", true, "Dis-/enable the IActiveAbiltiy on the FocusPouch. With this enabled, TGs active ability menu will allow you to open the pouch.").getBoolean(true);
 		coremod_allowEnchantModifications = config.get("Other Options", "Allow Enchantment modifications", true, "Dis-/enable the modification of looting and fortune modifications with the Ring of the Covetous Coin").getBoolean(true);
 		coremod_allowPotionApplicationMod = config.get("Other Options", "Allow modifications to newly applied PotionEffects", true, "Dis-/enable the modification of newly applied PotionEffects. (Primordial Armor affects newly applied Warp Effects)").getBoolean(true);
-		
+
 		String[] cm_allowedSpawnblocks_HilltopStones = config.getStringList("Valid generation bases: HilltopStones", "Other", new String[]{"minecraft:stone","minecraft:sand","minecraft:packed_ice","minecraft:grass","minecraft:gravel","minecraft:dirt"}, "A list of valid blocks that Thaumcraft's hilltop stones can spawn upon");
 		Set<Block> validBlocks = new HashSet();
 		for(int ss=0; ss<cm_allowedSpawnblocks_HilltopStones.length; ss++)
@@ -57,7 +58,7 @@ public class WGConfig
 			}
 		}
 		coremod_worldgenValidBase_HilltopStones = validBlocks.toArray(new Block[0]);
-		
+
 		String[] cm_allowedSpawnblocks_EldritchRing = config.getStringList("Valid generation bases: EldritchRing", "Other", new String[]{"minecraft:stone","minecraft:sand","minecraft:packed_ice","minecraft:grass","minecraft:gravel","minecraft:dirt"}, "A list of valid blocks that Thaumcraft's eldritch obelisks can spawn upon");
 		validBlocks = new HashSet();
 		for(int ss=0; ss<cm_allowedSpawnblocks_EldritchRing.length; ss++)
@@ -71,7 +72,22 @@ public class WGConfig
 			}
 		}
 		coremod_worldgenValidBase_EldritchRing = validBlocks.toArray(new Block[0]);
-		
+
 		config.save();
+	}
+
+	public static int getPotionID(int base, String key)
+	{
+		config.load();
+		int i = config.get("Other Options", "Potion ID: "+key, Utilities.getNextPotionId(base)).getInt();
+		config.save();
+		return i;
+	}
+	public static int getEnchantmentID(int base, String key)
+	{
+		config.load();
+		int i = config.get("Other Options", "Enchantment ID: "+key, Utilities.getNextEnchantmentId(base)).getInt();
+		config.save();
+		return i;
 	}
 }
