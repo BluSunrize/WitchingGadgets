@@ -37,6 +37,7 @@ import thaumcraft.common.lib.utils.BlockUtils;
 import thaumcraft.common.lib.utils.EntityUtils;
 import witchinggadgets.client.ClientProxy;
 import witchinggadgets.client.ClientUtilities;
+import witchinggadgets.common.util.Utilities;
 
 public class ItemRenderScanCamera implements IItemRenderer
 {
@@ -410,16 +411,7 @@ public class ItemRenderScanCamera implements IItemRenderer
 			}
 			if (p.worldObj.getBlock(mop.blockX, mop.blockY, mop.blockZ) != null)
 			{
-				ItemStack is = null;
-				try{
-					p.worldObj.getBlock(mop.blockX, mop.blockY, mop.blockZ).getPickBlock(mop, p.worldObj, mop.blockX, mop.blockY, mop.blockZ,p);
-				}catch(Exception e)
-				{}
-				if(is==null)
-					try{
-						p.worldObj.getBlock(mop.blockX, mop.blockY, mop.blockZ).getPickBlock(mop, p.worldObj, mop.blockX, mop.blockY, mop.blockZ);
-					}catch(Exception e)
-					{}
+				ItemStack is = Utilities.getPickedBlock(p.worldObj, mop.blockX, mop.blockY, mop.blockZ);
 
 				ScanResult sr = null;
 				int md = p.worldObj.getBlockMetadata(mop.blockX, mop.blockY, mop.blockZ);

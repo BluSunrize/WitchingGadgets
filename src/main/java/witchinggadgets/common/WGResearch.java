@@ -3,7 +3,9 @@ package witchinggadgets.common;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Blocks;
@@ -326,6 +328,13 @@ public class WGResearch
 						alchemyAspects = new AspectList();
 					alchemyAspects.remove(Aspect.METAL);
 					alchemyAspects.add(Aspect.METAL, 2);
+					Iterator<Entry<Aspect,Integer>> it = alchemyAspects.aspects.entrySet().iterator();
+					while(it.hasNext())
+					{
+						Entry<Aspect,Integer> e = it.next();
+						if(e.getKey()==null||e.getValue()==null)
+							it.remove();
+					}
 					ItemStack nuggets = Utilities.copyStackWithSize(OreDictionary.getOres("nugget"+ItemClusters.subNames[iOre]).get(0), 3);
 					registerAlchemyRecipe("METALLURGICPERFECTION_TRANSMUTATION","_"+ItemClusters.subNames[iOre], nuggets, "nugget"+ItemClusters.subNames[iOre], alchemyAspects);
 				}

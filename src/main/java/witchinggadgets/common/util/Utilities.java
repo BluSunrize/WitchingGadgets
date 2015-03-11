@@ -12,6 +12,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
@@ -388,18 +390,30 @@ public class Utilities
 				return true;
 		return false;
 	}
-	
+
+	public static ItemStack getPickedBlock(World world, int x, int y, int z)
+	{
+		if(world.getBlock(x, y, z)==null)
+			return null;
+		Item item = Item.getItemFromBlock(world.getBlock(x, y, z));
+		if (item == null)
+			return null;
+
+		Block block = item instanceof ItemBlock && !world.getBlock(x, y, z).isFlowerPot() ? Block.getBlockFromItem(item) : world.getBlock(x, y, z);
+		return new ItemStack(item, 1, block.getDamageValue(world, x, y, z));
+	}
+
 	public static class OreDictStack
 	{
 		public final String key;
 		public final int amount;
-		
+
 		public OreDictStack(String key, int amount)
 		{
 			this.key=key;
 			this.amount=amount;
 		}
-		
+
 		public boolean matches(ItemStack stack)
 		{
 			return Utilities.compareToOreName(stack, key) && stack.stackSize>=amount;

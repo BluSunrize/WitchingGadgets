@@ -106,16 +106,7 @@ public class ItemScanCamera extends Item {
 			{
 				int bi = Block.getIdFromBlock(p.worldObj.getBlock(mop.blockX, mop.blockY, mop.blockZ));
 				int md = b.getDamageValue(world, mop.blockX, mop.blockY, mop.blockZ);
-				ItemStack is = null;
-				try{
-					b.getPickBlock(mop, p.worldObj, mop.blockX, mop.blockY, mop.blockZ, p);
-				}catch(Exception e)
-				{}
-				if(is==null)
-				try{
-					b.getPickBlock(mop, p.worldObj, mop.blockX, mop.blockY, mop.blockZ);
-				}catch(Exception e)
-				{}
+				ItemStack is = Utilities.getPickedBlock(world, mop.blockX, mop.blockY, mop.blockZ);
 
 				ScanResult sr = null;
 				try
