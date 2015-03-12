@@ -25,7 +25,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemBag extends Item
 {
-	String[] subNames = {"normal","void","ender"};
+	String[] subNames = {"normal","void","ender","hungry"};
 	IIcon[] overlayIcons = new IIcon[subNames.length];
 
 	public ItemBag()
@@ -38,7 +38,7 @@ public class ItemBag extends Item
 
 	public static int getDefaultBagColour(int meta)
 	{
-		return meta==1?0x484848: meta==2?0x2d4741: 0x8a74bd;
+		return meta==1?0x484848: meta==2?0x2d4741: meta==3?0x855172: 0x8a74bd;
 	}
 	@Override
 	public int getColorFromItemStack(ItemStack stack, int pass)
@@ -110,19 +110,6 @@ public class ItemBag extends Item
 	@Override
 	public void onUpdate(ItemStack stack, World world, Entity entity, int par4, boolean par5)
 	{
-		if(!stack.hasTagCompound())
-		{
-			stack.setTagCompound(new NBTTagCompound());		
-		}
-		if(!stack.getTagCompound().hasKey("Inventory"))
-		{
-			NBTTagList inv = new NBTTagList();
-			stack.setTagInfo("Inventory", inv);
-		}
-		if(!stack.getTagCompound().hasKey("Owner") && entity instanceof EntityPlayer)
-		{
-			stack.getTagCompound().setString("Owner", ((EntityPlayer)entity).getCommandSenderName());
-		}
 		super.onUpdate(stack, world, entity, par4, par5);
 	}
 
@@ -137,9 +124,14 @@ public class ItemBag extends Item
 	{
 		if(!world.isRemote)
 		{
-			if(stack.hasTagCompound())
+			if(!stack.hasTagCompound())
+				stack.setTagCompound(new NBTTagCompound());		
+			if(!stack.getTagCompound().hasKey("Owner"))
+				stack.getTagCompound().setString("Owner", player.getCommandSenderName());
+
+			if((stack.getItemDamage()==0||stack.getItemDamage()==3) && stack.hasTagCompound())
 			{
-				if(!stack.getTagCompound().getBoolean("unlocked") && !stack.getTagCompound().getString("Owner").equalsIgnoreCase(player.getCommandSenderName()))
+				if(!player.capabilities.isCreativeMode && !stack.getTagCompound().getBoolean("unlocked") && !stack.getTagCompound().getString("Owner").equalsIgnoreCase(player.getCommandSenderName()))
 				{
 					player.attackEntityFrom(DamageSource.magic, 4f);
 					player.dropOneItem(true);
@@ -154,7 +146,7 @@ public class ItemBag extends Item
 				}
 			}
 
-			if(stack.getItemDamage()==0)
+			if(stack.getItemDamage()==0 || stack.getItemDamage()==3)
 				player.openGui(WitchingGadgets.instance, 3, world, MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posY), MathHelper.floor_double(player.posZ));
 			else if(stack.getItemDamage()==1)
 				player.openGui(WitchingGadgets.instance, 11, world, MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posY), MathHelper.floor_double(player.posZ));

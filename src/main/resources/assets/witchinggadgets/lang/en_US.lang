@@ -60,6 +60,7 @@ item.WG_Cluster.name=Cluster
 item.WG_Bag.normal.name=Bag of Tricks
 item.WG_Bag.void.name=Voidlinked Bag
 item.WG_Bag.ender.name=Enderlinked Bag
+item.WG_Bag.hungry.name=Hungry Bag
 
 item.WG_ThaumiumShears.name=Thaumium Shears
 item.WG_MagicFood.sweetwart.name=Sweetwart
@@ -248,7 +249,7 @@ witchinggadgets_research_page.THAUMICAPPLICATOR.1=
 witchinggadgets_research_name.SPINNINGWHEEL=Spinning
 witchinggadgets_research_text.SPINNINGWHEEL=[WG] Don't prick yourself
 witchinggadgets_research_page.SPINNINGWHEEL.1=While many great Wizards neglect the practice of spinning and weaving, many of them do that by underestimating its true power. A number of magical artifacts are the product of clothwork, including every thaumaturge's robes. Some witches will testify that spellcrafting in itself even has a lot in common with weaving, requiring careful handling of the respective components; be it raw magic in its aspects or thread.
-witchinggadgets_research_page.SPINNINGWHEEL.2=             §lCrafting§r<LINE>Every practitioners start into the field should be made by creating their very own §lSpinning Wheel§r. It will be used if in aquiring yarn, be it mundane, of exquisite material or some enhanced with magic. This yarn will then later be used to weave the fabric from which to craft various garments or magic artifacts. See the §lLoom§r for further details.
+witchinggadgets_research_page.SPINNINGWHEEL.2=Every practitioners start into the field should be made by creating their very own §lSpinning Wheel§r. It will be used if in aquiring yarn, be it mundane, of exquisite material or some enhanced with magic. This yarn will then later be used to weave the fabric from which to craft various garments or magic artifacts-
 witchinggadgets_research_page.SPINNINGWHEEL.r1=<IMG>witchinggadgets:textures/gui/research/spinningRecipes1.png:0:0:255:255:0.5</IMG>§lYarn§r
 witchinggadgets_research_page.SPINNINGWHEEL.r2=<IMG>witchinggadgets:textures/gui/research/spinningRecipes2.png:0:0:255:255:0.5</IMG>§lGolden Thread§r
 witchinggadgets_research_page.SPINNINGWHEEL.r3=<IMG>witchinggadgets:textures/gui/research/spinningRecipes3.png:0:0:255:255:0.5</IMG>§lThaumium Thread§r
@@ -314,6 +315,10 @@ witchinggadgets_research_page.CLOAK_WOLF.1=The old tales tell of the berserkers,
 witchinggadgets_research_name.ENDERBAG=Enderlinked Bag
 witchinggadgets_research_text.ENDERBAG=[WG] Everywhere and nowhere at once!
 witchinggadgets_research_page.ENDERBAG.1=By attuning your Bag of Tricks to the enderic frequencies of your personal Ender Chest, you now have access to its contents from anywhere in the world.<BR>Don't try to turn it inside out.
+#
+witchinggadgets_research_name.HUNGERBAG=Hungry Bag
+witchinggadgets_research_text.HUNGERBAG=[WG] Om nom nom nom
+witchinggadgets_research_page.HUNGERBAG.1=Combining the portability of the Bag of Tricks with the inquenchable appetite of the Hungry Chest makes for a bag which will automatically store items in it as you pick them up.
 #
 witchinggadgets_research_name.WGBAUBLES=Witching Wearables
 witchinggadgets_research_text.WGBAUBLES=[WG] It's like a magic boutique

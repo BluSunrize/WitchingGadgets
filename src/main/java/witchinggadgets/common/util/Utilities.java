@@ -399,7 +399,7 @@ public class Utilities
 		if (item == null)
 			return null;
 
-		Block block = item instanceof ItemBlock && !world.getBlock(x, y, z).isFlowerPot() ? Block.getBlockFromItem(item) : world.getBlock(x, y, z);
+		Block block = item instanceof ItemBlock? Block.getBlockFromItem(item) : world.getBlock(x, y, z);
 		return new ItemStack(item, 1, block.getDamageValue(world, x, y, z));
 	}
 

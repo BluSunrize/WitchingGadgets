@@ -279,32 +279,63 @@ public class EventHandler
 	public void onItemPickup(EntityItemPickupEvent event)
 	{
 		for(int i=0; i<event.entityPlayer.inventory.getSizeInventory(); i++)
-			if(event.entityPlayer.inventory.getStackInSlot(i)!=null && event.entityPlayer.inventory.getStackInSlot(i).getItem() instanceof ItemBag && event.entityPlayer.inventory.getStackInSlot(i).getItemDamage()==1)
+			if(event.entityPlayer.inventory.getStackInSlot(i)!=null && event.entityPlayer.inventory.getStackInSlot(i).getItem() instanceof ItemBag)
 			{
-				ItemStack[] filter = ((ItemBag)event.entityPlayer.inventory.getStackInSlot(i).getItem()).getStoredItems(event.entityPlayer.inventory.getStackInSlot(i));
-				for(ItemStack f : filter)
-					if(OreDictionary.itemMatches(f, event.item.getEntityItem(), true))
-					{
-						AspectList al = ThaumcraftCraftingManager.getObjectTags(event.item.getEntityItem());
-						al = ThaumcraftCraftingManager.getBonusTags(event.item.getEntityItem(), al);
-						if(al!=null && al.size()>=0)
+				if(event.entityPlayer.inventory.getStackInSlot(i).getItemDamage()==1)
+				{
+					ItemStack[] filter = ((ItemBag)event.entityPlayer.inventory.getStackInSlot(i).getItem()).getStoredItems(event.entityPlayer.inventory.getStackInSlot(i));
+					for(ItemStack f : filter)
+						if(OreDictionary.itemMatches(f, event.item.getEntityItem(), true))
 						{
-							AspectList primals = ResearchManager.reduceToPrimals(al);
-							Aspect a = primals.getAspects()[event.entityPlayer.getRNG().nextInt(primals.getAspects().length)];
-							if(a!=null)
+							AspectList al = ThaumcraftCraftingManager.getObjectTags(event.item.getEntityItem());
+							al = ThaumcraftCraftingManager.getBonusTags(event.item.getEntityItem(), al);
+							if(al!=null && al.size()>=0)
 							{
-								int slot = InventoryUtils.isWandInHotbarWithRoom(a, 1, event.entityPlayer);
-								if(slot>=0)
+								AspectList primals = ResearchManager.reduceToPrimals(al);
+								Aspect a = primals.getAspects()[event.entityPlayer.getRNG().nextInt(primals.getAspects().length)];
+								if(a!=null)
 								{
-									ItemWandCasting wand = (ItemWandCasting)event.entityPlayer.inventory.mainInventory[slot].getItem();
-									wand.addVis(event.entityPlayer.inventory.mainInventory[slot], a, primals.getAmount(a), true);
+									int slot = InventoryUtils.isWandInHotbarWithRoom(a, 1, event.entityPlayer);
+									if(slot>=0)
+									{
+										ItemWandCasting wand = (ItemWandCasting)event.entityPlayer.inventory.mainInventory[slot].getItem();
+										wand.addVis(event.entityPlayer.inventory.mainInventory[slot], a, primals.getAmount(a), true);
+									}
 								}
 							}
+							event.item.setDead();
+							event.setCanceled(true);
+							return;
 						}
-						event.item.setDead();
-						event.setCanceled(true);
-						return;
+				}
+				else if(event.entityPlayer.inventory.getStackInSlot(i).getItemDamage()==3)
+				{
+					System.out.println("pickup: "+event.item.getEntityItem());
+					ItemStack[] inv = ((ItemBag)event.entityPlayer.inventory.getStackInSlot(i).getItem()).getStoredItems(event.entityPlayer.inventory.getStackInSlot(i));
+					for(int f=0; f<inv.length; f++)
+					{
+						if(inv[f]==null)
+						{
+							inv[f] = event.item.getEntityItem().copy();
+							event.item.setDead();
+							event.setCanceled(true);
+							break;
+						}
+						else if(OreDictionary.itemMatches(inv[f], event.item.getEntityItem(), true))
+						{
+							int fit = Math.min( Math.min(64,inv[f].getMaxStackSize())-inv[f].stackSize, event.item.getEntityItem().stackSize);
+							inv[f].stackSize+=fit;
+							event.item.getEntityItem().stackSize-=fit;
+							if(event.item.getEntityItem().stackSize<=0)
+							{
+								event.item.setDead();
+								event.setCanceled(true);
+								break;
+							}
+						}
 					}
+					((ItemBag)event.entityPlayer.inventory.getStackInSlot(i).getItem()).setStoredItems(event.entityPlayer.inventory.getStackInSlot(i), inv);
+				}
 			}
 	}
 
