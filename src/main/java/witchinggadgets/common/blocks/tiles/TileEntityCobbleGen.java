@@ -64,7 +64,7 @@ public class TileEntityCobbleGen extends TileEntityWGBase
 
 	private boolean canOutput()
 	{
-		TileEntity inventory = this.worldObj.getTileEntity(this.xCoord + this.facing.offsetX, this.yCoord, this.zCoord + this.facing.offsetZ);
+		TileEntity inventory = this.worldObj.getTileEntity(this.xCoord + this.facing.offsetX, this.yCoord + this.facing.offsetY, this.zCoord + this.facing.offsetZ);
 		if ((inventory != null) && ((inventory instanceof IInventory)))
 			return InventoryUtils.insertStack((IInventory) inventory, new ItemStack(Blocks.cobblestone), this.facing.getOpposite().ordinal(), false) == null;
 		return true;

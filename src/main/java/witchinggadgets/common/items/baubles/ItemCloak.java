@@ -354,12 +354,9 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, 
 					amp++;
 				if(event.ammount>=12)
 					amp++;
-				if(player.getActivePotionEffect(Potion.damageBoost) == null || player.getActivePotionEffect(Potion.damageBoost).getDuration()<2 || player.getActivePotionEffect(Potion.damageBoost).getAmplifier()<amp)
-					player.addPotionEffect(new PotionEffect(Potion.damageBoost.id, 60, amp));
-				if(player.getActivePotionEffect(Potion.moveSpeed) == null || player.getActivePotionEffect(Potion.moveSpeed).getDuration()<2 || player.getActivePotionEffect(Potion.moveSpeed).getAmplifier()<amp)
-					player.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, 60, amp));
-				if(player.getActivePotionEffect(Potion.resistance) == null || player.getActivePotionEffect(Potion.resistance).getDuration()<2 || player.getActivePotionEffect(Potion.resistance).getAmplifier()<amp)
-					player.addPotionEffect(new PotionEffect(Potion.resistance.id, 60, amp));
+				player.addPotionEffect(new PotionEffect(Potion.damageBoost.id, 60, amp));
+				player.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, 60, amp));
+				player.addPotionEffect(new PotionEffect(Potion.resistance.id, 60, amp));
 			}
 		}
 	}
@@ -390,7 +387,7 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, 
 				((EntityCreature)event.entityLiving).setAttackTarget(null);
 		}
 	}
-	
+
 	@Optional.Method(modid = "Botania")
 	public ItemStack getCosmeticItem(ItemStack stack)
 	{
