@@ -312,7 +312,7 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, 
 	@Override
 	public boolean canActivate(EntityPlayer player, ItemStack stack, boolean isInHand)
 	{
-		return !isInHand;
+		return !isInHand && stack.getItemDamage()!=0 && stack.getItemDamage()!=3;
 	}
 
 	@Override

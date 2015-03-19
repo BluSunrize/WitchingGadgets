@@ -66,8 +66,8 @@ public class GuiMagicalTileLock extends GuiScreen
 			int id = this.unlocked?ii:Integer.parseInt(presets.keySet().toArray(new String[0])[r].split(",")[ii]);
 			this.buttonList.add(new GuiButtonMagicTile(id, guiLeft+19+(ii%3)*30,guiTop+19+(ii/3)*30));
 		}
-		this.buttonList.add(new GuiButton(10, guiLeft+34,guiTop+128,60,20,"Print"));
-		this.buttonList.add(new GuiButton(11, guiLeft+34,guiTop-20,60,20,"Solve"));
+//		this.buttonList.add(new GuiButton(10, guiLeft+34,guiTop+128,60,20,"Print"));
+//		this.buttonList.add(new GuiButton(11, guiLeft+34,guiTop-20,60,20,"Solve"));
 	}
 
 	@Override

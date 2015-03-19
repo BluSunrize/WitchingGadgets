@@ -33,7 +33,6 @@ import thaumcraft.common.items.armor.Hover;
 import thaumcraft.common.items.armor.ItemFortressArmor;
 import travellersgear.api.IActiveAbility;
 import travellersgear.api.IEventGear;
-import vazkii.botania.api.internal.IManaBurst;
 import witchinggadgets.WitchingGadgets;
 import witchinggadgets.api.IPrimordialCrafting;
 import witchinggadgets.client.render.ModelPrimordialArmor;
@@ -107,7 +106,7 @@ public class ItemPrimordialArmor extends ItemFortressArmor implements IActiveAbi
 		case 0:
 			AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(player.posX-1.5,player.posY-2,player.posZ-1.5, player.posX+1.5,player.posY+2.5,player.posZ+1.5);
 			for(Entity ent : (List<Entity>)world.getEntitiesWithinAABB(Entity.class, aabb))
-				if(ent instanceof IProjectile && !(ent instanceof IManaBurst) && !(ent instanceof EntityEgg))
+				if(ent instanceof IProjectile && !(ent.getClass().getSimpleName().equalsIgnoreCase("IManaBurst")) && !(ent instanceof EntityEgg))
 				{
 					//Thanks WayOfFlowingTime =P
 					double delX = ent.posX - player.posX;

@@ -351,10 +351,8 @@ public class WGContent
 		}
 		//ItemMagicBed = new ItemMagicBed(WGConfig.ItemMagicBedID).setUnlocalizedName("WG_MagicBed");
 		//GameRegistry.registerItem(ItemMagicBed, ItemMagicBed.getUnlocalizedName());
-		OreDictionary.registerOre("travelgearCloakBase", new ItemStack(ItemCloak,1,0));
 		OreDictionary.registerOre("crystalNetherQuartz", new ItemStack(Items.quartz));
 		OreDictionary.registerOre("scribingTools", new ItemStack(ConfigItems.itemInkwell,1,OreDictionary.WILDCARD_VALUE));
-
 	}
 	private static void initializeItems()
 	{
