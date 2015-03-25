@@ -107,9 +107,11 @@ public class ItemRenderMaterial implements IItemRenderer
 					break;
 				}
 			}
-
-			int asp = entityclientplayermp.ticksExisted % (68*scanAspects.size()) / 68;
-			aspectColour = scanAspects.getAspectsSorted()[asp].getColor();
+			if(scanAspects!=null)
+			{
+				int asp = entityclientplayermp.ticksExisted % (68*scanAspects.size()) / 68;
+				aspectColour = scanAspects.getAspectsSorted()[asp].getColor();
+			}
 		}
 
 		GL11.glPushMatrix();

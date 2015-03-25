@@ -18,21 +18,18 @@ public class ModelRobeSkirted extends ModelBiped
 {
 	List<ModelRenderer> parts = new ArrayList();
 
-	public ModelRobeSkirted(EntityLivingBase entity)
+	static ModelRobeSkirted model;
+	public static ModelRobeSkirted getModel()
+	{
+		if(model==null)
+			model = new ModelRobeSkirted();
+		return model;
+	}
+
+	protected ModelRobeSkirted()
 	{
 		super(.5F, 0, 128, 64);
 		this.bipedHeadwear.showModel = false;
-		if(entity!=null)
-		{
-			this.isSneak = entity.isSneaking();
-			this.isRiding = entity.isRiding();
-			this.isChild = entity.isChild();
-			this.heldItemRight = (entity.getHeldItem() != null ? 1 : 0);
-			if ((entity instanceof EntityPlayer))
-				this.aimedBow = (((EntityPlayer)entity).getItemInUseDuration() > 0);
-			if( ((EntityLivingBase)entity).getEquipmentInSlot(4)!=null && !( entity.getEquipmentInSlot(4).getUnlocalizedName().contains("goggles")||entity.getEquipmentInSlot(4).getUnlocalizedName().contains("Goggles")||entity.getEquipmentInSlot(4).getUnlocalizedName().contains("glasses") ) )
-				this.bipedHead.showModel = false;
-		}
 		parts.clear();
 
 		ModelRenderer temp;
@@ -153,6 +150,17 @@ public class ModelRobeSkirted extends ModelBiped
 			this.bipedLeftArm.rotateAngleZ -= MathHelper.cos(par4 * 0.09F) * 0.05F + 0.05F;
 			this.bipedRightArm.rotateAngleX += MathHelper.sin(par4 * 0.067F) * 0.05F;
 			this.bipedLeftArm.rotateAngleX -= MathHelper.sin(par4 * 0.067F) * 0.05F;
+		}
+		this.isSneak = entity.isSneaking();
+		this.isRiding = entity.isRiding();
+		if(entity instanceof EntityLivingBase)
+		{
+			this.isChild = ((EntityLivingBase)entity).isChild();
+			this.heldItemRight = (((EntityLivingBase) entity).getHeldItem() != null ? 1 : 0);
+			if ((entity instanceof EntityPlayer))
+				this.aimedBow = (((EntityPlayer)entity).getItemInUseDuration() > 0);
+			if( ((EntityLivingBase)entity).getEquipmentInSlot(4)!=null && !( ((EntityLivingBase) entity).getEquipmentInSlot(4).getUnlocalizedName().contains("goggles")||((EntityLivingBase) entity).getEquipmentInSlot(4).getUnlocalizedName().contains("Goggles")||((EntityLivingBase) entity).getEquipmentInSlot(4).getUnlocalizedName().contains("glasses") ) )
+				this.bipedHead.showModel = false;
 		}
 
 		if (this.isChild)

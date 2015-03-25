@@ -55,7 +55,7 @@ item.WG_Material.guidingString.name=Guiding Thread
 item.WG_Material.powerlessPearl.name=Powerless Pearl
 item.WG_Material.gemstoneDust.name=Gemstone Dust
 
-item.WG_Cluster.name=Cluster
+item.WG_Cluster.name=Native %1$s Cluster
 
 item.WG_Bag.normal.name=Bag of Tricks
 item.WG_Bag.void.name=Voidlinked Bag
@@ -231,7 +231,7 @@ witchinggadgets_research_page.WGPOTIONS.2=<IMG>witchinggadgets:textures/gui/poti
 
 witchinggadgets_research_name.ETHEREALWALL=Ethereal Wall
 witchinggadgets_research_text.ETHEREALWALL=[WG] Hidden in plain sight
-witchinggadgets_research_page.ETHEREALWALL.1=Refining the enchantments on arcane stone just a bit more has led to an interesting discovery. Simply applying a redstone signal to this new type of stone will make it §onon-corporeal§r, allowing you to pass through it.<BR>This also affects any other Etheral Wall connected to the powered block.<BR>Furthermore, you can disguise this stone to the appearance of most common blocks. Simply click it with a block in hand it and this one will take its texture. Sneak and click it with an empty hand to remove the disguise.
+witchinggadgets_research_page.ETHEREALWALL.1=Refining the enchantments on arcane stone just a bit more has led to an interesting discovery. Simply applying a redstone signal to this new type of stone will make it §onon-corporeal§r, allowing you to pass through it.<BR>This also affects any other Etheral Wall connected to the powered block.
 witchinggadgets_research_page.ETHEREALWALL.2=Furthermore, you can disguise this stone to the appearance of most common blocks. Simply click it with a block in hand it and this one will take its texture. Sneak and click it with an empty hand to remove the disguise. (It will only accept the texture of normally rendered blocks. Vanilla transparency works, Thaumcraft's Amber doesn't because it's coloured transparency, directional textures like wooden logs and quartz pillars are not fully supported)
 #
 witchinggadgets_research_name.STONEEXTRUDER=Thaumic Stone Extruder

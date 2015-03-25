@@ -10,6 +10,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.oredict.OreDictionary;
 import witchinggadgets.WitchingGadgets;
 import witchinggadgets.client.ClientUtilities;
@@ -105,11 +106,10 @@ public class ItemClusters extends Item
 		{
 			ItemStack ingot = OreDictionary.getOres("ingot"+subNames[stack.getItemDamage()]).get(0);
 			int limit = ingot.getDisplayName().lastIndexOf(" ");
-			ss = ingot.getDisplayName().substring(0, Math.max(0, limit))+" ";
+			ss = ingot.getDisplayName().substring(0, Math.max(0, limit));
 		}
-		return ss + super.getItemStackDisplayName(stack);
+	    return StatCollector.translateToLocalFormatted(this.getUnlocalizedNameInefficiently(stack)+".name",ss).trim();
 	}
-
 	@Override
 	public void getSubItems(Item item, CreativeTabs tab, List itemList)
 	{

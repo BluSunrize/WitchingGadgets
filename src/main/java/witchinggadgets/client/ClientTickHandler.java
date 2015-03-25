@@ -24,6 +24,8 @@ public class ClientTickHandler
 	@SubscribeEvent
 	public void renderTick(TickEvent.RenderTickEvent event)
 	{
+		if(!(Minecraft.getMinecraft().renderViewEntity instanceof EntityPlayer))
+			return;
 		EntityPlayer player = (EntityPlayer)Minecraft.getMinecraft().renderViewEntity;
 		if(player==null || oreHighlightMap.isEmpty())
 		{

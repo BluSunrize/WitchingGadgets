@@ -158,7 +158,7 @@ public class ItemAdvancedRobes extends ItemArmor implements IRepairable, IVisDis
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot)
 	{
 		if(armorSlot==1)
-			return new ModelRobeSkirted(entityLiving);
+			return ModelRobeSkirted.getModel();
 		return null;
 	}
 

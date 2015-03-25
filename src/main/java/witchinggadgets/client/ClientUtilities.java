@@ -624,17 +624,16 @@ public class ClientUtilities
 					buffered = getImageForResource(resource);
 					int passColour = item.getColorFromItemStack(stack, pass);
 					//			System.out.println("Is atlas");
-					int[] data = new int[tas.getIconWidth()*tas.getIconHeight()];
-					buffered.getRGB(0,0, tas.getIconWidth(),tas.getIconHeight(), data, 0,tas.getIconWidth());
+					
+					int[] data = new int[buffered.getWidth()*buffered.getHeight()];
+					buffered.getRGB(0,0, buffered.getWidth(),buffered.getHeight(), data, 0,tas.getIconWidth());
 					//buffered.getRGB(tas.getOriginX(),tas.getOriginY(), tas.getIconWidth(),tas.getIconHeight(), data, 0,tas.getIconWidth());
 					for(int rgb : data)
 						if(rgb!=0)
 						{
 							int coloured = blendColoursToInt(rgb,passColour)&0xffffff;
 							if(coloured>0 /*&& !colourSet.contains(coloured)*/)
-							{
 								colourSet.add(coloured);
-							}
 						}
 				}
 
