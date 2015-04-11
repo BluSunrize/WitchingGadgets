@@ -77,7 +77,7 @@ public class BlockWGStoneDevice extends BlockContainer
 	{
 		if(meta==6 && (side==0||side==1))
 			return icons[2];
-		return icons[meta];
+		return icons[Math.min(meta,icons.length-1)];
 	}
 	@Override
 	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side)
@@ -98,7 +98,7 @@ public class BlockWGStoneDevice extends BlockContainer
 		{
 			return ((TileEntityBlastfurnace)world.getTileEntity(x, y, z)).getTexture(side);
 		}
-		return this.icons[world.getBlockMetadata(x, y, z)];
+		return this.icons[Math.min(world.getBlockMetadata(x, y, z),icons.length-1)];
 	}
 	@Override
 	public int getLightValue(IBlockAccess world, int x, int y, int z)

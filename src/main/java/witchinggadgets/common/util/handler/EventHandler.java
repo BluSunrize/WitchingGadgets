@@ -310,7 +310,6 @@ public class EventHandler
 				}
 				else if(event.entityPlayer.inventory.getStackInSlot(i).getItemDamage()==3)
 				{
-					System.out.println("pickup: "+event.item.getEntityItem());
 					ItemStack[] inv = ((ItemBag)event.entityPlayer.inventory.getStackInSlot(i).getItem()).getStoredItems(event.entityPlayer.inventory.getStackInSlot(i));
 					for(int f=0; f<inv.length; f++)
 					{

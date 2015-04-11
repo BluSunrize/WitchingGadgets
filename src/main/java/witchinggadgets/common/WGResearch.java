@@ -417,7 +417,46 @@ public class WGResearch
 		addBlastTrippling("Silver");
 		addBlastTrippling("Lead");
 		InfernalBlastfurnaceRecipe.addRecipe(new ItemStack(ConfigItems.itemResource,3,3), "clusterCinnabar",1, 440,false).addBonus(new ItemStack(ConfigItems.itemNugget,1,5));
+		//TCon
+		addBlastTrippling("Aluminum");
+		addBlastTrippling("Cobalt");
+		addBlastTrippling("Ardite");
+		//ThermalFoundation
+		addBlastTrippling("Nickel");
+		addBlastTrippling("Platinum");
+		//Factorization
+		addBlastTrippling("FZDarkIron");
+		//Metallurgy 
+		addBlastTrippling("Manganese");
+		addBlastTrippling("Zinc");
+		addBlastTrippling("Platinum");
+		addBlastTrippling("Ignatius");
+		addBlastTrippling("ShadowIron");
+		addBlastTrippling("Lemurite");
+		addBlastTrippling("Midasium");
+		addBlastTrippling("Vyroxeres");
+		addBlastTrippling("Ceruclase");
+		addBlastTrippling("Alduorite");
+		addBlastTrippling("Kalendrite");
+		addBlastTrippling("Vulcanite");
+		addBlastTrippling("Sanguinite");
 
+		addBlastTrippling("Prometheum");
+		addBlastTrippling("DeepIron");
+		addBlastTrippling("Infuscolium");
+		addBlastTrippling("Oureclase");
+		addBlastTrippling("AstralSilver");
+		addBlastTrippling("Carmot");
+		addBlastTrippling("Mithril");
+		addBlastTrippling("Rubracium");
+		addBlastTrippling("Orichalcum");
+		addBlastTrippling("Adamantine");
+		addBlastTrippling("Atlarus");
+		addBlastTrippling("Eximite");
+		addBlastTrippling("Meutoite");
+		//Others
+		addBlastTrippling("Yellorium");
+		 
 		if(WGModCompat.loaded_TCon)
 		{
 			if(WGConfig.smelteryResultForClusters>0)
@@ -889,7 +928,6 @@ public class WGResearch
 					if(!OreDictionary.getOres(ore).isEmpty())
 						Utils.addSpecialMiningResult(OreDictionary.getOres(ore).get(0), clusterStack, 1f);
 				}
-				addBlastTrippling(name);
 			}
 			if(WGModCompat.loaded_TCon && WGConfig.smelteryResultForClusters>0 && FluidRegistry.getFluid(fluid)!=null)
 				WGModCompat.addTConSmelteryRecipe(cluster, "block"+name, fluidTemp, fluid, WGConfig.smelteryResultForClusters);

@@ -45,14 +45,9 @@ public class PlayerTickHandler
 					}
 
 					if(world.isRemote && world.rand.nextInt(3)==0)
-					{
 						WitchingGadgets.proxy.createSweatFx(player);
-					}
-					if(!world.isAABBInMaterial(player.boundingBox, Material.water) && (!player.isPotionActive(PotionWarpWard.instance) || player.getActivePotionEffect(PotionWarpWard.instance).getDuration()<5))
-					{
-						//System.out.println(player.isInsideOfMaterial(Material.water));
+					if(!world.isAABBInMaterial(player.boundingBox, Material.water))
 						player.addPotionEffect(new PotionEffect(PotionWarpWard.instance.id,20,0,true));
-					}
 					if(world.rand.nextInt(200)==0)
 						Thaumcraft.addWarpToPlayer(player, -1, true);
 				}

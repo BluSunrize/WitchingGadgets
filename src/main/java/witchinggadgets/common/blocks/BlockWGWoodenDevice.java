@@ -301,7 +301,7 @@ public class BlockWGWoodenDevice extends BlockContainer implements IWandable
 		{
 			TileEntitySpinningWheel tile = (TileEntitySpinningWheel)world.getTileEntity(x,y,z);
 
-			for(int i=0;i<tile.getSizeInventory();i++)
+			for(int i=0;i<4;i++)
 			{
 				ItemStack stack = tile.getStackInSlot(i);
 				if (stack != null)

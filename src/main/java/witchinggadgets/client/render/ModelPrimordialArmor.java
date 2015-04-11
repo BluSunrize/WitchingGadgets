@@ -8,6 +8,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
@@ -489,6 +491,16 @@ public class ModelPrimordialArmor extends ModelBiped
 	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
 	{ 
+		this.isSneak = entity.isSneaking();
+		this.isRiding = entity.isRiding();
+		if(entity instanceof EntityLivingBase)
+		{
+			this.isChild = ((EntityLivingBase)entity).isChild();
+			this.heldItemRight = (((EntityLivingBase) entity).getHeldItem() != null ? 1 : 0);
+			if(entity instanceof EntityPlayer && ((EntityPlayer)entity).getItemInUse()!=null)
+				this.aimedBow = ((EntityPlayer)entity).getItemInUse().getItemUseAction()==EnumAction.bow && ((EntityPlayer)entity).getItemInUseDuration() > 0;
+		}
+		
 		this.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 		if (((entity instanceof EntitySkeleton)) || ((entity instanceof EntityZombie)))
 		{

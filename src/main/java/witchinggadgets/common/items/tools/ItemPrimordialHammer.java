@@ -250,8 +250,8 @@ public class ItemPrimordialHammer extends ItemPickaxe implements IPrimordialCraf
 								int localMeta = world.getBlockMetadata(x, y, z);
 								if (block.removedByPlayer(world, player, x, y, z, true))
 									block.onBlockDestroyedByPlayer(world, x, y, z, localMeta);
-								block.harvestBlock(world, player, x, y, z, localMeta);
 								block.onBlockHarvested(world, x, y, z, localMeta, player);
+								block.harvestBlock(world, player, x, y, z, localMeta);
 							} 
 							else
 								world.setBlockToAir(x, y, z);

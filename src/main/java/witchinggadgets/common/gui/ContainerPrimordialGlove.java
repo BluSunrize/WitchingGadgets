@@ -119,7 +119,7 @@ public class ContainerPrimordialGlove extends Container
 			//System.out.println("Closing Container and saving stacks!");
 			ItemPrimordialGlove.setSetGems(this.bracelet, ((InventoryPrimordialGlove)this.input).stackList);
 
-			if (!this.player.getCurrentEquippedItem().equals(this.bracelet))
+			if (!this.bracelet.equals(this.player.getCurrentEquippedItem()))
 				this.player.setCurrentItemOrArmor(0, this.bracelet);
 			this.player.inventory.markDirty();
 		}

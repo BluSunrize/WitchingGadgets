@@ -9,7 +9,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.entity.projectile.EntityEgg;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -104,32 +103,50 @@ public class ItemPrimordialArmor extends ItemFortressArmor implements IActiveAbi
 		switch(getAbility(stack))
 		{
 		case 0:
+			//Thanks WayOfFlowingTime =P
 			AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(player.posX-1.5,player.posY-2,player.posZ-1.5, player.posX+1.5,player.posY+2.5,player.posZ+1.5);
-			for(Entity ent : (List<Entity>)world.getEntitiesWithinAABB(Entity.class, aabb))
-				if(ent instanceof IProjectile && !(ent.getClass().getSimpleName().equalsIgnoreCase("IManaBurst")) && !(ent instanceof EntityEgg))
+			for(Entity projectile : (List<Entity>)world.getEntitiesWithinAABB(Entity.class, aabb))
+			{
+				if(projectile==null)
+					continue;
+				if(!(projectile instanceof IProjectile) || projectile.getClass().getSimpleName().equalsIgnoreCase("IManaBurst"))
+					continue;
+
+				Entity shooter = null;
+				if(projectile instanceof EntityArrow)
+					shooter = ((EntityArrow) projectile).shootingEntity;
+				else if(projectile instanceof EntityThrowable)
+					shooter = ((EntityThrowable) projectile).getThrower();
+
+				if(projectile!=null && projectile.equals(player))
+					continue;
+
+				double delX = projectile.posX - player.posX;
+				double delY = projectile.posY - player.posY;
+				double delZ = projectile.posZ - player.posZ;
+				
+				double angle = (delX*projectile.motionX + delY*projectile.motionY + delZ*projectile.motionZ)/ (Math.sqrt(delX * delX + delY * delY + delZ * delZ)*Math.sqrt(projectile.motionX*projectile.motionX + projectile.motionY* projectile.motionY + projectile.motionZ*projectile.motionZ));
+				angle = Math.acos(angle);
+				if(angle < 3*(Math.PI/4)) //angle is < 135 degrees
+					continue;
+				
+				if(shooter != null)
 				{
-					//Thanks WayOfFlowingTime =P
-					double delX = ent.posX - player.posX;
-					double delY = ent.posY - player.posY;
-					double delZ = ent.posZ - player.posZ;
-					Entity shooter = (ent instanceof EntityArrow)?((EntityArrow)ent).shootingEntity: (ent instanceof EntityThrowable)?((EntityThrowable)ent).getThrower(): null;
-					if(shooter != null)
-					{
-						if(shooter.equals(player))
-							continue;
-						delX = -ent.posX + shooter.posX;
-						delY = -ent.posY + (shooter.posY + shooter.getEyeHeight());
-						delZ = -ent.posZ + shooter.posZ;
-					}
-					double curVel = Math.sqrt(delX * delX + delY * delY + delZ * delZ);
-					delX /= curVel;
-					delY /= curVel;
-					delZ /= curVel;
-					double newVel = Math.sqrt(ent.motionX*ent.motionX + ent.motionY*ent.motionY + ent.motionZ*ent.motionZ);
-					ent.motionX = newVel * delX;
-					ent.motionY = newVel * delY;
-					ent.motionZ = newVel * delZ;
+					delX = -projectile.posX + shooter.posX;
+					delY = -projectile.posY + (shooter.posY + shooter.getEyeHeight());
+					delZ = -projectile.posZ + shooter.posZ;
 				}
+				
+				
+				double curVel = Math.sqrt(delX * delX + delY * delY + delZ * delZ);
+				delX /= curVel;
+				delY /= curVel;
+				delZ /= curVel;
+				double newVel = Math.sqrt(projectile.motionX*projectile.motionX + projectile.motionY*projectile.motionY + projectile.motionZ*projectile.motionZ);
+				projectile.motionX = newVel * delX;
+				projectile.motionY = newVel * delY;
+				projectile.motionZ = newVel * delZ;
+			}
 			break;
 		case 3:
 			int[] curedPotions = {Potion.blindness.id,Potion.poison.id,Potion.wither.id,Potion.confusion.id,Config.potionTaintPoisonID};

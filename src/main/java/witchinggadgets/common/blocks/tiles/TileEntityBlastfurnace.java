@@ -208,7 +208,7 @@ public class TileEntityBlastfurnace extends TileEntityWGBase implements IEssenti
 		NBTTagList invList = new NBTTagList();
 		for(ItemStack s : inputs)
 			invList.appendTag(s.writeToNBT(new NBTTagCompound()));
-		//System.out.println("Position: "+position);
+		tags.setTag("inputs", invList);
 	}
 
 	public boolean addStackToInputs(ItemStack stack)
