@@ -9,7 +9,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -22,6 +21,7 @@ import witchinggadgets.WitchingGadgets;
 import witchinggadgets.client.render.ModelMagicalBaubles;
 import witchinggadgets.common.items.ItemInfusedGem;
 import witchinggadgets.common.util.Lib;
+import witchinggadgets.common.util.Utilities;
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import cpw.mods.fml.common.Loader;
@@ -219,16 +219,16 @@ public class ItemMagicalBaubles extends Item implements IBauble, ITravellersGear
 	public void onItemEquipped(EntityLivingBase living, ItemStack stack)
 	{
 		if(stack.getItemDamage()==1)
-			living.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.knockbackResistance).applyModifier( new AttributeModifier(new UUID(109406L, stack.getItemDamage()), "WGKnockbackResistance", 0.6, 0) );
+			Utilities.addAttributeToLiving(living, SharedMonsterAttributes.knockbackResistance, new UUID(Lib.ATTRIBUTE_MOD_UUID, stack.getItemDamage()), "WGKnockbackResistance", 0.6, 0);
 		if(stack.getItemDamage()==2)
-			living.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.attackDamage).applyModifier( new AttributeModifier(new UUID(109406L, stack.getItemDamage()), "WGStrengthBonus", 2, 0) );
+			Utilities.addAttributeToLiving(living, SharedMonsterAttributes.attackDamage, new UUID(Lib.ATTRIBUTE_MOD_UUID, stack.getItemDamage()), "WGStrengthBonus", 2, 0);
 	}
 	public void onItemUnequipped(EntityLivingBase living, ItemStack stack)
 	{
 		if(stack.getItemDamage()==1)
-			living.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.knockbackResistance).removeModifier( new AttributeModifier(new UUID(109406L, stack.getItemDamage()), "WGKnockbackResistance", 0.6, 0) );
+			Utilities.removeAttributeFromLiving(living, SharedMonsterAttributes.knockbackResistance, new UUID(Lib.ATTRIBUTE_MOD_UUID, stack.getItemDamage()), "WGKnockbackResistance", 0.6, 0);
 		if(stack.getItemDamage()==2)
-			living.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.attackDamage).removeModifier( new AttributeModifier(new UUID(109406L, stack.getItemDamage()), "WGStrengthBonus", 2, 0) );
+			Utilities.removeAttributeFromLiving(living, SharedMonsterAttributes.attackDamage, new UUID(Lib.ATTRIBUTE_MOD_UUID, stack.getItemDamage()), "WGStrengthBonus", 2, 0);
 	}
 
 

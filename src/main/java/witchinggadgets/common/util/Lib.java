@@ -7,5 +7,5 @@ public class Lib
 	public static final String DESCRIPTION = "wg.desc.";
 	public static final String TITLE = "wg.title.";
 	
-	public static final String NBTTAG_HASHCODE = "playerHashcode";
+	public static final long ATTRIBUTE_MOD_UUID = 109406L;
 }

@@ -4,11 +4,16 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.UUID;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
@@ -373,6 +378,20 @@ public class Utilities
 				tgInv[0]=cloak;
 			TravellersGearAPI.setExtendedInventory(player, tgInv);
 		}
+	}
+
+	public static void addAttributeToLiving(EntityLivingBase living, IAttribute attr, UUID uuid, String tag, double val, int type)
+	{
+		IAttributeInstance attrIns = living.getAttributeMap().getAttributeInstance(attr);
+		if(attrIns==null || attrIns.getModifier(uuid)!=null)
+			return;
+		attrIns.applyModifier( new AttributeModifier(uuid, tag, val, type) );
+	}
+	public static void removeAttributeFromLiving(EntityLivingBase living, IAttribute attr, UUID uuid, String tag, double val, int type)
+	{
+		IAttributeInstance attrIns = living.getAttributeMap().getAttributeInstance(attr);
+		if(attrIns!=null)
+			attrIns.removeModifier(new AttributeModifier(uuid, tag, val, type) );
 	}
 
 	public static ItemStack copyStackWithSize(ItemStack stack, int i)
