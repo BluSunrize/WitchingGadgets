@@ -326,7 +326,8 @@ public class TileEntityBlastfurnace extends TileEntityWGBase implements IEssenti
 		{
 			for(int i=0;i<3;i++)
 			{
-				WitchingGadgets.proxy.createFurnaceDestructionBlobFx(worldObj, xCoord, yCoord, zCoord);
+				worldObj.spawnParticle("lava", xCoord+.5,yCoord+.9,zCoord+.5, 0.0D, 0.0D, 0.0D);
+                //WitchingGadgets.proxy.createFurnaceDestructionBlobFx(worldObj, xCoord, yCoord, zCoord);
 				//				float xx = xCoord+.5f+ worldObj.rand.nextFloat()*.3f;
 				//				float zz = zCoord+.5f+ worldObj.rand.nextFloat()*.3f;
 				//
