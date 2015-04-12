@@ -131,7 +131,7 @@ public class WGResearch
 		registerShapelessArcaneRecipe("BAGOFTRICKS","_CLOTH",new ItemStack(WGContent.ItemMaterial,2,3), craftingAspects, new ItemStack(WGContent.ItemMaterial,1,0), new ItemStack(WGContent.ItemMaterial,1,0), new ItemStack(WGContent.ItemMaterial,1,0), new ItemStack(WGContent.ItemMaterial,1,2));
 		craftingAspects = new AspectList().add(Aspect.ORDER,20).add(Aspect.AIR,20);
 		registerArcaneRecipe("BAGOFTRICKS","_BAG",new ItemStack(WGContent.ItemBag), craftingAspects, "C C", "C C", "CCC", 'C', new ItemStack(WGContent.ItemMaterial,1,3));
-		
+
 		craftingAspects = new AspectList().add(Aspect.ORDER,10).add(Aspect.AIR,10);
 		registerArcaneRecipe("HUNGERBAG","",new ItemStack(WGContent.ItemBag,1,3), craftingAspects, " H ", "CBC", 'C',new ItemStack(WGContent.ItemMaterial,1,3), 'H',new ItemStack(ConfigBlocks.blockChestHungry), 'B',new ItemStack(WGContent.ItemBag));
 
@@ -179,10 +179,10 @@ public class WGResearch
 		craftingAspects = new AspectList().add(Aspect.FIRE,10).add(Aspect.ENTROPY, 10);
 		registerArcaneRecipe("TERRAFORMFOCUS_HELL","",new ItemStack(WGContent.BlockMetalDevice,1,6), craftingAspects, " S ","IBI","ITI", 'B',new ItemStack(Blocks.nether_brick), 'I',"ingotIron", 'S',new ItemStack(ConfigItems.itemShard,1,6), 'T',new ItemStack(ConfigBlocks.blockTube));
 		ThaumcraftApi.addWarpToItem(new ItemStack(WGContent.BlockMetalDevice,1,6), 1);
-		
+
 		craftingAspects = new AspectList().add(Aspect.EARTH,10).add(Aspect.WATER, 10);
 		registerArcaneRecipe("TERRAFORMFOCUS_MUSHROOM","",new ItemStack(WGContent.BlockMetalDevice,1,9), craftingAspects, " S ","IBI","ITI", 'B',new ItemStack(Blocks.mycelium), 'I',"ingotIron", 'S',new ItemStack(ConfigItems.itemShard,1,6), 'T',new ItemStack(ConfigBlocks.blockTube));
-		
+
 		/**
 		 * INFUSION
 		 */
@@ -417,46 +417,9 @@ public class WGResearch
 		addBlastTrippling("Silver");
 		addBlastTrippling("Lead");
 		InfernalBlastfurnaceRecipe.addRecipe(new ItemStack(ConfigItems.itemResource,3,3), "clusterCinnabar",1, 440,false).addBonus(new ItemStack(ConfigItems.itemNugget,1,5));
-		//TCon
-		addBlastTrippling("Aluminum");
-		addBlastTrippling("Cobalt");
-		addBlastTrippling("Ardite");
-		//ThermalFoundation
-		addBlastTrippling("Nickel");
-		addBlastTrippling("Platinum");
-		//Factorization
-		addBlastTrippling("FZDarkIron");
-		//Metallurgy 
-		addBlastTrippling("Manganese");
-		addBlastTrippling("Zinc");
-		addBlastTrippling("Platinum");
-		addBlastTrippling("Ignatius");
-		addBlastTrippling("ShadowIron");
-		addBlastTrippling("Lemurite");
-		addBlastTrippling("Midasium");
-		addBlastTrippling("Vyroxeres");
-		addBlastTrippling("Ceruclase");
-		addBlastTrippling("Alduorite");
-		addBlastTrippling("Kalendrite");
-		addBlastTrippling("Vulcanite");
-		addBlastTrippling("Sanguinite");
+		for(String s : WGConfig.tripplingClusterList)
+			addBlastTrippling(s);
 
-		addBlastTrippling("Prometheum");
-		addBlastTrippling("DeepIron");
-		addBlastTrippling("Infuscolium");
-		addBlastTrippling("Oureclase");
-		addBlastTrippling("AstralSilver");
-		addBlastTrippling("Carmot");
-		addBlastTrippling("Mithril");
-		addBlastTrippling("Rubracium");
-		addBlastTrippling("Orichalcum");
-		addBlastTrippling("Adamantine");
-		addBlastTrippling("Atlarus");
-		addBlastTrippling("Eximite");
-		addBlastTrippling("Meutoite");
-		//Others
-		addBlastTrippling("Yellorium");
-		 
 		if(WGModCompat.loaded_TCon)
 		{
 			if(WGConfig.smelteryResultForClusters>0)
@@ -939,7 +902,7 @@ public class WGResearch
 		if(!OreDictionary.getOres("ingot"+name).isEmpty())
 		{
 			InfernalBlastfurnaceRecipe r = InfernalBlastfurnaceRecipe.addRecipe(Utilities.copyStackWithSize(OreDictionary.getOres("ingot"+name).get(0),3), "cluster"+name,1, 440,false);
-			if(!OreDictionary.getOres("nugget"+name).isEmpty())
+			if(r!=null && !OreDictionary.getOres("nugget"+name).isEmpty())
 				r.addBonus(OreDictionary.getOres("nugget"+name).get(0));
 		}
 	}

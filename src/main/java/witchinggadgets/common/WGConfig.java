@@ -15,6 +15,7 @@ public class WGConfig
 	public static boolean limitBookSearchToCategory;
 	public static boolean allowClusters;
 	public static boolean allowTransmutations;
+	public static String[] tripplingClusterList;
 
 	public static boolean coremod_allowBootsRepair;
 	public static boolean coremod_allowFocusPouchActive;
@@ -37,6 +38,20 @@ public class WGConfig
 		smelteryResultForClusters = config.get("Other Options", "Smeltery Result for Clusters", 144*3, "How many milliBuckets of molten Metal a cluster should give. 144mB equal 1 ingot. Set to 0 to disable smeltery recipes.").getInt();
 		allowClusters = config.get("Other Options", "Enable clusters", true, "Set this to false to disable clusters, useful when you are usign AOBD.").getBoolean(true);
 		allowTransmutations = config.get("Other Options", "Enable transmutations", true, "Set this to false to disable nugget transmutations, this should fix the infinite loop glitch").getBoolean(true);
+		String[] clusters = {
+		//Tinkers
+		"Aluminum","Cobalt","Ardite",
+		//ThermalFoundation
+		"Nickel","Platinum",
+		//Factorization
+		"FZDarkIron",
+		//Metallurgy 
+		"Manganese","Zinc","Platinum","Ignatius","ShadowIron","Lemurite","Midasium","Vyroxeres","Ceruclase","Alduorite","Kalendrite","Vulcanite","Sanguinite",
+		"Prometheum","DeepIron","Infuscolium","Oureclase","AstralSilver","Carmot","Mithril","Rubracium","Orichalcum","Adamantine","Atlarus","Eximite","Meutoite",
+		//Others
+		"Uranium"};
+		tripplingClusterList = config.get("Other Options", "Trippling Cluster List", clusters, "A list of ore names for which the clsuters should smelt into three ingots. This is so that custom AOBD clsuters can be thrown into the Blast Furnace").getStringList();
+		
 		limitBookSearchToCategory = config.get("Other Options", "Limit Book Search", false, "Thaumonomicon Search to currently active category").getBoolean(false);
 		radialSpeed = config.getFloat("Other Options", "Selection Radial Speed", .15f, .15f, 1, "The speed at which the gem-selection for the primordial glove opens. 15% is the minimum.");
 
@@ -75,7 +90,7 @@ public class WGConfig
 
 		config.save();
 	}
-
+	
 	public static int getPotionID(int base, String key)
 	{
 		config.load();

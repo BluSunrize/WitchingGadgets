@@ -90,12 +90,7 @@ public class InfernalBlastfurnaceRecipe
 
 	public static InfernalBlastfurnaceRecipe addRecipe(ItemStack output, String input, int inputSize, int time, boolean isSpecial)
 	{
-		if(!OreDictionary.getOres(input).isEmpty())
-		{
-			ItemStack inputStack = OreDictionary.getOres(input).get(0);
-			return addRecipe(output, inputStack, time, isSpecial);
-		}
-		return null;
+		return addRecipe(output, input, time, isSpecial);
 	}
 	public static InfernalBlastfurnaceRecipe addRecipe(ItemStack output, Object input, int time, boolean isSpecial)
 	{
@@ -158,7 +153,7 @@ public class InfernalBlastfurnaceRecipe
 		boolean b_out = ItemStack.areItemStacksEqual(r.output, this.output);
 		boolean b_in_IS = (this.input instanceof ItemStack && r.input instanceof ItemStack) && OreDictionary.itemMatches((ItemStack)this.input, (ItemStack)r.input, true);
 		boolean b_in_OD = (this.input instanceof OreDictStack && r.input instanceof OreDictStack) && ((OreDictStack)this.input).key.equals( ((OreDictStack)r.input).key );
-		
+
 		return b_out && (b_in_IS||b_in_OD);
 	}
 }
