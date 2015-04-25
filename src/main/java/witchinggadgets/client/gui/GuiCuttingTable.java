@@ -7,12 +7,12 @@ import net.minecraft.entity.player.InventoryPlayer;
 import org.lwjgl.opengl.GL11;
 
 import thaumcraft.client.lib.UtilsFX;
+import witchinggadgets.WitchingGadgets;
 import witchinggadgets.client.ClientUtilities;
 import witchinggadgets.common.blocks.tiles.TileEntityCuttingTable;
 import witchinggadgets.common.gui.ContainerCuttingTable;
 import witchinggadgets.common.items.ItemInfusedGem;
-import witchinggadgets.common.util.network.PacketTileUpdate;
-import witchinggadgets.common.util.network.WGPacketPipeline;
+import witchinggadgets.common.util.network.message.MessageTileUpdate;
 
 public class GuiCuttingTable extends GuiContainer
 {
@@ -69,7 +69,8 @@ public class GuiCuttingTable extends GuiContainer
 				this.tile.targetGemCut=0;
 			
 			if(this.tile.targetGemCut != old)
-				WGPacketPipeline.INSTANCE.sendToServer(new PacketTileUpdate(this.tile));
+				WitchingGadgets.packetHandler.sendToServer(new MessageTileUpdate(this.tile));
+				//WGPacketPipeline.INSTANCE.sendToServer(new PacketTileUpdate(this.tile));
 		}
 	}
 }

@@ -10,9 +10,9 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
+import witchinggadgets.WitchingGadgets;
 import witchinggadgets.common.blocks.tiles.TileEntityMagicalTileLock;
-import witchinggadgets.common.util.network.PacketTileUpdate;
-import witchinggadgets.common.util.network.WGPacketPipeline;
+import witchinggadgets.common.util.network.message.MessageTileUpdate;
 
 public class GuiMagicalTileLock extends GuiScreen
 {
@@ -132,7 +132,8 @@ public class GuiMagicalTileLock extends GuiScreen
 					this.unlocked = true;
 					this.tileentity.unlocked = true;
 					this.tileentity.tick = 0;
-					WGPacketPipeline.INSTANCE.sendToServer(new PacketTileUpdate(this.tileentity));
+					WitchingGadgets.packetHandler.sendToServer(new MessageTileUpdate(this.tileentity));
+					//WGPacketPipeline.INSTANCE.sendToServer(new PacketTileUpdate(this.tileentity));
 				}
 			}
 		}

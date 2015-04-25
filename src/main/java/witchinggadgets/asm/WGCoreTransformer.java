@@ -78,7 +78,7 @@ public class WGCoreTransformer implements IClassTransformer
 		WitchingGadgets.logger.log(Level.INFO, "[CORE] Patching Boots");
 
 		final String methodToPatch = "getIsRepairable";
-		final String methodToPatch_obf = "a";
+		final String methodToPatch_obf = "func_82789_a";//"a";
 		String name = deobf?methodToPatch:methodToPatch_obf;
 		String desc = deobf?"(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z":"(Ladd;Ladd;)Z";
 
@@ -166,12 +166,13 @@ public class WGCoreTransformer implements IClassTransformer
 		WitchingGadgets.logger.log(Level.INFO, "[CORE] Patching getFortuneModifier & getLootingModifier");
 
 		final String methodToPatch1 = "getFortuneModifier";
-		final String methodToPatch_obf1 = "f";
-		final String desc = "(Lsv;)I";
+		final String methodToPatch_obf1 = "func_77517_e";//"f";
+		final String desc = "(Lnet/minecraft/entity/EntityLivingBase;)I";
+		final String desc_obf = "(Lsv;)I";
 		String name1 = deobf?methodToPatch1:methodToPatch_obf1;
 
 		final String methodToPatch2 = "getLootingModifier";
-		final String methodToPatch_obf2 = "i";
+		final String methodToPatch_obf2 = "func_77519_f";//"i";
 		String name2 = deobf?methodToPatch2:methodToPatch_obf2;
 
 
@@ -182,7 +183,7 @@ public class WGCoreTransformer implements IClassTransformer
 
 		for(MethodNode methodNode : classNode.methods)
 		{
-			if(methodNode.name.equals(name1) && methodNode.desc.equals(desc))
+			if(methodNode.name.equals(name1) && (methodNode.desc.equals(desc)||methodNode.desc.equals(desc_obf)) )
 			{
 				Iterator<AbstractInsnNode> insnNodes=methodNode.instructions.iterator();
 				while(insnNodes.hasNext())
@@ -201,7 +202,7 @@ public class WGCoreTransformer implements IClassTransformer
 					}
 				}
 			}
-			else if(methodNode.name.equals(name2) && methodNode.desc.equals(desc))
+			else if(methodNode.name.equals(name2) && (methodNode.desc.equals(desc)||methodNode.desc.equals(desc_obf)) )
 			{
 				Iterator<AbstractInsnNode> insnNodes=methodNode.instructions.iterator();
 				while(insnNodes.hasNext())
@@ -236,6 +237,7 @@ public class WGCoreTransformer implements IClassTransformer
 				if(bStack!=null && bStack.getItem().equals(WGContent.ItemMagicalBaubles)&&ItemMagicalBaubles.subNames[bStack.getItemDamage()].equals("ringLuck"))
 				{
 					base +=2;
+					break;
 				}
 			}
 		return base;
@@ -250,6 +252,7 @@ public class WGCoreTransformer implements IClassTransformer
 				if(bStack!=null && bStack.getItem().equals(WGContent.ItemMagicalBaubles)&&ItemMagicalBaubles.subNames[bStack.getItemDamage()].equals("ringLuck"))
 				{
 					base +=2;
+					break;
 				}
 			}
 		return base;
@@ -262,7 +265,7 @@ public class WGCoreTransformer implements IClassTransformer
 		WitchingGadgets.logger.log(Level.INFO, "[CORE] Patching onNewPotionEffect");
 
 		final String methodToPatch = "onNewPotionEffect";
-		final String methodToPatch_obf = "a";
+		final String methodToPatch_obf = "a";//"func_70670_a";
 		final String desc1 = deobf?"(Lnet/minecraft/potion/PotionEffect;)V":"(Lrw;)V";
 		final String desc2 = deobf?"(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/potion/PotionEffect;)V":"(Lsv;Lrw;)V";
 		String name1 = deobf?methodToPatch:methodToPatch_obf;
@@ -295,7 +298,7 @@ public class WGCoreTransformer implements IClassTransformer
 		ClassWriter cw=new ClassWriter(ClassWriter.COMPUTE_MAXS);
 		classNode.accept(cw);
 
-		return cw.toByteArray();		
+		return cw.toByteArray();
 	}
 	static Field f_potionAmplifier;
 	static Field f_potionDuration;
@@ -322,15 +325,16 @@ public class WGCoreTransformer implements IClassTransformer
 
 				try{
 					if(f_potionAmplifier==null)
-						f_potionAmplifier = PotionEffect.class.getDeclaredField(isDeobfEnvironment?"amplifier":"c");
+						f_potionAmplifier = PotionEffect.class.getDeclaredField(isDeobfEnvironment?"amplifier":"field_76461_c"/*"c"*/);
 					if(!f_potionAmplifier.isAccessible())
 						f_potionAmplifier.setAccessible(true);
 					if(f_potionDuration==null)
-						f_potionDuration = PotionEffect.class.getDeclaredField(isDeobfEnvironment?"duration":"b");
+						f_potionDuration = PotionEffect.class.getDeclaredField(isDeobfEnvironment?"duration":"field_76460_b"/*"b"*/);
 					if(!f_potionDuration.isAccessible())
 						f_potionDuration.setAccessible(true);
 
 					int val_Amp = f_potionAmplifier.getInt(effect);
+					
 					if(val_Amp>0)
 						val_Amp = Math.max(0, val_Amp-ordo);
 					f_potionAmplifier.setInt(effect, val_Amp);

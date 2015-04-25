@@ -52,6 +52,7 @@ import thaumcraft.common.lib.research.ResearchManager;
 import thaumcraft.common.lib.utils.InventoryUtils;
 import thaumcraft.common.tiles.TileInfusionMatrix;
 import travellersgear.api.TravellersGearAPI;
+import witchinggadgets.WitchingGadgets;
 import witchinggadgets.api.IPrimordialCrafting;
 import witchinggadgets.common.WGContent;
 import witchinggadgets.common.items.ItemMaterials;
@@ -60,8 +61,7 @@ import witchinggadgets.common.items.tools.IPrimordialGear;
 import witchinggadgets.common.items.tools.ItemBag;
 import witchinggadgets.common.util.Lib;
 import witchinggadgets.common.util.Utilities;
-import witchinggadgets.common.util.network.PacketClientNotifier;
-import witchinggadgets.common.util.network.WGPacketPipeline;
+import witchinggadgets.common.util.network.message.MessageClientNotifier;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.eventhandler.EventPriority;
@@ -202,7 +202,6 @@ public class EventHandler
 			EntityPlayer player = (EntityPlayer)event.source.getSourceOfDamage(); 
 			if(player.getCurrentEquippedItem()!=null && player.getCurrentEquippedItem().getItem().equals(WGContent.ItemPrimordialSword) && player.getRNG().nextInt(6)<EnchantmentHelper.getLootingModifier(player))
 			{
-				System.out.println("I'm lootign because fuck you.");
 				ItemStack head=null;
 				if(event.entityLiving instanceof EntitySkeleton)
 					head = new ItemStack(Items.skull,1, ((EntitySkeleton)event.entityLiving).getSkeletonType());
@@ -393,6 +392,7 @@ public class EventHandler
 	@SubscribeEvent
 	public void playerLogin(PlayerLoggedInEvent event)
 	{
-		WGPacketPipeline.INSTANCE.sendTo(new PacketClientNotifier(0), (EntityPlayerMP) event.player);
+		WitchingGadgets.packetHandler.sendTo(new MessageClientNotifier(0), (EntityPlayerMP) event.player);
+		//WGPacketPipeline.INSTANCE.sendTo(new PacketClientNotifier(0), (EntityPlayerMP) event.player);
 	}
 }

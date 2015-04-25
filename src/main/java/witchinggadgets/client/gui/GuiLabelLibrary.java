@@ -9,11 +9,11 @@ import org.lwjgl.opengl.GL11;
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.client.lib.UtilsFX;
+import witchinggadgets.WitchingGadgets;
 import witchinggadgets.client.ClientUtilities;
 import witchinggadgets.common.blocks.tiles.TileEntityLabelLibrary;
 import witchinggadgets.common.gui.ContainerLabelLibrary;
-import witchinggadgets.common.util.network.PacketTileUpdate;
-import witchinggadgets.common.util.network.WGPacketPipeline;
+import witchinggadgets.common.util.network.message.MessageTileUpdate;
 
 public class GuiLabelLibrary extends GuiContainer
 {
@@ -83,6 +83,7 @@ public class GuiLabelLibrary extends GuiContainer
 				i++;
 			}
 		if(tile.aspect != old)
-			WGPacketPipeline.INSTANCE.sendToServer(new PacketTileUpdate(tile));
+			WitchingGadgets.packetHandler.sendToServer(new MessageTileUpdate(this.tile));
+			//WGPacketPipeline.INSTANCE.sendToServer(new PacketTileUpdate(tile));
 	}
 }

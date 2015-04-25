@@ -167,7 +167,18 @@ public class ItemCrystalCapsule extends Item implements IFluidContainerItem
 	{
 		if(item.hasTagCompound() && item.getTagCompound().hasKey("fluid"))
 			if(FluidRegistry.getFluid(item.getTagCompound().getString("fluid"))!=null)
-				list.add( FluidRegistry.getFluid(item.getTagCompound().getString("fluid")).getLocalizedName(new FluidStack(FluidRegistry.getFluid(item.getTagCompound().getString("fluid")),1000)) );
+			{
+				String fluidName = "ERROR";
+				try{
+					Fluid f = FluidRegistry.getFluid(item.getTagCompound().getString("fluid"));
+					FluidStack fs = new FluidStack(f,1000);
+					fluidName = fs.getLocalizedName();
+				}catch(Exception e)
+				{
+					e.printStackTrace();
+				}
+				list.add(fluidName);
+			}
 	}
 
 	@Override

@@ -35,6 +35,7 @@ import thaumcraft.client.gui.GuiResearchBrowser;
 import thaumcraft.common.Thaumcraft;
 import thaumcraft.common.config.ConfigItems;
 import travellersgear.api.RenderTravellersGearEvent;
+import witchinggadgets.WitchingGadgets;
 import witchinggadgets.common.WGContent;
 import witchinggadgets.common.WGResearch;
 import witchinggadgets.common.blocks.tiles.TileEntitySaunaStove;
@@ -44,8 +45,7 @@ import witchinggadgets.common.util.Lib;
 import witchinggadgets.common.util.Utilities;
 import witchinggadgets.common.util.WGKeyHandler;
 import witchinggadgets.common.util.handler.InfusedGemHandler;
-import witchinggadgets.common.util.network.PacketPrimordialGlove;
-import witchinggadgets.common.util.network.WGPacketPipeline;
+import witchinggadgets.common.util.network.message.MessagePrimordialGlove;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -136,7 +136,8 @@ public class ClientEventHandler
 			double angle = (mx<0?180:0)+Math.abs((mx<0?-180:0)+ (my<0?90:0)+Math.abs((my<0?-90:0)+Math.abs(Math.toDegrees(Math.acos(cx))-90)));
 			int sel = angle>288?0: angle<72?1: 2+(int)((288-angle)/72);
 			//System.out.println("Selected: "+sel);
-			WGPacketPipeline.INSTANCE.sendToServer(new PacketPrimordialGlove(player, (byte)0, sel));
+			WitchingGadgets.packetHandler.sendToServer(new MessagePrimordialGlove(player, (byte)0, sel));
+			//WGPacketPipeline.INSTANCE.sendToServer(new PacketPrimordialGlove(player, (byte)0, sel));
 		}
 		//		if(thaumSearchField!=null)
 		//		{
