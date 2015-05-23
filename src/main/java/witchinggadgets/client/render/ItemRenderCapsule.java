@@ -12,7 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.opengl.GL11;
@@ -55,9 +54,9 @@ public class ItemRenderCapsule implements IItemRenderer
 		IIcon iicon;
 		Tessellator tes = Tessellator.instance;
 
-		if(item.hasTagCompound() && item.getTagCompound().hasKey("fluid"))
+		if( ((ItemCrystalCapsule)WGContent.ItemCapsule).getFluidStored(item)!=null )
 		{
-			Fluid fluid = FluidRegistry.getFluid(item.getTagCompound().getString("fluid"));
+			Fluid fluid = ((ItemCrystalCapsule)WGContent.ItemCapsule).getFluidStored(item);
 			iicon = fluid.getIcon(new FluidStack(fluid,1000));
 			int colour = fluid.getColor(new FluidStack(fluid,1000)); 
 
@@ -74,14 +73,14 @@ public class ItemRenderCapsule implements IItemRenderer
 
 			GL11.glScaled(1,1,.75f);
 			GL11.glTranslatef(0,0,-.01f);
-			ClientUtilities.renderIconWithMask(iicon, ((ItemCrystalCapsule)WGContent.ItemCrystalCapsule).fluidMask, new Color(colour), type);
+			ClientUtilities.renderIconWithMask(iicon, ((ItemCrystalCapsule)WGContent.ItemCapsule).fluidMask, new Color(colour), type);
 			GL11.glTranslatef(0,0,.01f);
 			GL11.glScaled(1,1,1/.75f);
 
 			//			ItemRenderer.renderItemIn2D(p_78439_0_, p_78439_1_, p_78439_2_, p_78439_3_, p_78439_4_, p_78439_5_, p_78439_6_, p_78439_7_);derItemIn2D(tes,  iicon.getMaxU(), iicon.getMinV(), iicon.getMinU(), iicon.getMaxV(), iicon.getIconWidth(), iicon.getIconHeight(), 0.0625F);
 		}
 
-		iicon = WGContent.ItemCrystalCapsule.getIcon(item, 0);
+		iicon = WGContent.ItemCapsule.getIcon(item, 0);
 		textureManager.bindTexture(textureManager.getResourceLocation(item.getItemSpriteNumber()));
 		if(type.equals(ItemRenderType.INVENTORY))
 		{
@@ -89,7 +88,7 @@ public class ItemRenderCapsule implements IItemRenderer
 			GL11.glTranslatef(0,0,1);
 		}
 		ItemRenderer.renderItemIn2D(tes,  iicon.getMaxU(), iicon.getMinV(), iicon.getMinU(), iicon.getMaxV(), iicon.getIconWidth(), iicon.getIconHeight(), 0.0625F);
-		iicon = WGContent.ItemCrystalCapsule.getIcon(item, 1);
+		iicon = WGContent.ItemCapsule.getIcon(item, 1);
 		if(iicon==null)
 		{
 			GL11.glPopMatrix();

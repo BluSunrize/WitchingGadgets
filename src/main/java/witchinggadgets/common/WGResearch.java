@@ -307,7 +307,7 @@ public class WGResearch
 		addBlastTrippling("Cinnabar");
 
 		alchemyAspects = new AspectList().add(Aspect.VOID,2).add(Aspect.CRYSTAL,4);
-		registerAlchemyRecipe("CRYSTALCAPSULE","", new ItemStack(WGContent.ItemCrystalCapsule), new ItemStack(Items.bucket), alchemyAspects);
+		registerAlchemyRecipe("CRYSTALCAPSULE","", new ItemStack(WGContent.ItemCapsule), new ItemStack(Items.bucket), alchemyAspects);
 
 		for(int iOre=0; iOre<ItemClusters.subNames.length; iOre++)
 		{
@@ -685,7 +685,7 @@ public class WGResearch
 		//CRYSTALCAPSULE
 		researchAspects = new AspectList().add(Aspect.CRYSTAL, 3).add(Aspect.ORDER, 2).add(Aspect.VOID, 4);
 		pages = new ResearchPage[]{ new ResearchPage("witchinggadgets_research_page.CRYSTALCAPSULE.1"), new ResearchPage((CrucibleRecipe) recipeList.get("CRYSTALCAPSULE"))};
-		getResearchItem("CRYSTALCAPSULE", "WITCHGADG", researchAspects, 2, -2, 2, new ItemStack(WGContent.ItemCrystalCapsule)).setPages(pages).setSecondary().setParents("GEMCUTTING").registerResearchItem();
+		getResearchItem("CRYSTALCAPSULE", "WITCHGADG", researchAspects, 2, -2, 2, new ItemStack(WGContent.ItemCapsule)).setPages(pages).setSecondary().setParents("GEMCUTTING").registerResearchItem();
 
 
 		//ORIGINAL INFUSIONENCHANTMENT

@@ -1,7 +1,6 @@
 package witchinggadgets.common;
 
 import java.util.Arrays;
-import java.util.Map;
 import java.util.UUID;
 
 import net.minecraft.block.Block;
@@ -14,16 +13,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -110,7 +104,7 @@ public class WGContent
 
 	public static Item ItemMaterial;
 	public static Item ItemCluster;
-	public static Item ItemCrystalCapsule;
+	public static Item ItemCapsule;
 	public static Item ItemBag;
 	public static Item ItemCloak;
 	public static Item ItemKama;
@@ -342,8 +336,8 @@ public class WGContent
 		ItemPrimordialBoots = new ItemPrimordialArmor(primordialArmor, 4, 3).setUnlocalizedName("WG_PrimordialBoots");
 		GameRegistry.registerItem(ItemPrimordialBoots, ItemPrimordialBoots.getUnlocalizedName());
 
-		ItemCrystalCapsule = new ItemCrystalCapsule().setUnlocalizedName("WG_CrystalFlask");
-		GameRegistry.registerItem(ItemCrystalCapsule, ItemCrystalCapsule.getUnlocalizedName());
+		ItemCapsule = new ItemCrystalCapsule().setUnlocalizedName("WG_CrystalFlask");
+		GameRegistry.registerItem(ItemCapsule, ItemCapsule.getUnlocalizedName());
 		if(WGConfig.allowClusters)
 		{
 			ItemCluster = new ItemClusters().setUnlocalizedName("WG_Cluster");
@@ -358,7 +352,7 @@ public class WGContent
 	{
 		WGResearch.recipeList.put("THAUMIUMSHEARS", GameRegistry.addShapedRecipe(new ItemStack(ItemThaumiumShears), " t", "t ", 't', ItemApi.getItem("itemResource", 2)));
 
-		BlockDispenser.dispenseBehaviorRegistry.putObject(ItemCrystalCapsule, new ItemCrystalCapsule.CapsuleDispenserBehaviour());	    
+		BlockDispenser.dispenseBehaviorRegistry.putObject(ItemCapsule, new ItemCrystalCapsule.CapsuleDispenserBehaviour());	    
 
 		GameRegistry.addRecipe(new RobeColourizationRecipe());
 		GameRegistry.addRecipe(new CloakColourizationRecipe());
@@ -386,15 +380,6 @@ public class WGContent
 	{
 		ChestGenHooks.getInfo("towerChestContents").addItem(new WeightedRandomChestContent(new ItemStack(ItemMaterial,1,8),1,1,8));
 		ChestGenHooks.getInfo(ChestGenHooks.VILLAGE_BLACKSMITH).addItem(new WeightedRandomChestContent(new ItemStack(ItemMaterial,1,8),1,1,8));
-
-		ItemStack emptyCapsule = new ItemStack(ItemCrystalCapsule);
-		for(Map.Entry<String,Fluid> f : FluidRegistry.getRegisteredFluids().entrySet())
-		{
-			ItemStack filledCapsule = new ItemStack(ItemCrystalCapsule);
-			filledCapsule.setTagCompound(new NBTTagCompound());
-			filledCapsule.getTagCompound().setString("fluid", f.getKey());
-			FluidContainerRegistry.registerFluidContainer(new FluidStack(f.getValue(),1000), filledCapsule, emptyCapsule);
-		}
 
 		InfernalBlastfurnaceRecipe.tryAddIngotImprovement("Iron", "Steel", false);
 		InfernalBlastfurnaceRecipe.tryAddSpecialOreMelting("Tungsten","Tungsten",true);

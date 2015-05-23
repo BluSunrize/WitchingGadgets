@@ -21,6 +21,7 @@ import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent.SetArmorModel;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 import org.lwjgl.input.Mouse;
@@ -76,9 +77,6 @@ public class ClientEventHandler
 	@SubscribeEvent(priority=EventPriority.HIGHEST)
 	public void getTooltip(ItemTooltipEvent event)
 	{
-		//		UniqueIdentifier uidd = GameRegistry.findUniqueIdentifierFor(event.itemStack.getItem());
-		//		if(uidd!=null)
-		//			event.toolTip.add(uidd.toString());
 		if(OreDictionary.itemMatches(new ItemStack(ConfigItems.itemResource,1,18), event.itemStack, true) && EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, event.itemStack)==1 && EnchantmentHelper.getEnchantmentLevel(Enchantment.looting.effectId, event.itemStack)==1)
 			event.toolTip.set(0, StatCollector.translateToLocal("item.modifiedTC.luckyCoin"));
 		
@@ -88,8 +86,6 @@ public class ClientEventHandler
 			for(Class intf : Block.getBlockFromItem(event.itemStack.getItem()).getClass().getInterfaces())
 				if(intf.getCanonicalName().endsWith("IInfusionStabiliser"))
 					event.toolTip.add(StatCollector.translateToLocal("wg.desc.infusionStabilizer"));
-		//		for(int o: OreDictionary.getOreIDs(event.itemStack))
-		//			event.toolTip.add(OreDictionary.getOreName(o));
 
 		try{
 			if(event.entityPlayer!=null)

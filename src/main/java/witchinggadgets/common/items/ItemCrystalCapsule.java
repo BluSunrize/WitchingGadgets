@@ -16,15 +16,18 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fluids.IFluidContainerItem;
+import net.minecraftforge.fluids.IFluidHandler;
 import thaumcraft.common.lib.utils.InventoryUtils;
 import witchinggadgets.WitchingGadgets;
 
@@ -34,6 +37,7 @@ public class ItemCrystalCapsule extends Item implements IFluidContainerItem
 	{
 		super();
 		this.setCreativeTab(WitchingGadgets.tabWG);
+		this.setHasSubtypes(true);
 	}
 
 	public ItemStack getContainerItem(ItemStack itemStack)
@@ -48,45 +52,76 @@ public class ItemCrystalCapsule extends Item implements IFluidContainerItem
 		if((localMovingObjectPosition == null) || (localMovingObjectPosition.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK))
 			return stack;
 
-		int x = localMovingObjectPosition.blockX;
-		int y = localMovingObjectPosition.blockY;
-		int z = localMovingObjectPosition.blockZ;
-		switch (localMovingObjectPosition.sideHit)
+		if(!world.isRemote)
 		{
-		case 0: 
-			y--;
-			break;
-		case 1: 
-			y++;
-			break;
-		case 2: 
-			z--;
-			break;
-		case 3: 
-			z++;
-			break;
-		case 4: 
-			x--;
-			break;
-		case 5: 
-			x++;
-		}
-		if( !player.canPlayerEdit(x, y, z, localMovingObjectPosition.sideHit, stack) || (!world.isAirBlock(x, y, z) && world.getBlock(x, y, z).getMaterial().isSolid()) )
-			return stack;
+			int x = localMovingObjectPosition.blockX;
+			int y = localMovingObjectPosition.blockY;
+			int z = localMovingObjectPosition.blockZ;
+			if(tryFillTank(stack,world,x,y,z,localMovingObjectPosition.sideHit))
+				return stack;
 
-		ItemStack used = useCapsule(world, x, y, z, stack);
-		if(stack.equals(used))
-			return stack;
-		if(!player.inventory.addItemStackToInventory(used))
-			player.dropPlayerItemWithRandomChoice(used, false);
+			switch (localMovingObjectPosition.sideHit)
+			{
+			case 0: 
+				y--;
+				break;
+			case 1: 
+				y++;
+				break;
+			case 2: 
+				z--;
+				break;
+			case 3: 
+				z++;
+				break;
+			case 4: 
+				x--;
+				break;
+			case 5: 
+				x++;
+			}
+			if( !player.canPlayerEdit(x, y, z, localMovingObjectPosition.sideHit, stack) || (!world.isAirBlock(x, y, z) && world.getBlock(x, y, z).getMaterial().isSolid()) )
+				return stack;
+
+			ItemStack used = useCapsule(world, x, y, z, stack);
+			if(stack.equals(used))
+				return stack;
+			if(!player.inventory.addItemStackToInventory(used))
+				player.dropPlayerItemWithRandomChoice(used, false);
+		}
 		return stack;
+	}
+
+	boolean tryFillTank(ItemStack stack, World world, int x, int y, int z, int side)
+	{
+		TileEntity te = world.getTileEntity(x, y, z);
+		if (te instanceof IFluidHandler)
+		{
+			IFluidHandler handler = (IFluidHandler)te;
+			ForgeDirection dir = ForgeDirection.getOrientation(side);
+			FluidStack fs = getFluid(stack);
+			if(fs==null)
+			{
+				FluidStack input = handler.drain(dir, 1000, false);
+				if(input == null || input.amount<1000)
+					return false;
+				this.fill(stack, handler.drain(dir, 1000, true), true);
+				return true;
+			}
+			int space = handler.fill(dir, fs, false);
+			if(space<1000)
+				return false;
+			handler.fill(dir, this.drain(stack, 1000, true), true);
+			return true;
+		}
+		return false;
 	}
 
 	ItemStack useCapsule(World world, int x, int y, int z, ItemStack stack)
 	{
-		if(stack.hasTagCompound() && stack.getTagCompound().hasKey("fluid"))
+		if(this.getFluidStored(stack)!=null)
 		{
-			Fluid f = FluidRegistry.getFluid(stack.getTagCompound().getString("fluid"));
+			Fluid f = this.getFluidStored(stack);
 			if(f==null || f.getBlock()==null || !f.canBePlacedInWorld())
 				return stack;
 			world.setBlock(x, y, z, f.getBlock());
@@ -109,6 +144,7 @@ public class ItemCrystalCapsule extends Item implements IFluidContainerItem
 			if(f==null)
 				return stack;
 			ItemStack filled = this.getContainerItem(stack);
+
 			if(!filled.hasTagCompound())
 				filled.setTagCompound(new NBTTagCompound());
 			filled.getTagCompound().setString("fluid", FluidRegistry.getFluidName(new FluidStack(f,1000)));
@@ -121,9 +157,7 @@ public class ItemCrystalCapsule extends Item implements IFluidContainerItem
 	@Override
 	public FluidStack getFluid(ItemStack container)
 	{
-		if(!container.hasTagCompound() || container.getTagCompound().hasKey("fluid"))
-			return null;
-		Fluid f = FluidRegistry.getFluid(container.getTagCompound().getString("fluid"));
+		Fluid f = this.getFluidStored(container);
 		if(f==null)
 			return null;
 		return new FluidStack(f,1000);
@@ -138,7 +172,6 @@ public class ItemCrystalCapsule extends Item implements IFluidContainerItem
 	@Override
 	public int fill(ItemStack container, FluidStack resource, boolean doFill)
 	{
-		//		System.out.println("attempt fill");
 		if(resource==null || resource.amount<1000)
 			return 0;
 		if(!container.hasTagCompound())
@@ -151,10 +184,9 @@ public class ItemCrystalCapsule extends Item implements IFluidContainerItem
 	@Override
 	public FluidStack drain(ItemStack container, int maxDrain, boolean doDrain)
 	{
-		//		System.out.println("attempt drain");
-		if(maxDrain<1000 || !container.hasTagCompound() || container.getTagCompound().hasKey("fluid"))
+		if(maxDrain<1000)
 			return null;
-		Fluid f = FluidRegistry.getFluid(container.getTagCompound().getString("fluid"));
+		Fluid f = this.getFluidStored(container);
 		if(f==null)
 			return null;
 		if(doDrain)
@@ -165,20 +197,19 @@ public class ItemCrystalCapsule extends Item implements IFluidContainerItem
 	@Override
 	public void addInformation(ItemStack item, EntityPlayer player, List list, boolean adv)
 	{
-		if(item.hasTagCompound() && item.getTagCompound().hasKey("fluid"))
-			if(FluidRegistry.getFluid(item.getTagCompound().getString("fluid"))!=null)
+		Fluid f = this.getFluidStored(item);
+		if(f!=null)
+		{
+			String fluidName = "ERROR";
+			try{
+				FluidStack fs = new FluidStack(f,1000);
+				fluidName = fs.getLocalizedName();
+			}catch(Exception e)
 			{
-				String fluidName = "ERROR";
-				try{
-					Fluid f = FluidRegistry.getFluid(item.getTagCompound().getString("fluid"));
-					FluidStack fs = new FluidStack(f,1000);
-					fluidName = fs.getLocalizedName();
-				}catch(Exception e)
-				{
-					e.printStackTrace();
-				}
-				list.add(fluidName);
+				e.printStackTrace();
 			}
+			list.add(fluidName);
+		}
 	}
 
 	@Override
@@ -192,6 +223,14 @@ public class ItemCrystalCapsule extends Item implements IFluidContainerItem
 			s.getTagCompound().setString("fluid", f.getKey());
 			list.add(s);
 		}
+	}
+
+	public Fluid getFluidStored(ItemStack stack)
+	{
+		if(stack.hasTagCompound() && stack.getTagCompound().hasKey("fluid"))
+			if(FluidRegistry.getFluid(stack.getTagCompound().getString("fluid"))!=null)
+				return FluidRegistry.getFluid(stack.getTagCompound().getString("fluid"));
+		return null;
 	}
 
 	public IIcon overlay;

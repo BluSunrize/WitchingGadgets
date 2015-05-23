@@ -179,6 +179,7 @@ public class EventHandler
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public void onLivingDrop(LivingDropsEvent event)
 	{
+		System.out.println("loot: "+event.lootingLevel);
 		if(event.entityLiving instanceof EntityWolf)
 		{
 			EntityWolf enemy = (EntityWolf) event.entityLiving;

@@ -124,11 +124,12 @@ public class WGModCompat
 	static Method addMelting = null;
 	public static void addTConSmelteryRecipe(ItemStack ore, Block block, int blockMeta, int temperature, String fluidName, int fluidAmount)
 	{
-		if(!loaded_TCon)
+		if(!loaded_TCon || FluidRegistry.getFluid(fluidName)==null)
 			return;
-		FluidStack fluid = new FluidStack(FluidRegistry.getFluid(fluidName), fluidAmount);
-
+		
 		try{
+			FluidStack fluid = new FluidStack(FluidRegistry.getFluid(fluidName), fluidAmount);
+
 			if(smeltery==null)
 				smeltery = Class.forName("tconstruct.library.crafting.Smeltery");
 			if(addMelting==null)
@@ -138,7 +139,6 @@ public class WGModCompat
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			throw new RuntimeException(e);
 		}
 	}
 	static Class dryingRack = null;
