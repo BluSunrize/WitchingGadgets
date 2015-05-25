@@ -183,7 +183,6 @@ public class ItemRenderPrimordialGauntlet implements IItemRenderer
 				for(int g=0;g<gems.length;g++)
 					if(gems[g]!= null)
 					{
-						//					System.out.println("Render gem "+("Gem0"+g+"_oval0"+g));
 						Color col = new Color(gems[g].getItem().getColorFromItemStack(gems[g], 0));
 						if(gems[g].getItemDamage()==0)
 							GL11.glColor3d(col.getRed()/255.0, col.getGreen()/255.0, col.getBlue()/255.0);

@@ -80,7 +80,7 @@ public class WGKeyHandler
 			float step = WGConfig.radialSpeed;
 			if(thaumcraftFKey!=null && thaumcraftFKey.getIsKeyPressed() && !keyDown[1])
 			{
-				if(player.isSneaking())
+				if(player.isSneaking() && player.getCurrentEquippedItem()!=null && player.getCurrentEquippedItem().getItem() instanceof ItemPrimordialGlove)
 					WitchingGadgets.packetHandler.sendToServer(new MessagePrimordialGlove(player, (byte)1, 0));
 				else
 					if(gemLock)

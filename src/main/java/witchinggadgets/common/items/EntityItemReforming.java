@@ -33,7 +33,6 @@ public class EntityItemReforming extends EntityItem
 					Thaumcraft.proxy.drawInfusionParticles1(worldObj, posX+rand.nextInt(3)-1.5, posY+rand.nextFloat(), posZ+rand.nextInt(3)-1.5, (int)Math.floor(posX), (int)Math.floor(posY), (int)Math.floor(posZ), getEntityItem().getItem(), getEntityItem().getItemDamage());
 		}
 
-		//System.out.println((worldObj.isRemote?"Client":"Server") + " World delay: "+renderDelay);
 	}
 
 

@@ -73,13 +73,8 @@ public class GuiLabelLibrary extends GuiContainer
 			if(ThaumcraftApiHelper.hasDiscoveredAspect(player.getCommandSenderName(), a))
 			{
 				if(mX>=size*(i%row) && mX<size*(i%row+1))
-				{
 					if(mY>=size*(i/row) && mY<size*((i+row)/row))
-					{
-						System.out.println(a.getTag());
 						tile.aspect=a;
-					}
-				}
 				i++;
 			}
 		if(tile.aspect != old)

@@ -47,17 +47,11 @@ public class ContainerCuttingTable extends Container
 			@Override
 			public void onPickupFromSlot(EntityPlayer player, ItemStack stack)
 			{
-				//System.out.println("On Crafting ("+(player.worldObj.isRemote?"Client":"Server")+" World), "+stack);
 				this.inventory.decrStackSize(0, 1);
 				this.inventory.decrStackSize(1, 1);
 				this.inventory.decrStackSize(2, 1);
 				this.inventory.decrStackSize(3, 1);
 			}
-			//			@Override
-			//		    protected void onCrafting(ItemStack stack, int i)
-			//			{
-			//				System.out.println("On Crafting, "+stack+", amount = i");
-			//			}
 		}
 				);
 		this.slotCount = 5;
@@ -128,10 +122,8 @@ public class ContainerCuttingTable extends Container
 			{
 				if(this.getSlot(1).isItemValid(stackInSlot))
 				{
-					System.out.println("Heyo!");
 					if(!this.mergeItemStack(stackInSlot, 1,4, false))
 					{
-						System.out.println("lolwat");
 						return null;
 					}
 				}

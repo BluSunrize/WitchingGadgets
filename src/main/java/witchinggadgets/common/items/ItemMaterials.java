@@ -398,7 +398,6 @@ public class ItemMaterials extends Item
 					{
 						player.addChatMessage(new ChatComponentTranslation(Lib.CHAT+"infusionInfo.instability",enchRecipe.calcInstability(central)).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.DARK_PURPLE)) );
 						float essmod = 1+enchRecipe.getEssentiaMod(central);
-						System.out.println(enchRecipe.getEssentiaMod(central));
 						if(essmod>1)
 						{
 							String plaintext = "";

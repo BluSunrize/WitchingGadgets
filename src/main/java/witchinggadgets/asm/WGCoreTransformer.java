@@ -166,14 +166,14 @@ public class WGCoreTransformer implements IClassTransformer
 		WitchingGadgets.logger.log(Level.INFO, "[CORE] Patching getFortuneModifier & getLootingModifier");
 
 		final String methodToPatch1 = "getFortuneModifier";
-		final String methodToPatch_obf1 = "func_77517_e";//"f";
+		final String methodToPatch_srg1 = "func_77517_e";
+		final String methodToPatch_obf1 = "f";
 		final String desc = "(Lnet/minecraft/entity/EntityLivingBase;)I";
 		final String desc_obf = "(Lsv;)I";
-		String name1 = deobf?methodToPatch1:methodToPatch_obf1;
 
 		final String methodToPatch2 = "getLootingModifier";
-		final String methodToPatch_obf2 = "func_77519_f";//"i";
-		String name2 = deobf?methodToPatch2:methodToPatch_obf2;
+		final String methodToPatch_srg2 = "func_77519_f";
+		final String methodToPatch_obf2 = "i";
 
 
 		ClassReader cr = new ClassReader(origCode);
@@ -183,7 +183,7 @@ public class WGCoreTransformer implements IClassTransformer
 
 		for(MethodNode methodNode : classNode.methods)
 		{
-			if(methodNode.name.equals(name1) && (methodNode.desc.equals(desc)||methodNode.desc.equals(desc_obf)) )
+			if( (methodNode.name.equals(methodToPatch1)||methodNode.name.equals(methodToPatch_srg1)||methodNode.name.equals(methodToPatch_obf1)) && (methodNode.desc.equals(desc)||methodNode.desc.equals(desc_obf)) )
 			{
 				Iterator<AbstractInsnNode> insnNodes=methodNode.instructions.iterator();
 				while(insnNodes.hasNext())
@@ -202,7 +202,7 @@ public class WGCoreTransformer implements IClassTransformer
 					}
 				}
 			}
-			else if(methodNode.name.equals(name2) && (methodNode.desc.equals(desc)||methodNode.desc.equals(desc_obf)) )
+			else if( (methodNode.name.equals(methodToPatch2)||methodNode.name.equals(methodToPatch_srg2)||methodNode.name.equals(methodToPatch_obf2)) && (methodNode.desc.equals(desc)||methodNode.desc.equals(desc_obf)) )
 			{
 				Iterator<AbstractInsnNode> insnNodes=methodNode.instructions.iterator();
 				while(insnNodes.hasNext())
@@ -265,17 +265,18 @@ public class WGCoreTransformer implements IClassTransformer
 		WitchingGadgets.logger.log(Level.INFO, "[CORE] Patching onNewPotionEffect");
 
 		final String methodToPatch = "onNewPotionEffect";
-		final String methodToPatch_obf = "a";//"func_70670_a";
-		final String desc1 = deobf?"(Lnet/minecraft/potion/PotionEffect;)V":"(Lrw;)V";
+		final String methodToPatch_srg = "func_70670_a";
+		final String methodToPatch_obf = "a";
+		final String desc1 = "(Lnet/minecraft/potion/PotionEffect;)V";
+		final String desc1_obf = "(Lrw;)V";
 		final String desc2 = deobf?"(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/potion/PotionEffect;)V":"(Lsv;Lrw;)V";
-		String name1 = deobf?methodToPatch:methodToPatch_obf;
 
 		ClassReader cr = new ClassReader(origCode);
 
 		ClassNode classNode=new ClassNode();
 		cr.accept(classNode, 0);
 		for(MethodNode methodNode : classNode.methods)
-			if(methodNode.name.equals(name1) && methodNode.desc.equals(desc1))
+			if( (methodNode.name.equals(methodToPatch)||methodNode.name.equals(methodToPatch_srg)||methodNode.name.equals(methodToPatch_obf)) && (methodNode.desc.equals(desc1)||methodNode.desc.equals(desc1_obf)))
 			{
 				Iterator<AbstractInsnNode> insnNodes=methodNode.instructions.iterator();
 				while(insnNodes.hasNext())
@@ -334,7 +335,7 @@ public class WGCoreTransformer implements IClassTransformer
 						f_potionDuration.setAccessible(true);
 
 					int val_Amp = f_potionAmplifier.getInt(effect);
-					
+
 					if(val_Amp>0)
 						val_Amp = Math.max(0, val_Amp-ordo);
 					f_potionAmplifier.setInt(effect, val_Amp);

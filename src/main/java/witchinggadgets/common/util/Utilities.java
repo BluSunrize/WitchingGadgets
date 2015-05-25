@@ -10,6 +10,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttribute;
@@ -29,6 +30,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import org.apache.logging.log4j.Level;
 
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.nodes.INode;
@@ -402,6 +404,11 @@ public class Utilities
 		return s;
 	}
 
+	public static void setAttackTarget(EntityLiving living, EntityLivingBase target)
+	{
+		ReflectionHelper.setPrivateValue(EntityLiving.class, living, target, "attackTarget","field_70696_bz");
+	}
+	
 	public static boolean isRightMaterial(Material mat, Material[] materials)
 	{
 		for(Material m : materials)

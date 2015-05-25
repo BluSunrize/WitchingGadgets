@@ -57,7 +57,6 @@ public class MultipartEssentiaTube_Valve extends MultipartEssentiaTube
 	public void update()
 	{
 		super.update();
-		//		System.out.println( (world().isRemote?"ClientSide: ":"ServerSide: ")+facing);
 		if(!world().isRemote && count%5==0)
 		{
 			boolean gettingPower = world().isBlockIndirectlyGettingPowered(x(), y(), z());;
@@ -81,8 +80,6 @@ public class MultipartEssentiaTube_Valve extends MultipartEssentiaTube
 		}
 		if(world().isRemote)
 		{
-			//			if(allowFlow)
-			//			System.out.println("hi");
 			if(!allowFlow && rotation<360)
 				rotation += 20;
 			else if(allowFlow && rotation > 0)

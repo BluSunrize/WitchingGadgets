@@ -105,7 +105,6 @@ public class TileEntityTerraformer extends TileEntityWGBase implements IAspectCo
 	{
 		this.essentia.writeToNBT(tags);
 		tags.setInteger("tick", tick);
-		//		System.out.println("reading tick: "+tick);
 	}
 
 	@Override

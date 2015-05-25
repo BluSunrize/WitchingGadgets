@@ -223,7 +223,6 @@ public class ClientUtilities
 		{
 			return;
 		}
-		//		System.out.println(colour);
 		if(colour!=null)
 			GL11.glColor4f(colour.getRed()/255f, colour.getGreen()/255f, colour.getBlue()/255f, colour.getAlpha()/255f);
 		GL11.glEnable(3042);
@@ -623,7 +622,6 @@ public class ClientUtilities
 					resource = getResource(iconName);
 					buffered = getImageForResource(resource);
 					int passColour = item.getColorFromItemStack(stack, pass);
-					//			System.out.println("Is atlas");
 					
 					int[] data = new int[buffered.getWidth()*buffered.getHeight()];
 					buffered.getRGB(0,0, buffered.getWidth(),buffered.getHeight(), data, 0,tas.getIconWidth());

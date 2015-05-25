@@ -89,7 +89,6 @@ public class GuiMagicalTileLock extends GuiScreen
 			if(solving!=null && step>=0 && step<solving.length)
 				if(currentTile==null)
 				{
-					//System.out.println(solving[31-step]+",");
 					for(int i=0;i<8;i++)
 						if( ((GuiButton)buttonList.get(i)).id == solving[31-step] )
 							this.actionPerformed( (GuiButton)buttonList.get(i));
@@ -148,25 +147,26 @@ public class GuiMagicalTileLock extends GuiScreen
 	@Override
 	protected void actionPerformed(GuiButton button)
 	{
-		if(button.id==10)
-		{
-			for(int ii : stored)
-				System.out.print(ii+",");
-			System.out.println();
-		}
-		else if(button.id==11)
-		{
-			String iA = "";
-			for(int ii=0;ii<8;ii++)
-			{
-				GuiButton b = (GuiButton) this.buttonList.get(ii);
-				iA += b.id+",";
-			}
-			iA = iA.substring(0, 15);
-			step=0;
-			solving = presets.get(iA);
-		}
-		else if(currentTile==null && !unlocked)
+//		if(button.id==10)
+//		{
+//			for(int ii : stored)
+//				System.out.print(ii+",");
+//			System.out.println();
+//		}
+//		else if(button.id==11)
+//		{
+//			String iA = "";
+//			for(int ii=0;ii<8;ii++)
+//			{
+//				GuiButton b = (GuiButton) this.buttonList.get(ii);
+//				iA += b.id+",";
+//			}
+//			iA = iA.substring(0, 15);
+//			step=0;
+//			solving = presets.get(iA);
+//		}
+//		else 
+			if(currentTile==null && !unlocked)
 		{
 			GuiButtonMagicTile tile = (GuiButtonMagicTile) button;
 			int guiLeft = (this.width-xSize)/2;
@@ -188,7 +188,6 @@ public class GuiMagicalTileLock extends GuiScreen
 				if( ((GuiButton)o).xPosition==x && ((GuiButton)o).yPosition-y==30)
 					hasBot=true;
 			}
-			//System.out.println("top: "+hasTop+", bot: "+hasBot+", left: "+hasLeft+", right: "+hasRight);
 
 			x -= guiLeft;
 			y -= guiTop;

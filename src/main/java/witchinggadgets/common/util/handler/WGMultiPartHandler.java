@@ -58,12 +58,6 @@ public class WGMultiPartHandler implements IPartFactory, IPartConverter
 	{
 		Block b = world.getBlock(coord.x, coord.y, coord.z);
 		int meta = world.getBlockMetadata(coord.x, coord.y, coord.z);
-//		if (b.equals(WGContent.BlockMPVisRelay))
-//		{
-//			//			System.out.println(world.getTileEntity(coord.x, coord.y, coord.z));
-//			//			System.out.println("conversion!");
-//			return new MultipartVisRelay(meta);
-//		}
 		if (b.equals(ConfigBlocks.blockTube))
 		{
 			if(world.getTileEntity(coord.x, coord.y, coord.z) instanceof TileTubeValve)

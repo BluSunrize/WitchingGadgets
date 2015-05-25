@@ -174,7 +174,6 @@ implements IEssentiaTransport, IWandable, TSlottedPart
 	public void update()
 	{
 		super.update();
-		//		System.out.println("facing: "+facing);
 		if(this.venting > 0)
 			this.venting -= 1;
 		if (this.count == 0)

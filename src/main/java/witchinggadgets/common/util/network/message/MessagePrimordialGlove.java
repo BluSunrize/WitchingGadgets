@@ -57,13 +57,13 @@ public class MessagePrimordialGlove implements IMessage
 				if(ent instanceof EntityPlayer)
 				{
 					EntityPlayer player = (EntityPlayer) ent;
-					if(message.type==0 && player.getCurrentEquippedItem()!=null)
+					if(message.type==(byte)0 && player.getCurrentEquippedItem()!=null)
 					{
 						if(!player.getCurrentEquippedItem().hasTagCompound())
 							player.getCurrentEquippedItem().setTagCompound(new NBTTagCompound());
 						player.getCurrentEquippedItem().getTagCompound().setInteger("selected", message.selected);
 					}
-					else if(message.type==1)
+					else if(message.type==(byte)1)
 						player.openGui(WitchingGadgets.instance, 7, world, (int)player.posX,(int)player.posY,(int)player.posZ);
 				}
 			}

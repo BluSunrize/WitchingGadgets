@@ -72,7 +72,7 @@ public class VillageComponentPhotoshop extends StructureVillagePieces.Village
 
 
 		//Shape
-		this.fillWithMetadataBlocks(world, box, 0,1,0, 6,7,6, Blocks.planks,2, Blocks.planks,2, false);
+		this.fillWithMetadataBlocks(world, box, 0,0,0, 6,7,6, Blocks.planks,2, Blocks.planks,2, false);
 		this.fillWithBlocks(world, box, 1,1,1, 5,7,5, Blocks.air, Blocks.air, false);
 
 		//Logs
@@ -146,8 +146,6 @@ public class VillageComponentPhotoshop extends StructureVillagePieces.Village
 
 		//Details
 		try{
-			System.out.println(x+","+y+","+z+": coordBaseMode="+coordBaseMode);
-
 			this.generateStructureChestContents(world,box,rand, 1,1,5, chestContents.getItems(rand), chestContents.getCount(rand));
 
 			int px = this.getXWithOffset(0,3);
@@ -167,7 +165,6 @@ public class VillageComponentPhotoshop extends StructureVillagePieces.Village
 					photo.setTagCompound(new NBTTagCompound());
 					if(scan != null)
 					{
-						System.out.println(scan.entity);
 						NBTTagCompound scanTag = Utilities.writeScanResultToNBT(scan);
 						photo.getTagCompound().setTag("scanResult", scanTag);
 					}

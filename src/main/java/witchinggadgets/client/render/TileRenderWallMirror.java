@@ -143,7 +143,6 @@ public class TileRenderWallMirror extends TileEntitySpecialRenderer
 		{
 
 			double distance = Math.sqrt((tile.xCoord-pp.posX)*(tile.xCoord-pp.posX)+(tile.zCoord-pp.posZ)*(tile.zCoord-pp.posZ));
-			//			System.out.println(distance);
 			float distanceScaling = .8125f * (float)(9-distance)/9f;
 			float hOffset =(float)( tile.facing==2||tile.facing==3?(pp.posX-(tile.xCoord+.5)):(pp.posZ-(tile.zCoord+.5)));
 			hOffset /= 4;

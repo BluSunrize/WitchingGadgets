@@ -358,8 +358,6 @@ public class TileEntityBlastfurnace extends TileEntityWGBase implements IEssenti
 	{
 
 		int i = (masterPos==null||masterPos.length<3)?0: (worldObj.getTileEntity(masterPos[0],masterPos[1],masterPos[2]) instanceof TileEntityBlastfurnace && ((TileEntityBlastfurnace)worldObj.getTileEntity(masterPos[0],masterPos[1],masterPos[2])).active)? (((TileEntityBlastfurnace)worldObj.getTileEntity(masterPos[0],masterPos[1],masterPos[2])).specialFuel?2:1): 0;
-		//		if(position == 10 & side ==0)
-		//			System.out.println("Texture used: "+i);
 		switch(position)
 		{
 		case 0:

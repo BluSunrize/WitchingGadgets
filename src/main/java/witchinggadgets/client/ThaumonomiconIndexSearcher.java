@@ -78,7 +78,6 @@ public class ThaumonomiconIndexSearcher
 		{
 			int guiLeft = event.gui.width/2;
 			int guiTop = event.gui.height/2-110;
-			//			System.out.println("heyo?");
 			thaumSearchField = new GuiTextField(event.gui.mc.fontRenderer, guiLeft, guiTop, 103, 13);
 			thaumSearchField.setTextColor(-1);
 			thaumSearchField.setDisabledTextColour(-1);

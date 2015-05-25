@@ -79,7 +79,6 @@ public class EtherealWallMaster
 			result[counter] = tile;
 			counter++;
 		}
-		//System.out.println("Tile array conversion done");
 		return result;
 	}
 

@@ -55,11 +55,9 @@ public class TileEntitySaunaStove extends TileEntityWGBase implements IFluidHand
 			tick--;
 			if(boundingBoxes.length<=0 && !recheck)
 				prepareAreaCheck();
-			//System.out.println("Ticked, "+(tick*10)/20f+" seconds left");
 		}
 		if(!recheck && tick<=0)
 		{
-			//System.out.println((worldObj.isRemote?"Client":"Server")+" Side: want to consume...tank has "+tank.getFluidAmount()+" mb");
 			if(this.tank.getFluidAmount()>=1000)
 			{
 				this.tank.drain(1000, true);
@@ -75,41 +73,11 @@ public class TileEntitySaunaStove extends TileEntityWGBase implements IFluidHand
 		{
 			for(AxisAlignedBB aabb : boundingBoxes)
 			{
-				//				System.out.println(aabb);
 				List<EntityPlayer> l = worldObj.getEntitiesWithinAABB(EntityPlayer.class, aabb);
 				for(EntityPlayer pl : l)
 					targetedPlayers.put(pl.getEntityId(),this);
-				//				Iterator<EntityPlayer> it = targetedPlayers.iterator();
-				//				while(it.hasNext())
-				//				{
-				//					EntityPlayer pl = it.next();
-				//					if(!l.contains(pl))
-				//						targetedPlayers.remove(pl);
-				//				}
 			}
-			//			for(EntityPlayer pl:targetedPlayers)
-			//				System.out.println(pl);
 		}
-		//		if(canWork())
-		//		{
-		//			tick++;
-		//			if(tick==32 && worldObj.isRemote)
-		//				worldObj.playSoundEffect(xCoord + 0.5F, yCoord + 0.5F, zCoord + 0.5F, "random.fizz", 0.5F, 2.6F + (worldObj.rand.nextFloat() - worldObj.rand.nextFloat()) * 0.8F);
-		//			if(tick>=tickGoal)
-		//			{
-		//				if(!worldObj.isRemote)
-		//					createCobble();
-		//				else
-		//					worldObj.playSoundEffect(xCoord + 0.5F, yCoord + 0.5F, zCoord + 0.5F, "dig.stone", 0.5F, 2.6F + (worldObj.rand.nextFloat() - worldObj.rand.nextFloat()) * 0.8F);
-		//				tick=0;
-		//			}
-		//		}
-		//		else
-		//		{
-		//			if(tick > 0)
-		//				tick = 0;
-		//		}
-
 	}
 
 	boolean recheck = false;
@@ -162,8 +130,6 @@ public class TileEntitySaunaStove extends TileEntityWGBase implements IFluidHand
 		}
 		if(closedList.size()>=closedListMax || openList.isEmpty())
 		{
-			//System.out.println("Done rechecking!");
-			//System.out.println(closedList.size());
 			recheck = false;
 
 			aabbList.clear();
@@ -178,7 +144,6 @@ public class TileEntitySaunaStove extends TileEntityWGBase implements IFluidHand
 	boolean recreate = false;
 	void createAABBs()
 	{
-		//		System.out.println("CreatingAABBs");
 		int timeoutAABB=0;
 		while(aabbUsedBlocks.size()<closedList.size() && timeoutAABB<1)
 		{
@@ -266,10 +231,6 @@ public class TileEntitySaunaStove extends TileEntityWGBase implements IFluidHand
 			recreate = false;
 			boundingBoxes = aabbList.toArray(new AxisAlignedBB[0]);
 		}
-		//		if(GuiScreen.isCtrlKeyDown())
-		//		{
-		//			System.out.println("AABB: "+xMin+", 0, "+zMin+" to "+xMax+", "+yMax+", "+zMax);
-		//		}
 	}
 
 	boolean isBlockValidForSteamPassing(int x, int y ,int z)

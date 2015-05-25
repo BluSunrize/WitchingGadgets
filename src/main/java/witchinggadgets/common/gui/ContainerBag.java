@@ -33,7 +33,6 @@ public class ContainerBag extends Container
 
 		if (!world.isRemote)
 			try {
-				//System.out.println("Getting Stacks in the ItemInventory");
 				((InventoryBag)this.input).stackList = ((ItemBag)this.pouch.getItem()).getStoredItems(this.pouch);
 			}
 		catch (Exception e)
@@ -107,7 +106,6 @@ public class ContainerBag extends Container
 		super.onContainerClosed(par1EntityPlayer);
 		if (!this.worldObj.isRemote)
 		{
-			//System.out.println("Closing Container and saving stacks!");
 			((ItemBag)this.pouch.getItem()).setStoredItems(this.pouch, ((InventoryBag)this.input).stackList);
 
 			if (!this.player.getCurrentEquippedItem().equals(this.pouch))

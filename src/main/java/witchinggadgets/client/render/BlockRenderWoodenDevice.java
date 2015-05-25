@@ -66,9 +66,7 @@ public class BlockRenderWoodenDevice implements ISimpleBlockRenderingHandler
 			}
 		}catch(Exception e)
 		{
-			//Tessellator.instance.draw();
 			e.printStackTrace();
-			//			System.out.println("Yay for critical errors >_>");
 		}
 		GL11.glEnable(32826);
 		GL11.glPopMatrix();

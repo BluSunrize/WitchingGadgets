@@ -56,7 +56,6 @@ public class PlayerTickHandler
 			}
 			if(!player.worldObj.isRemote && player.riddenByEntity!=null && player.riddenByEntity instanceof EntityLivingBase && EnchantmentHelper.getEnchantmentLevel(WGContent.enc_rideProtect.effectId, player.getCurrentArmor(3))>0)
 			{
-				System.out.println(player.worldObj+" dismount! "+player.riddenByEntity);
 				player.riddenByEntity.attackEntityFrom(DamageSource.causePlayerDamage(player), 1);
 				player.riddenByEntity.addVelocity(player.getRNG().nextFloat()*.4f, .1f, player.getRNG().nextFloat()*.4f);
 				((EntityLivingBase)player.riddenByEntity).dismountEntity(player);

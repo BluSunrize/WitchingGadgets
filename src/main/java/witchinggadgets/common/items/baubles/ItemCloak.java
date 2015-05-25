@@ -280,6 +280,17 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, 
 				}
 
 			}
+
+			if(subNames[stack.getItemDamage()].equals("wolf") && stack.hasTagCompound() && stack.getTagCompound().hasKey("wolfPotion"))
+			{
+				int amp = stack.getTagCompound().getInteger("wolfPotion");
+				player.addPotionEffect(new PotionEffect(Potion.damageBoost.id, 60, amp));
+				player.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, 60, amp));
+				player.addPotionEffect(new PotionEffect(Potion.resistance.id, 60, amp));
+				stack.getTagCompound().removeTag("wolfPotion");
+				if(stack.getTagCompound().hasNoTags())
+					stack.setTagCompound(null);
+			}
 		}
 	}
 	public void onItemEquipped(EntityPlayer player, ItemStack stack)
@@ -336,7 +347,7 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, 
 				{
 					for(EntityCreature e : (List<EntityCreature>)player.worldObj.getEntitiesWithinAABB(EntityCreature.class, AxisAlignedBB.getBoundingBox(player.posX-16,player.posY-16,player.posZ-16, player.posX+16,player.posY+16,player.posZ+16)))
 						if(e!=null && !(e instanceof IBossDisplayData) && player.equals(e.getAttackTarget()))
-							e.setAttackTarget(null);
+							Utilities.setAttackTarget(e, null);
 				}
 			}
 	}
@@ -344,20 +355,16 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, 
 	@Override
 	public void onUserDamaged(LivingHurtEvent event, ItemStack stack)
 	{
-		if(!stack.equals(event.entityLiving.getEquipmentInSlot(0)))
+		if(!stack.equals(event.entityLiving.getEquipmentInSlot(0)) && stack.getItemDamage()==3)
 		{
-			if(stack.getItemDamage()==3)
-			{	
-				EntityPlayer player = (EntityPlayer) event.entityLiving;
-				int amp = 1;
-				if(event.ammount>=8)
-					amp++;
-				if(event.ammount>=12)
-					amp++;
-				player.addPotionEffect(new PotionEffect(Potion.damageBoost.id, 60, amp));
-				player.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, 60, amp));
-				player.addPotionEffect(new PotionEffect(Potion.resistance.id, 60, amp));
-			}
+			int amp = 1;
+			if(event.ammount>=8)
+				amp++;
+			if(event.ammount>=12)
+				amp++;
+			if(!stack.hasTagCompound())
+				stack.setTagCompound(new NBTTagCompound());
+			stack.getTagCompound().setInteger("wolfPotion", amp);
 		}
 	}
 
@@ -384,7 +391,7 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, 
 			boolean goggles = event.entityLiving.getEquipmentInSlot(4)!=null && (event.entityLiving.getEquipmentInSlot(4).getItem() instanceof IRevealer || event.entityLiving.getEquipmentInSlot(4).getItem() instanceof IGoggles);
 			boolean special = event.entityLiving instanceof IEldritchMob || event.entityLiving instanceof IBossDisplayData;
 			if(!goggles && !special)
-				((EntityCreature)event.entityLiving).setAttackTarget(null);
+				Utilities.setAttackTarget((EntityCreature)event.entityLiving, null);
 		}
 	}
 

@@ -127,7 +127,6 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
-		//System.out.println("Time to Open a gui, Clientside, ID: "+ID);
 		TileEntity tile = world.getTileEntity(x, y, z);
 		if(ID == 0)return new GuiSpinningWheel(player.inventory, (TileEntitySpinningWheel)tile);
 

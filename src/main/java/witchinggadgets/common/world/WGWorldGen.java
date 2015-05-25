@@ -41,7 +41,6 @@ public class WGWorldGen implements IWorldGenerator
 		int y = world.getHeightValue(x, z);
 		if(world.getBlock(x, y, z).getMaterial()==Material.grass||world.getBlock(x, y, z).getMaterial()==Material.sand)
 		{
-			System.out.println("Tomb generated at "+x+", "+y+", "+z);
 			y-=8;
 			for(int yy=0;yy<tombShape.length;yy++)
 				for(int xx=0;xx<12;xx++)

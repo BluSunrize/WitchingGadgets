@@ -75,7 +75,7 @@ public class ItemPrimordialGlove extends Item implements IPrimordialCrafting
 	}
 	public static ItemStack setSetGems(ItemStack bracelet, ItemStack[] gems)
 	{
-		if( (!(bracelet.getItem() instanceof ItemPrimordialGlove)) || gems.length>5)
+		if( bracelet==null || (!(bracelet.getItem() instanceof ItemPrimordialGlove)) || gems==null || gems.length>5)
 			return bracelet;
 
 		if(bracelet.getTagCompound() == null)
@@ -113,7 +113,6 @@ public class ItemPrimordialGlove extends Item implements IPrimordialCrafting
 				if(g!=null && g.isItemDamaged())
 				{
 					int restored = al.getAmount(ItemInfusedGem.getAspect(g));
-					//					System.out.println("restoring: "+restored);
 					int newDmg = Math.max(g.getItemDamage()-restored, 0);
 					g.setItemDamage(newDmg);
 				}

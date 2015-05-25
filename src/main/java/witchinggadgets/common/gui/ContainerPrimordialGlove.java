@@ -41,7 +41,6 @@ public class ContainerPrimordialGlove extends Container
 		if (!world.isRemote)
 			try {
 				map.put(player.getEntityId(), this);
-				//System.out.println("Getting Stacks in the ItemInventory");
 				((InventoryPrimordialGlove)this.input).stackList = ItemPrimordialGlove.getSetGems(this.bracelet);
 			}
 		catch (Exception e)
@@ -116,7 +115,6 @@ public class ContainerPrimordialGlove extends Container
 		if (!this.worldObj.isRemote)
 		{
 			map.remove(player.getEntityId());
-			//System.out.println("Closing Container and saving stacks!");
 			ItemPrimordialGlove.setSetGems(this.bracelet, ((InventoryPrimordialGlove)this.input).stackList);
 
 			if (!this.bracelet.equals(this.player.getCurrentEquippedItem()))

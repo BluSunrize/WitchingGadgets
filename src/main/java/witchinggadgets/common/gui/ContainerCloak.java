@@ -31,7 +31,6 @@ public class ContainerCloak extends Container
 
 		if (!world.isRemote)
 			try {
-				//System.out.println("Getting Stacks in the ItemInventory");
 				((InventoryCloak)this.input).stackList = ((ItemCloak)this.cloak.getItem()).getStoredItems(this.cloak);
 			}
 		catch (Exception e)

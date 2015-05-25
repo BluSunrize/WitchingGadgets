@@ -66,7 +66,6 @@ public class PhotoDevelopingRecipe extends ShapelessArcaneRecipe
 	@Override
 	public boolean matches(IInventory iinventoryCrafting, World world, EntityPlayer player)
 	{
-		//System.out.println("YUCK");
 		ItemStack photoplate = null;
 		ArrayList<ItemStack> paper = new ArrayList<ItemStack>();
 		ArrayList<ItemStack> ink = new ArrayList<ItemStack>();
@@ -75,9 +74,7 @@ public class PhotoDevelopingRecipe extends ShapelessArcaneRecipe
 		{
 			if(i==10 || i==9)
 				break;
-//			System.out.println("i: "+i);
 			ItemStack stackInSlot = iinventoryCrafting.getStackInSlot(i);
-//			System.out.println("stackInSlot: "+stackInSlot);
 			if (stackInSlot != null)
 			{
 				if(stackInSlot.getItem().equals(WGContent.ItemMaterial) && stackInSlot.getItemDamage()==9)
@@ -94,14 +91,10 @@ public class PhotoDevelopingRecipe extends ShapelessArcaneRecipe
 					ink.add(stackInSlot);
 				else
 				{
-					//System.out.println(OreDictionary.itemMatches(new ItemStack(Item.dyePowder,1,0), stackInSlot, false));
-					//System.out.println("Stopping at i: "+i);
-					//System.out.println(stackInSlot.getDisplayName());
 					return false;
 				}
 			}
 		}
-		//System.out.println(photoplate!=null && !paper.isEmpty() && !ink.isEmpty() && (paper.size()==ink.size()));
 		return photoplate!=null && !paper.isEmpty() && !ink.isEmpty() && (paper.size()==ink.size());
 	}
 

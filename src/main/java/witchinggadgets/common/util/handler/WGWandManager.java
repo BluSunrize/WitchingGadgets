@@ -66,16 +66,12 @@ public class WGWandManager implements IWandTriggerManager
 			structure &= isValidBFStair(world, x+1,y+2,z-1, 20, 1,2);//world.getBlock(x+1,y,z-1).equals(Blocks.stone_brick_stairs) && (world.getBlockMetadata(x+1,y,z-1)==1||world.getBlockMetadata(x+1,y,z-1)==2);
 			structure &= isValidBFStair(world, x+1,y+2,z+0, 23, 1);//world.getBlock(x+1,y,z+0).equals(Blocks.stone_brick_stairs) && world.getBlockMetadata(x+1,y,z+0)==1;
 			structure &= isValidBFStair(world, x+1,y+2,z+1, 26, 1,3);//world.getBlock(x+1,y,z+1).equals(Blocks.stone_brick_stairs) && (world.getBlockMetadata(x+1,y,z+1)==1||world.getBlockMetadata(x+1,y,z+1)==3);
-			if(!structure)
-				System.out.println("broken on stairs");
 			
 			for(int yy=0;yy<=1;yy++)
 				for(int xx=-1;xx<=1;xx++)
 					for(int zz=-1;zz<=1;zz++)
 					{
 						structure &= isValidBFBrick(world, x+xx,y+yy,z+zz, ( (yy*9)+((zz+1)*3)+(xx+1)) );//world.getBlock(x+xx,y+yy,z+zz).equals(Blocks.stonebrick);
-						if(!structure)
-							System.out.println("broken at "+xx+","+yy+","+zz);
 					}
 			if(structure)
 				break;
@@ -85,7 +81,6 @@ public class WGWandManager implements IWandTriggerManager
 			int x = lavas.get(lava)[0];
 			int y = lavas.get(lava)[1]-2;
 			int z = lavas.get(lava)[2];
-			//System.out.println("HEYO!, lava at "+x+", "+y+", "+z);
 
 			for(int yy=0;yy<=2;yy++)
 				for(int zz=-1;zz<=1;zz++)

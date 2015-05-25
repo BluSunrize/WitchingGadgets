@@ -77,7 +77,6 @@ public class TileEntityCuttingTable extends TileEntityWGBase implements IInvento
 		if(this.inventory[0]==null || !InfusedGemHandler.isGem(this.inventory[0]))
 			return null;
 		ItemStack stack = new ItemStack(WGContent.ItemInfusedGem);
-		//			System.out.println(l.getAmount(aspect));
 		Aspect aspect = getInfusingAspect();
 		if(aspect != null)
 		{

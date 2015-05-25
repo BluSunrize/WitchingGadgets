@@ -483,7 +483,6 @@ public class BlockWGStoneDevice extends BlockContainer
 			{
 				tile.camoID = camoID;
 				tile.camoMeta = camoMeta;
-				System.out.println("New Meta: "+tile.camoMeta);
 				world.markBlockRangeForRenderUpdate(x, y, z, x, y, z);
 				//				PacketDispatcher.sendPacketToAllInDimension(tile.getDescriptionPacket(), world.provider.dimensionId);
 			}

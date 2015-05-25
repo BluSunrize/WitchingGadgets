@@ -359,7 +359,6 @@ public class TileRenderCuttingTable extends TileEntitySpecialRenderer
 
 		public void renderFlask(byte fl, int colour)
 		{
-			//			System.out.println("rendering flask");
 			GL11.glEnable(3042);
 			flasks.get(fl)[2].render(.0625f);
 			GL11.glColor3f((colour >> 16 & 255)/255.0F, (colour >> 8 & 255)/255.0F, (colour & 255) / 255.0F);

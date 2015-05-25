@@ -21,7 +21,6 @@ import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent.SetArmorModel;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 import org.lwjgl.input.Mouse;
@@ -113,7 +112,6 @@ public class ClientEventHandler
 	@SubscribeEvent
 	public void handleMouse(MouseEvent event)
 	{
-		//		System.out.println("Mouse Event");
 		if(event.button==0 && inGemSearch)
 		{
 			inGemSearch=false;
@@ -126,12 +124,9 @@ public class ClientEventHandler
 			int my = event.y-mc.displayHeight/2;
 			double radius = Math.sqrt(mx*mx + my*my);
 
-			//			System.out.println(radius);
-
 			double cx = mx/radius;//Math.cos(Math.toRadians(angle));
 			double angle = (mx<0?180:0)+Math.abs((mx<0?-180:0)+ (my<0?90:0)+Math.abs((my<0?-90:0)+Math.abs(Math.toDegrees(Math.acos(cx))-90)));
 			int sel = angle>288?0: angle<72?1: 2+(int)((288-angle)/72);
-			//System.out.println("Selected: "+sel);
 			WitchingGadgets.packetHandler.sendToServer(new MessagePrimordialGlove(player, (byte)0, sel));
 			//WGPacketPipeline.INSTANCE.sendToServer(new PacketPrimordialGlove(player, (byte)0, sel));
 		}
@@ -142,7 +137,6 @@ public class ClientEventHandler
 		//			int mx = Mouse.getEventX() * mc.currentScreen.width / mc.displayWidth;
 		//			int my = mc.currentScreen.height - Mouse.getEventY() * mc.currentScreen.height / mc.displayHeight - 1;
 		//			//			int k = Mouse.getEventButton();
-		//			System.out.println("click at "+mx+", "+my);
 		//			thaumSearchField.mouseClicked(mx, my, event.button);
 		//		}
 	}
@@ -200,7 +194,6 @@ public class ClientEventHandler
 
 			ClientUtilities.bindTexture("witchinggadgets:textures/gui/gauntletRadial1.png");
 			float mod = (int)((System.currentTimeMillis()%10000))/10000f;
-			//			System.out.println(mod);
 			GL11.glRotatef(360*mod, 0, 0, 1);
 			tessellator.startDrawingQuads();
 			tessellator.setColorOpaque_I(0xffffff);

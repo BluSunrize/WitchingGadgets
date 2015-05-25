@@ -124,16 +124,17 @@ public class EventHandler
 					if(Math.signum(targetVec.xCoord)!=Math.signum(attackVec.xCoord) || Math.signum(targetVec.zCoord)!=Math.signum(attackVec.zCoord))
 						chance-=.1f;
 					if(player.getRNG().nextFloat()<chance)
-						((EntityCreature)event.entityLiving).setAttackTarget(null);
+						Utilities.setAttackTarget((EntityCreature)event.entityLiving, null);
 					else
 					{
 						for(EntityCreature e : (List<EntityCreature>)player.worldObj.getEntitiesWithinAABB(EntityCreature.class, AxisAlignedBB.getBoundingBox(player.posX-5,player.posY-5,player.posZ-5, player.posX+5,player.posY+5,player.posZ+5)))
 							if(e!=null && !(e instanceof IBossDisplayData) && player.equals(e.getAttackTarget()))
-								e.setAttackTarget(player);
+								Utilities.setAttackTarget((EntityCreature)event.entityLiving, null);
 					}
 				}
 		}
 	}
+	
 	@SubscribeEvent
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
@@ -179,7 +180,6 @@ public class EventHandler
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public void onLivingDrop(LivingDropsEvent event)
 	{
-		System.out.println("loot: "+event.lootingLevel);
 		if(event.entityLiving instanceof EntityWolf)
 		{
 			EntityWolf enemy = (EntityWolf) event.entityLiving;

@@ -29,7 +29,6 @@ public class CommonProxy implements IGuiHandler
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
-		//System.out.println("Time to Open a gui, Serverside, ID: "+ID);
 		TileEntity tile = world.getTileEntity(x, y, z);
 		if(ID == 0)return new ContainerSpinningWheel(player.inventory, (TileEntitySpinningWheel)tile);
 		
@@ -39,7 +38,6 @@ public class CommonProxy implements IGuiHandler
 		if(ID == 6)return new ContainerPatchedFocusPouch(player.inventory, world, x, y, z);
 
 		if(ID == 7)return new ContainerPrimordialGlove(player.inventory, world, x, y, z);
-		//System.out.println("...or just skip it...");
 		if(ID == 8)return new ContainerLabelLibrary(player.inventory, (TileEntityLabelLibrary)tile);
 
 		if(ID == 9)return new ContainerCuttingTable(player.inventory, (TileEntityCuttingTable)tile);

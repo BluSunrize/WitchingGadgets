@@ -28,7 +28,6 @@ public class BlockRenderStoneDevice implements ISimpleBlockRenderingHandler
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer)
 	{
-		//		System.out.println(block);
 		GL11.glPushMatrix();
 		try{
 			GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
@@ -253,11 +252,7 @@ public class BlockRenderStoneDevice implements ISimpleBlockRenderingHandler
 		else 
 			if(world.getBlockMetadata(x, y, z) == 8)
 			{
-				//			if(true)
-				//			return false;
 				byte pos = ((TileEntityBlastfurnace)world.getTileEntity(x, y, z)).position;
-				//ForgeDirection facing = ((TileEntityBlastfurnace)world.getTileEntity(x, y, z)).facing;
-				//System.out.println(pos);
 				if(pos==22)
 					renderer.setRenderBounds(0,0,0, 1,.875,1);
 				else if(pos>=18)

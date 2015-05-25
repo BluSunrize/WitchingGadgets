@@ -150,12 +150,10 @@ public class BlockWGWoodenDevice extends BlockContainer implements IWandable
 						if(fcd.filledContainer.isItemEqual(player.inventory.getCurrentItem()))
 							emptyContainer = fcd.emptyContainer.copy();
 
-					System.out.println("empty container: "+emptyContainer);
 					player.inventory.decrStackSize(player.inventory.currentItem, 1);
 					if(emptyContainer != null)
 					{
 						boolean b = player.inventory.addItemStackToInventory(emptyContainer);
-						System.out.println("Added: "+b);
 						if(!b)
 							player.dropPlayerItemWithRandomChoice(emptyContainer, false);
 					}
