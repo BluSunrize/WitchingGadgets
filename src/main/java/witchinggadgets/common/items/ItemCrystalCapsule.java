@@ -30,6 +30,7 @@ import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fluids.IFluidHandler;
 import thaumcraft.common.lib.utils.InventoryUtils;
 import witchinggadgets.WitchingGadgets;
+import witchinggadgets.common.util.Utilities;
 
 public class ItemCrystalCapsule extends Item implements IFluidContainerItem
 {
@@ -57,7 +58,7 @@ public class ItemCrystalCapsule extends Item implements IFluidContainerItem
 			int x = localMovingObjectPosition.blockX;
 			int y = localMovingObjectPosition.blockY;
 			int z = localMovingObjectPosition.blockZ;
-			if(tryFillTank(stack,world,x,y,z,localMovingObjectPosition.sideHit))
+			if(tryFillTank(stack,world,x,y,z,localMovingObjectPosition.sideHit, player))
 				return stack;
 
 			switch (localMovingObjectPosition.sideHit)
@@ -92,7 +93,7 @@ public class ItemCrystalCapsule extends Item implements IFluidContainerItem
 		return stack;
 	}
 
-	boolean tryFillTank(ItemStack stack, World world, int x, int y, int z, int side)
+	boolean tryFillTank(ItemStack stack, World world, int x, int y, int z, int side, EntityPlayer player)
 	{
 		TileEntity te = world.getTileEntity(x, y, z);
 		if (te instanceof IFluidHandler)
@@ -105,13 +106,20 @@ public class ItemCrystalCapsule extends Item implements IFluidContainerItem
 				FluidStack input = handler.drain(dir, 1000, false);
 				if(input == null || input.amount<1000)
 					return false;
-				this.fill(stack, handler.drain(dir, 1000, true), true);
+				ItemStack filled = Utilities.copyStackWithSize(stack, 1);
+				this.fill(filled, handler.drain(dir, 1000, true), true);
+				if(!player.inventory.addItemStackToInventory(filled))
+					player.dropPlayerItemWithRandomChoice(filled, false);
+				stack.stackSize-=1;
 				return true;
 			}
 			int space = handler.fill(dir, fs, false);
 			if(space<1000)
 				return false;
-			handler.fill(dir, this.drain(stack, 1000, true), true);
+			handler.fill(dir, fs, true);
+			if(!player.inventory.addItemStackToInventory(getContainerItem(stack)))
+				player.dropPlayerItemWithRandomChoice(stack, false);
+			stack.stackSize-=1;
 			return true;
 		}
 		return false;

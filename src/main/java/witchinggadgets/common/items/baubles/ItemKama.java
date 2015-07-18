@@ -13,6 +13,7 @@ import witchinggadgets.client.render.ModelKama;
 import witchinggadgets.common.util.Lib;
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -81,6 +82,13 @@ public class ItemKama extends ItemCloak implements IBauble
 		if(stack.hasTagCompound() && stack.getTagCompound().getBoolean("noGlide"))
 			list.add(StatCollector.translateToLocal(Lib.DESCRIPTION+"noGlide"));
 		list.add(StatCollector.translateToLocalFormatted(Lib.DESCRIPTION+"gearSlot.bauble."+getBaubleType(stack)));
+
+		if(Loader.isModLoaded("Botania"))
+		{
+			ItemStack cosmetic = getCosmeticItem(stack);
+			if(cosmetic != null)
+				list.add( String.format(StatCollector.translateToLocal("botaniamisc.hasCosmetic"), cosmetic.getDisplayName()).replaceAll("&","\u00a7") );
+		}
 	}
 	
 	@Override

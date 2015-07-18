@@ -76,9 +76,12 @@ public class ClientEventHandler
 	@SubscribeEvent(priority=EventPriority.HIGHEST)
 	public void getTooltip(ItemTooltipEvent event)
 	{
+		for(int oid : OreDictionary.getOreIDs(event.itemStack))
+			event.toolTip.add(OreDictionary.getOreName(oid));
+		
 		if(OreDictionary.itemMatches(new ItemStack(ConfigItems.itemResource,1,18), event.itemStack, true) && EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, event.itemStack)==1 && EnchantmentHelper.getEnchantmentLevel(Enchantment.looting.effectId, event.itemStack)==1)
 			event.toolTip.set(0, StatCollector.translateToLocal("item.modifiedTC.luckyCoin"));
-		
+
 		if(event.itemStack.getItem().equals(Items.skull))
 			event.toolTip.add(StatCollector.translateToLocal("wg.desc.infusionStabilizer"));
 		else if(Block.getBlockFromItem(event.itemStack.getItem())!=null)
@@ -86,26 +89,24 @@ public class ClientEventHandler
 				if(intf.getCanonicalName().endsWith("IInfusionStabiliser"))
 					event.toolTip.add(StatCollector.translateToLocal("wg.desc.infusionStabilizer"));
 
-		try{
-			if(event.entityPlayer!=null)
-				if(ThaumcraftApiHelper.isResearchComplete(event.entityPlayer.getCommandSenderName(), "GEMCUTTING") && InfusedGemHandler.isGem(event.itemStack) && GuiScreen.isShiftKeyDown())
+		if(event.entityPlayer!=null)
+			if(ThaumcraftApiHelper.isResearchComplete(event.entityPlayer.getCommandSenderName(), "GEMCUTTING") && InfusedGemHandler.isGem(event.itemStack) && GuiScreen.isShiftKeyDown())
+			{
+				if(InfusedGemHandler.getNaturalAffinities(event.itemStack)!=null && InfusedGemHandler.getNaturalAffinities(event.itemStack).length>0)
 				{
-					if(InfusedGemHandler.getNaturalAffinities(event.itemStack)!=null && InfusedGemHandler.getNaturalAffinities(event.itemStack).length>0)
-					{
-						event.toolTip.add(EnumChatFormatting.DARK_GREEN+StatCollector.translateToLocal(Lib.DESCRIPTION+"gemaffinity"));
-						for(Aspect a : InfusedGemHandler.getNaturalAffinities(event.itemStack))
-							if(a!=null)
-								event.toolTip.add(" "+EnumChatFormatting.DARK_GREEN+a.getName());
-					}
-					if(InfusedGemHandler.getNaturalAversions(event.itemStack)!=null && InfusedGemHandler.getNaturalAversions(event.itemStack).length>0)
-					{
-						event.toolTip.add(EnumChatFormatting.RED+StatCollector.translateToLocal(Lib.DESCRIPTION+"gemaversion"));
-						for(Aspect a : InfusedGemHandler.getNaturalAversions(event.itemStack))
-							if(a!=null)
-								event.toolTip.add(" "+EnumChatFormatting.RED+a.getName());
-					}
+					event.toolTip.add(EnumChatFormatting.DARK_GREEN+StatCollector.translateToLocal(Lib.DESCRIPTION+"gemaffinity"));
+					for(Aspect a : InfusedGemHandler.getNaturalAffinities(event.itemStack))
+						if(a!=null)
+							event.toolTip.add(" "+EnumChatFormatting.DARK_GREEN+a.getName());
 				}
-		}catch(Exception e){e.printStackTrace();}
+				if(InfusedGemHandler.getNaturalAversions(event.itemStack)!=null && InfusedGemHandler.getNaturalAversions(event.itemStack).length>0)
+				{
+					event.toolTip.add(EnumChatFormatting.RED+StatCollector.translateToLocal(Lib.DESCRIPTION+"gemaversion"));
+					for(Aspect a : InfusedGemHandler.getNaturalAversions(event.itemStack))
+						if(a!=null)
+							event.toolTip.add(" "+EnumChatFormatting.RED+a.getName());
+				}
+			}
 	}
 
 	@SideOnly(Side.CLIENT)

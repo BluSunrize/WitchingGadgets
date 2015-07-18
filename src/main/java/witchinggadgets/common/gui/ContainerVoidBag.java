@@ -94,7 +94,7 @@ public class ContainerVoidBag extends ContainerGhostSlots
 	@Override
 	public ItemStack slotClick(int par1, int par2, int par3, EntityPlayer par4EntityPlayer)
 	{
-		if (par1 == this.blockedSlot) return null;		
+		if(par1 == this.blockedSlot || (par2==0&&par3==blockedSlot)) return null;		
 		((ItemBag)this.pouch.getItem()).setStoredItems(this.pouch, ((InventoryBag)this.input).stackList);
 
 		return super.slotClick(par1, par2, par3, par4EntityPlayer);

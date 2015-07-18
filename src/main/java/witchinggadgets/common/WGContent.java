@@ -21,6 +21,7 @@ import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 import thaumcraft.api.ItemApi;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
@@ -345,6 +346,7 @@ public class WGContent
 		}
 		//ItemMagicBed = new ItemMagicBed(WGConfig.ItemMagicBedID).setUnlocalizedName("WG_MagicBed");
 		//GameRegistry.registerItem(ItemMagicBed, ItemMagicBed.getUnlocalizedName());
+		OreDictionary.registerOre("blockVoid", new ItemStack(BlockMetalDevice,1,7));
 		OreDictionary.registerOre("crystalNetherQuartz", new ItemStack(Items.quartz));
 		OreDictionary.registerOre("scribingTools", new ItemStack(ConfigItems.itemInkwell,1,OreDictionary.WILDCARD_VALUE));
 	}
@@ -362,7 +364,9 @@ public class WGContent
 		RecipeSorter.register("WitchingGadgets:bagdye", BagColourizationRecipe.class, RecipeSorter.Category.SHAPELESS, "after:forge:shapelessore");
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockMetalDevice,1,7), "vvv","vvv","vvv", 'v',"ingotVoid"));
-
+		ItemStack voidIngot = OreDictionary.getOres("ingotVoid").get(0);
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(voidIngot.getItem(),9,voidIngot.getItemDamage()), "blockVoid"));
+		
 		GameRegistry.addShapelessRecipe(new ItemStack(ItemMagicFoodstuffs,1,0), Items.nether_wart,Items.sugar);
 		GameRegistry.addShapedRecipe(new ItemStack(ItemMagicFoodstuffs,1,1), "nnn","www", 'n',new ItemStack(ItemMagicFoodstuffs,1,0), 'w', Items.wheat);
 

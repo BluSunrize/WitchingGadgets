@@ -9,6 +9,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.boss.IBossDisplayData;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
@@ -81,7 +82,7 @@ public class EventHandler
 		if(event.source.getSourceOfDamage() instanceof EntityPlayer && ((EntityPlayer)event.source.getSourceOfDamage()).getCurrentEquippedItem()!=null)
 		{
 			EntityPlayer player = (EntityPlayer)event.source.getSourceOfDamage();
-			if(player.getCurrentEquippedItem().getItem().equals(WGContent.ItemPrimordialHammer) && (event.entityLiving instanceof EntitySlime || event.entityLiving.getClass().getName().endsWith("BlueSlime")) )
+			if(player.getCurrentEquippedItem().getItem().equals(WGContent.ItemPrimordialHammer) && (event.entityLiving instanceof EntitySlime || event.entityLiving.getClass().getName().endsWith("BlueSlime") || event.entityLiving.getCreatureAttribute()==EnumCreatureAttribute.ARTHROPOD) )
 				event.ammount *= 2;
 			if(player.getCurrentEquippedItem().getItem().equals(WGContent.ItemPrimordialAxe) && !event.source.isUnblockable())
 			{

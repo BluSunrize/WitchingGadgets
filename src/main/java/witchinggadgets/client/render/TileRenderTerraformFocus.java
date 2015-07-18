@@ -47,15 +47,18 @@ public class TileRenderTerraformFocus extends TileEntitySpecialRenderer
 			{
 				ClientUtilities.bindTexture("textures/atlas/blocks.png");
 				ItemStack stack = ((ITerraformFocus)tile.getBlockType()).getDisplayedBlock(tile.getWorldObj(),tile.xCoord,tile.yCoord,tile.zCoord);
-				Block b = Block.getBlockFromItem(stack.getItem());
-				if(b!=null)
+				if(stack!=null)
 				{
-					float rot = RenderManager.instance.livingPlayer.ticksExisted%40 / 40f;
-					GL11.glTranslatef(0,1.3125f,0);
-					GL11.glScalef(.25f, .25f, .25f);
-					GL11.glRotatef(rot*360, 0, 1, 0);
-					GL11.glRotatef(rot*360, 0, 0, 1);
-					RenderBlocks.getInstance().renderBlockAsItem(b, stack.getItemDamage(), .75f);
+					Block b = Block.getBlockFromItem(stack.getItem());
+					if(b!=null)
+					{
+						float rot = RenderManager.instance.livingPlayer.ticksExisted%40 / 40f;
+						GL11.glTranslatef(0,1.3125f,0);
+						GL11.glScalef(.25f, .25f, .25f);
+						GL11.glRotatef(rot*360, 0, 1, 0);
+						GL11.glRotatef(rot*360, 0, 0, 1);
+						RenderBlocks.getInstance().renderBlockAsItem(b, stack.getItemDamage(), .75f);
+					}
 				}
 			}
 		}

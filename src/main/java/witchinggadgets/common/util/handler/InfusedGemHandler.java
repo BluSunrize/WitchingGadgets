@@ -1,91 +1,106 @@
 package witchinggadgets.common.util.handler;
 
+import java.util.HashMap;
+
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 import thaumcraft.api.aspects.Aspect;
-import thaumcraft.api.aspects.AspectList;
 import witchinggadgets.common.util.Utilities;
 
 public class InfusedGemHandler
 {
-	
-	
+	public static HashMap<String, Aspect[]> naturalAffinities = new HashMap<String, Aspect[]>();
+	public static HashMap<String, Aspect[]> naturalAversions = new HashMap<String, Aspect[]>();
+
+	static{
+		registerAffinities("gemDiamond", Aspect.ORDER,Aspect.ENTROPY);
+		registerAffinities("gemEmerald", Aspect.ORDER,Aspect.EARTH);
+		registerAversions("gemEmerald", Aspect.WATER,Aspect.ENTROPY);
+		registerAffinities("crystalNetherQuartz", Aspect.ENTROPY,Aspect.FIRE);
+		registerAversions("crystalNetherQuartz", Aspect.ORDER,Aspect.WATER);
+		registerAffinities("crystalCertusQuartz", Aspect.ORDER,Aspect.AIR);
+		registerAversions("crystalCertusQuartz", Aspect.ENTROPY,Aspect.FIRE);
+
+		registerAffinities("gemTopaz", Aspect.AIR,Aspect.FIRE);
+		registerAversions("gemTopaz", Aspect.ENTROPY,Aspect.WATER);
+		registerAffinities("gemAmber", Aspect.AIR,Aspect.EARTH);
+		registerAversions("gemAmber", Aspect.ENTROPY);
+		registerAffinities("gemPeridot", Aspect.EARTH);
+		registerAversions("gemPeridot", Aspect.ENTROPY,Aspect.FIRE);
+		registerAffinities("gemMalachite", Aspect.EARTH,Aspect.WATER);
+		registerAversions("gemMalachite", Aspect.ENTROPY,Aspect.FIRE);
+		registerAffinities("gemRuby", Aspect.FIRE);
+		registerAversions("gemRuby", Aspect.ENTROPY,Aspect.WATER);
+		registerAffinities("gemSapphire", Aspect.WATER);
+		registerAversions("gemSapphire", Aspect.ENTROPY,Aspect.FIRE);
+		registerAffinities("gemTanzanite", Aspect.WATER);
+		registerAversions("gemTanzanite", Aspect.ENTROPY,Aspect.FIRE);
+		
+		registerAffinities("gemPrimordial", Aspect.AIR,Aspect.EARTH,Aspect.FIRE,Aspect.WATER,Aspect.ORDER,Aspect.ENTROPY);
+	}
+
+
+	public static void registerAffinities(Object o, Aspect... aspects)
+	{
+		System.out.println("registerign for "+o+": "+aspects.length);
+		if(o instanceof String)
+			naturalAffinities.put((String)o, aspects);
+		else if(o instanceof ItemStack)
+			naturalAffinities.put(Utilities.getItemStackString((ItemStack)o), aspects);
+	}
+	public static void removeAffinities(Object o)
+	{
+		if(o instanceof String)
+			naturalAffinities.remove((String)o);
+		else if(o instanceof ItemStack)
+			naturalAffinities.remove(Utilities.getItemStackString((ItemStack)o));
+	}
+	public static void registerAversions(Object o, Aspect... aspects)
+	{
+		if(o instanceof String)
+			naturalAversions.put((String)o, aspects);
+		else if(o instanceof ItemStack)
+			naturalAversions.put(Utilities.getItemStackString((ItemStack)o), aspects);
+	}
+	public static void removeAversions(Object o)
+	{
+		if(o instanceof String)
+			naturalAversions.remove((String)o);
+		else if(o instanceof ItemStack)
+			naturalAversions.remove(Utilities.getItemStackString((ItemStack)o));
+	}
+
+
 	public static Aspect[] getNaturalAffinities(ItemStack gem)
 	{
-		//		if(gem.)
-		AspectList l = new AspectList();
-		if(Utilities.compareToOreName(gem, "gemDiamond"))
-		{
-			l.add(Aspect.ORDER,1);
-			l.add(Aspect.ENTROPY,1);
-		}
-		if(Utilities.compareToOreName(gem, "gemEmerald"))
-		{
-			l.add(Aspect.ORDER,1);
-			l.add(Aspect.EARTH,1);
-		}
-		if(Utilities.compareToOreName(gem, "crystalNetherQuartz"))
-		{
-			l.add(Aspect.ENTROPY,1);
-			l.add(Aspect.FIRE,1);
-		}
-		if(Utilities.compareToOreName(gem, "crystalCertusQuartz"))
-		{
-			l.add(Aspect.ORDER,1);
-			l.add(Aspect.AIR,1);
-		}
-		if(Utilities.compareToOreName(gem, "gemTopaz") || Utilities.compareToOreName(gem, "gemAmber"))
-			l.add(Aspect.AIR,1);
-		if(Utilities.compareToOreName(gem, "gemPeridot") || Utilities.compareToOreName(gem, "gemMalachite") || Utilities.compareToOreName(gem, "gemAmber"))
-			l.add(Aspect.EARTH,1);
-		if(Utilities.compareToOreName(gem, "gemRuby") || Utilities.compareToOreName(gem, "gemTopaz"))
-			l.add(Aspect.FIRE,1);
-		if(Utilities.compareToOreName(gem, "gemSapphire") || Utilities.compareToOreName(gem, "gemMalachite") || Utilities.compareToOreName(gem, "gemTanzanite"))
-			l.add(Aspect.WATER,1);
-		if(Utilities.compareToOreName(gem, "gemPrimordial"))
-		{
-			l.add(Aspect.AIR,1);
-			l.add(Aspect.EARTH,1);
-			l.add(Aspect.FIRE,1);
-			l.add(Aspect.WATER,1);
-			l.add(Aspect.ORDER,1);
-			l.add(Aspect.ENTROPY,1);
-		}
-		return l.getPrimalAspects();
+		String s0 = Utilities.getItemStackString(gem);
+		if(naturalAffinities.containsKey(s0))
+			return naturalAffinities.get(s0);
+		for(String s1 : naturalAffinities.keySet())
+			if(Utilities.compareToOreName(gem, s1))
+				return naturalAffinities.get(s1);
+		return new Aspect[0];
 	}
 	public static Aspect[] getNaturalAversions(ItemStack gem)
 	{
-		//		if(gem.)
-		AspectList l = new AspectList();
-		if(Utilities.compareToOreName(gem, "gemEmerald"))
-		{
-			l.add(Aspect.WATER,1);
-			l.add(Aspect.ENTROPY,1);
-		}
-		if(Utilities.compareToOreName(gem, "crystalNetherQuartz"))
-		{
-			l.add(Aspect.ORDER,1);
-			l.add(Aspect.WATER,1);
-		}
-		if(Utilities.compareToOreName(gem, "crystalCertusQuartz"))
-		{
-			l.add(Aspect.ENTROPY,1);
-			l.add(Aspect.FIRE,1);
-		}
-		if(Utilities.compareToOreName(gem, "gemRuby") || Utilities.compareToOreName(gem, "gemPeridot") || Utilities.compareToOreName(gem, "gemTopaz") || Utilities.compareToOreName(gem, "gemTanzanite") || Utilities.compareToOreName(gem, "gemMalachite") || Utilities.compareToOreName(gem, "gemSapphire") || Utilities.compareToOreName(gem, "gemAmber"))
-			l.add(Aspect.ENTROPY,1);
-		
-		if(Utilities.compareToOreName(gem, "gemRuby") || Utilities.compareToOreName(gem, "gemTopaz"))
-			l.add(Aspect.WATER,1);
-		if(Utilities.compareToOreName(gem, "gemPeridot") || Utilities.compareToOreName(gem, "gemMalachite") || Utilities.compareToOreName(gem, "gemSapphire") || Utilities.compareToOreName(gem, "gemTanzanite"))
-			l.add(Aspect.FIRE,1);
-		return l.getPrimalAspects();
+		String s0 = Utilities.getItemStackString(gem);
+		if(naturalAversions.containsKey(s0))
+			return naturalAversions.get(s0);
+		for(String s1 : naturalAversions.keySet())
+			if(Utilities.compareToOreName(gem, s1))
+				return naturalAversions.get(s1);
+		return new Aspect[0];
 	}
-	
+
 	public static boolean isGem(ItemStack stack)
 	{
-		for(int oid : OreDictionary.getOreIDs(stack))
-			if(OreDictionary.getOreName(oid).startsWith("gem") || OreDictionary.getOreName(oid).startsWith("crystal"))
+		String s0 = Utilities.getItemStackString(stack);
+		if(naturalAffinities.containsKey(s0) || naturalAversions.containsKey(s0))
+			return true;
+		for(String s : naturalAffinities.keySet())
+			if(Utilities.compareToOreName(stack, s))
+				return true;
+		for(String s : naturalAversions.keySet())
+			if(Utilities.compareToOreName(stack, s))
 				return true;
 		return false;
 	}

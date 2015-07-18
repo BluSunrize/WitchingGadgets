@@ -181,7 +181,6 @@ public class Utilities
 		return ((ResearchCategoryList)ResearchCategories.researchCategories.get(category)).research.containsKey(key);
 	}
 
-
 	/**
 	 * Removes Vis from items in the Inventory, ignoring discounts.
 	 */
@@ -242,6 +241,17 @@ public class Utilities
 				if(oid0==oid1)
 					return true;
 		return false;
+	}
+
+	public static String getItemStackString(ItemStack stack)
+	{
+		StringBuilder result = new StringBuilder();
+		result.append(Item.itemRegistry.getNameForObject(stack.getItem()));
+		if(stack.getItemDamage() == OreDictionary.WILDCARD_VALUE)
+			result.append(":*");
+		else if(stack.getItemDamage()>0)
+			result.append(':').append(stack.getItemDamage());
+		return result.toString();
 	}
 
 	static String[] dyes = new String[]{"dyeBlack","dyeRed","dyeGreen","dyeBrown","dyeBlue","dyePurple","dyeCyan","dyeLightGray","dyeGray","dyePink","dyeLime","dyeYellow","dyeLightBlue","dyeMagenta","dyeOrange","dyeWhite"};
@@ -408,7 +418,7 @@ public class Utilities
 	{
 		ReflectionHelper.setPrivateValue(EntityLiving.class, living, target, "attackTarget","field_70696_bz");
 	}
-	
+
 	public static boolean isRightMaterial(Material mat, Material[] materials)
 	{
 		for(Material m : materials)

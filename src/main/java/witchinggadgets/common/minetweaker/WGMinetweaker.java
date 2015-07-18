@@ -15,6 +15,7 @@ public class WGMinetweaker
 	{
 		MineTweakerAPI.registerClass(SpinningWheel.class);
 		MineTweakerAPI.registerClass(InfernalBlastfurnace.class);
+		MineTweakerAPI.registerClass(GemCutting.class);
 	}
 
 	/** Helper Methods */

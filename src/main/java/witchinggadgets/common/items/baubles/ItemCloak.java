@@ -332,11 +332,12 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, 
 		if(stack.getItemDamage()<subNames.length)
 			if(subNames[stack.getItemDamage()].equals("storage") && !player.worldObj.isRemote)
 				player.openGui(WitchingGadgets.instance, this.equals(WGContent.ItemKama)?5:4, player.worldObj, MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posY), MathHelper.floor_double(player.posZ));
-			else if(subNames[stack.getItemDamage()].equals("raven"))
+			else if(subNames[stack.getItemDamage()].equals("raven") && !player.worldObj.isRemote)
 			{
 				if(!stack.hasTagCompound())
 					stack.setTagCompound(new NBTTagCompound());
 				stack.getTagCompound().setBoolean("noGlide", !stack.getTagCompound().getBoolean("noGlide"));
+				System.out.println("glide set to : "+stack.getTagCompound().getBoolean("noGlide"));
 			}
 			else if(subNames[stack.getItemDamage()].equals("spectral") && !player.worldObj.isRemote && Utilities.consumeVisFromInventoryWithoutDiscount(player, new AspectList().add(Aspect.AIR,1)))
 			{
@@ -386,7 +387,7 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, 
 	@Override
 	public void onUserTargeted(LivingSetAttackTargetEvent event, ItemStack stack)
 	{
-		if(stack.hasTagCompound() && stack.getTagCompound().getBoolean("isSpectral"))
+		if(stack.hasTagCompound() && stack.getTagCompound().getBoolean("isSpectral") && event.entityLiving instanceof EntityCreature)
 		{
 			boolean goggles = event.entityLiving.getEquipmentInSlot(4)!=null && (event.entityLiving.getEquipmentInSlot(4).getItem() instanceof IRevealer || event.entityLiving.getEquipmentInSlot(4).getItem() instanceof IGoggles);
 			boolean special = event.entityLiving instanceof IEldritchMob || event.entityLiving instanceof IBossDisplayData;
