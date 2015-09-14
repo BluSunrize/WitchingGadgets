@@ -43,13 +43,24 @@ public class ItemMagicFood extends ItemFood
 	public ItemStack onEaten(ItemStack stack, World world, EntityPlayer player)
 	{
 		--stack.stackSize;
-		int meta = stack.getItemDamage();
-		player.getFoodStats().addStats(hungerHealed[meta], saturation[meta]);
+		player.getFoodStats().func_151686_a(this, stack);
 		world.playSoundAtEntity(player, "random.burp", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
 		this.onFoodEaten(stack, world, player);
 		return stack;
 	}
 
+	@Override
+    public int func_150905_g(ItemStack stack)
+    {
+        return hungerHealed[Math.min(hungerHealed.length-1, stack.getItemDamage())];
+    }
+
+	@Override
+    public float func_150906_h(ItemStack stack)
+    {
+        return saturation[Math.min(saturation.length-1, stack.getItemDamage())];
+    }
+	
 	@Override
 	public void onFoodEaten(ItemStack stack, World world, EntityPlayer player)
 	{
