@@ -210,28 +210,25 @@ public class WGContent
 	private static void preInitBlocks()
 	{
 		BlockWallMirror = new BlockWallMirror().setBlockName("WG_WallMirror");
-		GameRegistry.registerBlock(BlockWallMirror, BlockWallMirror.getLocalizedName());
+		GameRegistry.registerBlock(BlockWallMirror, BlockWallMirror.getUnlocalizedName().substring("tile.".length()));
 
 		BlockVoidWalkway = new BlockVoidWalkway().setBlockName("WG_VoidWalkway");
-		GameRegistry.registerBlock(BlockVoidWalkway, BlockVoidWalkway.getLocalizedName());
+		GameRegistry.registerBlock(BlockVoidWalkway, BlockVoidWalkway.getUnlocalizedName().substring("tile.".length()));
 
 		BlockStoneDevice = new BlockWGStoneDevice().setBlockName("WG_StoneDevice");
-		GameRegistry.registerBlock(BlockStoneDevice, ItemBlockStoneDevice.class, BlockStoneDevice.getLocalizedName());
+		GameRegistry.registerBlock(BlockStoneDevice, ItemBlockStoneDevice.class, BlockStoneDevice.getUnlocalizedName().substring("tile.".length()));
 
 		BlockWoodenDevice = new BlockWGWoodenDevice().setBlockName("WG_WoodenDevice");
-		GameRegistry.registerBlock(BlockWoodenDevice, ItemBlockWoodenDevice.class, BlockWoodenDevice.getLocalizedName());
+		GameRegistry.registerBlock(BlockWoodenDevice, ItemBlockWoodenDevice.class, BlockWoodenDevice.getUnlocalizedName().substring("tile.".length()));
 
 		BlockMetalDevice = new BlockWGMetalDevice().setBlockName("WG_MetalDevice");
-		GameRegistry.registerBlock(BlockMetalDevice, ItemBlockMetalDevice.class, BlockMetalDevice.getLocalizedName());
-
-		//BlockMagicBed = new BlockMagicBed(WGConfig.BlockMagicBedID).setUnlocalizedName("WG_MagicBed");
-		//GameRegistry.registerBlock(BlockMagicBed, BlockMagicBed.getLocalizedName());
+		GameRegistry.registerBlock(BlockMetalDevice, ItemBlockMetalDevice.class, BlockMetalDevice.getUnlocalizedName().substring("tile.".length()));
 
 		BlockRoseVine = new BlockRoseVines().setBlockName("WG_RoseVine");
-		GameRegistry.registerBlock(BlockRoseVine, BlockRoseVine.getLocalizedName());
+		GameRegistry.registerBlock(BlockRoseVine, BlockRoseVine.getUnlocalizedName().substring("tile.".length()));
 
 		BlockCustomAiry = new BlockModifiedAiry().setBlockName("WG_CustomAir");
-		GameRegistry.registerBlock(BlockCustomAiry, BlockCustomAiry.getLocalizedName());
+		GameRegistry.registerBlock(BlockCustomAiry, BlockCustomAiry.getUnlocalizedName().substring("tile.".length()));
 
 		OreDictionary.registerOre("blockVoid", new ItemStack(BlockMetalDevice,1,7));
 	}

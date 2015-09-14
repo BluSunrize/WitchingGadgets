@@ -41,7 +41,6 @@ public class InfusedGemHandler
 
 	public static void registerAffinities(Object o, Aspect... aspects)
 	{
-		System.out.println("registerign for "+o+": "+aspects.length);
 		if(o instanceof String)
 			naturalAffinities.put((String)o, aspects);
 		else if(o instanceof ItemStack)

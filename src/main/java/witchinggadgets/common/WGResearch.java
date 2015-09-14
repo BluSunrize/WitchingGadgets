@@ -417,8 +417,9 @@ public class WGResearch
 		addBlastTrippling("Silver");
 		addBlastTrippling("Lead");
 		InfernalBlastfurnaceRecipe.addRecipe(new ItemStack(ConfigItems.itemResource,3,3), "clusterCinnabar",1, 440,false).addBonus(new ItemStack(ConfigItems.itemNugget,1,5));
-		for(String s : WGConfig.tripplingClusterList)
-			addBlastTrippling(s);
+		for(String name : OreDictionary.getOreNames())
+			if(name.startsWith("cluster"))
+				addBlastTrippling(name.substring("cluster".length()));
 
 		if(WGModCompat.loaded_TCon)
 		{

@@ -76,9 +76,6 @@ public class ClientEventHandler
 	@SubscribeEvent(priority=EventPriority.HIGHEST)
 	public void getTooltip(ItemTooltipEvent event)
 	{
-		for(int oid : OreDictionary.getOreIDs(event.itemStack))
-			event.toolTip.add(OreDictionary.getOreName(oid));
-		
 		if(OreDictionary.itemMatches(new ItemStack(ConfigItems.itemResource,1,18), event.itemStack, true) && EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, event.itemStack)==1 && EnchantmentHelper.getEnchantmentLevel(Enchantment.looting.effectId, event.itemStack)==1)
 			event.toolTip.set(0, StatCollector.translateToLocal("item.modifiedTC.luckyCoin"));
 

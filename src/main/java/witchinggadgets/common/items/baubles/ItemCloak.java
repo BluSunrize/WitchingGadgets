@@ -337,7 +337,6 @@ public class ItemCloak extends Item implements ITravellersGear, IActiveAbility, 
 				if(!stack.hasTagCompound())
 					stack.setTagCompound(new NBTTagCompound());
 				stack.getTagCompound().setBoolean("noGlide", !stack.getTagCompound().getBoolean("noGlide"));
-				System.out.println("glide set to : "+stack.getTagCompound().getBoolean("noGlide"));
 			}
 			else if(subNames[stack.getItemDamage()].equals("spectral") && !player.worldObj.isRemote && Utilities.consumeVisFromInventoryWithoutDiscount(player, new AspectList().add(Aspect.AIR,1)))
 			{

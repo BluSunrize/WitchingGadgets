@@ -1,6 +1,8 @@
 package witchinggadgets;
 
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -26,10 +28,13 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLMissingMappingsEvent;
+import cpw.mods.fml.common.event.FMLMissingMappingsEvent.MissingMapping;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import cpw.mods.fml.common.registry.GameRegistry.Type;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.relauncher.Side;
 
@@ -53,7 +58,7 @@ public class WitchingGadgets
 
 	@SidedProxy(clientSide="witchinggadgets.client.ClientProxy", serverSide="witchinggadgets.common.CommonProxy")
 	public static CommonProxy proxy;
-	
+
 	public static SimpleNetworkWrapper packetHandler;
 
 	@Mod.EventHandler
@@ -63,7 +68,7 @@ public class WitchingGadgets
 
 		WGConfig.loadConfig(event);
 		WGContent.preInit();
-		
+
 		packetHandler = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
 
 		eventHandler = new EventHandler();
@@ -88,13 +93,13 @@ public class WitchingGadgets
 	public void init(FMLInitializationEvent event)
 	{
 		proxy.registerRenders();
-//		WGPacketPipeline.INSTANCE.initialise();
+		//		WGPacketPipeline.INSTANCE.initialise();
 
 		WGContent.init();
-		
+
 		proxy.registerHandlers();
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
-		
+
 		packetHandler.registerMessage(MessageClientNotifier.HandlerClient.class, MessageClientNotifier.class, 0, Side.CLIENT);
 		packetHandler.registerMessage(MessagePlaySound.HandlerClient.class, MessagePlaySound.class, 1, Side.CLIENT);
 		packetHandler.registerMessage(MessagePrimordialGlove.HandlerServer.class, MessagePrimordialGlove.class, 2, Side.SERVER);
@@ -103,10 +108,37 @@ public class WitchingGadgets
 	}
 
 	@Mod.EventHandler
-	public static void postInit(FMLPostInitializationEvent event)
+	public void postInit(FMLPostInitializationEvent event)
 	{
 		WGModCompat.init();
 		WGContent.postInit();
-//		WGPacketPipeline.INSTANCE.postInitialise();
+		//		WGPacketPipeline.INSTANCE.postInitialise();
+	}
+
+	@Mod.EventHandler
+	public void missingMappings(FMLMissingMappingsEvent event)
+	{
+		Block[] wgBlocks = {WGContent.BlockWallMirror,WGContent.BlockVoidWalkway,WGContent.BlockPortal,WGContent.BlockStoneDevice,WGContent.BlockWoodenDevice,WGContent.BlockMetalDevice,WGContent.BlockMagicBed,WGContent.BlockRoseVine,WGContent.BlockCustomAiry};
+		for(MissingMapping mapping : event.get())
+			if(mapping.name.startsWith("WitchingGadgets:"))
+			{
+				try{
+					String s = mapping.name.substring("WitchingGadgets:".length());
+					for(Block b : wgBlocks)
+						if(b!=null)
+						{
+							if(s.equalsIgnoreCase(b.getLocalizedName()))
+							{
+								if(mapping.type==Type.BLOCK)
+									mapping.remap(b);
+								else
+									mapping.remap(Item.getItemFromBlock(b));
+								logger.warn("Remapping "+mapping.name+" to "+b.getUnlocalizedName());
+							}
+						}
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
 	}
 }
