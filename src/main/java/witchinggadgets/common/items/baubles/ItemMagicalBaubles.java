@@ -1,5 +1,6 @@
 package witchinggadgets.common.items.baubles;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,8 +34,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemMagicalBaubles extends Item implements IBauble, ITravellersGear, vazkii.botania.api.item.ICosmeticAttachable
 {
 	//String[] subNames = {"ringSocketed_gold","ringSocketed_thaumium","ringSocketed_silver"};
-	public static String[] subNames = {"shouldersDoublejump","shouldersKnockback","vambraceStrength","vambraceHaste","titleCrimsonCult","ringLuck"};
+	public static String[] subNames = {"shouldersDoublejump","shouldersKnockback","vambraceStrength","vambraceHaste","titleCrimsonCult","ringLuck","ringSniper"};
 	IIcon[] icons = new IIcon[subNames.length];
+	public static HashSet<String> bowSpeedPlayers = new HashSet<String>();
 
 	public ItemMagicalBaubles()
 	{
@@ -219,16 +221,16 @@ public class ItemMagicalBaubles extends Item implements IBauble, ITravellersGear
 	public void onItemEquipped(EntityLivingBase living, ItemStack stack)
 	{
 		if(stack.getItemDamage()==1)
-			Utilities.addAttributeToLiving(living, SharedMonsterAttributes.knockbackResistance, new UUID(Lib.ATTRIBUTE_MOD_UUID, stack.getItemDamage()), "WGKnockbackResistance", 0.6, 0);
+			Utilities.addAttributeModToLiving(living, SharedMonsterAttributes.knockbackResistance, new UUID(Lib.ATTRIBUTE_MOD_UUID, stack.getItemDamage()), "WGKnockbackResistance", 0.6, 0);
 		if(stack.getItemDamage()==2)
-			Utilities.addAttributeToLiving(living, SharedMonsterAttributes.attackDamage, new UUID(Lib.ATTRIBUTE_MOD_UUID, stack.getItemDamage()), "WGStrengthBonus", 2, 0);
+			Utilities.addAttributeModToLiving(living, SharedMonsterAttributes.attackDamage, new UUID(Lib.ATTRIBUTE_MOD_UUID, stack.getItemDamage()), "WGStrengthBonus", 2, 0);
 	}
 	public void onItemUnequipped(EntityLivingBase living, ItemStack stack)
 	{
 		if(stack.getItemDamage()==1)
-			Utilities.removeAttributeFromLiving(living, SharedMonsterAttributes.knockbackResistance, new UUID(Lib.ATTRIBUTE_MOD_UUID, stack.getItemDamage()), "WGKnockbackResistance", 0.6, 0);
+			Utilities.removeAttributeModFromLiving(living, SharedMonsterAttributes.knockbackResistance, new UUID(Lib.ATTRIBUTE_MOD_UUID, stack.getItemDamage()), "WGKnockbackResistance", 0.6, 0);
 		if(stack.getItemDamage()==2)
-			Utilities.removeAttributeFromLiving(living, SharedMonsterAttributes.attackDamage, new UUID(Lib.ATTRIBUTE_MOD_UUID, stack.getItemDamage()), "WGStrengthBonus", 2, 0);
+			Utilities.removeAttributeModFromLiving(living, SharedMonsterAttributes.attackDamage, new UUID(Lib.ATTRIBUTE_MOD_UUID, stack.getItemDamage()), "WGStrengthBonus", 2, 0);
 	}
 
 

@@ -10,9 +10,11 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -46,6 +48,7 @@ import witchinggadgets.common.util.Utilities;
 import witchinggadgets.common.util.WGKeyHandler;
 import witchinggadgets.common.util.handler.InfusedGemHandler;
 import witchinggadgets.common.util.network.message.MessagePrimordialGlove;
+import baubles.api.BaublesApi;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -280,21 +283,20 @@ public class ClientEventHandler
 	@SubscribeEvent
 	public void renderArmor(SetArmorModel event)
 	{
-		if(event.stack!=null && EnchantmentHelper.getEnchantmentLevel(WGContent.enc_invisibleGear.effectId, event.stack)>0)
+		int translucency = EnchantmentHelper.getEnchantmentLevel(WGContent.enc_invisibleGear.effectId, event.stack);
+		if(event.stack!=null && (translucency>1 || (translucency>0 && event.entityPlayer.isInvisible())))
 		{	
 			boolean unveiling = EnchantmentHelper.getEnchantmentLevel(WGContent.enc_unveiling.effectId, Minecraft.getMinecraft().thePlayer.getEquipmentInSlot(4))>0;
 			if(event.entityPlayer.equals(Minecraft.getMinecraft().thePlayer) || !unveiling )
 				event.result=-2;
 		}
-		for(ItemStack cloak : Utilities.getActiveMagicalCloak(event.entityPlayer))
-			if(cloak!=null && cloak.hasTagCompound() && cloak.getTagCompound().getBoolean("isSpectral"))
-				event.result=-2;
 	}
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void renderTravellersGear(RenderTravellersGearEvent event)
 	{
-		if(event.stack!=null && EnchantmentHelper.getEnchantmentLevel(WGContent.enc_invisibleGear.effectId, event.stack)>0)
+		int translucency = EnchantmentHelper.getEnchantmentLevel(WGContent.enc_invisibleGear.effectId, event.stack);
+		if(event.stack!=null && (translucency>1 || (translucency>0 && event.entityPlayer.isInvisible())))
 		{	
 			boolean unveiling = EnchantmentHelper.getEnchantmentLevel(WGContent.enc_unveiling.effectId, Minecraft.getMinecraft().thePlayer.getEquipmentInSlot(4))>0;
 			if(event.entityPlayer.equals(Minecraft.getMinecraft().thePlayer) || !unveiling )
@@ -393,6 +395,17 @@ public class ClientEventHandler
 							event.setCanceled(true);
 						}
 					}
+		}
+	}
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public void onFOVUpdate(FOVUpdateEvent event)
+	{
+		IInventory baubles = BaublesApi.getBaubles(event.entity);
+		if(Utilities.isPlayerUsingBow(event.entity) && baubles!=null && (OreDictionary.itemMatches(new ItemStack(WGContent.ItemMagicalBaubles,1,6),baubles.getStackInSlot(1), true)||OreDictionary.itemMatches(new ItemStack(WGContent.ItemMagicalBaubles,1,6),baubles.getStackInSlot(2), true)))
+		{
+			if(event.entity.isSneaking())
+				event.newfov = .25f;
 		}
 	}
 }

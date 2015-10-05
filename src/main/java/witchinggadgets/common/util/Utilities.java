@@ -20,6 +20,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
@@ -30,7 +31,6 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import org.apache.logging.log4j.Level;
 
-import cpw.mods.fml.relauncher.ReflectionHelper;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.nodes.INode;
@@ -47,6 +47,8 @@ import witchinggadgets.WitchingGadgets;
 import witchinggadgets.common.WGContent;
 import witchinggadgets.common.items.baubles.ItemCloak;
 import baubles.api.BaublesApi;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 
 public class Utilities
 {
@@ -392,14 +394,45 @@ public class Utilities
 		}
 	}
 
-	public static void addAttributeToLiving(EntityLivingBase living, IAttribute attr, UUID uuid, String tag, double val, int type)
+	static Class c_tconProjectileWeapon;
+	public static boolean isPlayerUsingBow(EntityPlayer player)
+	{
+		if(!player.isUsingItem() || player.getItemInUse()==null || player.getItemInUse().getItem()==null)
+			return false;
+		if(player.getItemInUse().getItem() instanceof ItemBow)
+			return true;
+		if(Loader.isModLoaded("TConstruct"))
+		{
+			if(c_tconProjectileWeapon==null)
+				try{
+					c_tconProjectileWeapon = Class.forName("tconstruct.library.weaponry.ProjectileWeapon");
+				}catch(Exception e){}
+			if(c_tconProjectileWeapon!=null && c_tconProjectileWeapon.isAssignableFrom(player.getItemInUse().getItem().getClass()))
+				return true;
+		}
+		return false;
+	}
+
+	public static void addAttributeModToLivingUnsaved(EntityLivingBase living, IAttribute attr, UUID uuid, String tag, double val, int type)
+	{
+		IAttributeInstance attrIns = living.getAttributeMap().getAttributeInstance(attr);
+		if(attrIns==null || attrIns.getModifier(uuid)!=null)
+			return;
+		attrIns.applyModifier( new AttributeModifier(uuid, tag, val, type).setSaved(false) );
+	}
+	public static void addAttributeModToLiving(EntityLivingBase living, IAttribute attr, UUID uuid, String tag, double val, int type)
 	{
 		IAttributeInstance attrIns = living.getAttributeMap().getAttributeInstance(attr);
 		if(attrIns==null || attrIns.getModifier(uuid)!=null)
 			return;
 		attrIns.applyModifier( new AttributeModifier(uuid, tag, val, type) );
 	}
-	public static void removeAttributeFromLiving(EntityLivingBase living, IAttribute attr, UUID uuid, String tag, double val, int type)
+	public static boolean livingHasAttributeMod(EntityLivingBase living, IAttribute attr, UUID uuid)
+	{
+		IAttributeInstance attrIns = living.getAttributeMap().getAttributeInstance(attr);
+		return attrIns!=null && attrIns.getModifier(uuid)!=null;
+	}
+	public static void removeAttributeModFromLiving(EntityLivingBase living, IAttribute attr, UUID uuid, String tag, double val, int type)
 	{
 		IAttributeInstance attrIns = living.getAttributeMap().getAttributeInstance(attr);
 		if(attrIns!=null)

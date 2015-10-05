@@ -1,19 +1,28 @@
 package witchinggadgets.common.util.handler;
 
+import java.util.UUID;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
 import thaumcraft.common.Thaumcraft;
 import thaumcraft.common.lib.potions.PotionWarpWard;
 import witchinggadgets.WitchingGadgets;
 import witchinggadgets.common.WGContent;
 import witchinggadgets.common.WGModCompat;
 import witchinggadgets.common.blocks.tiles.TileEntitySaunaStove;
+import witchinggadgets.common.util.Lib;
+import witchinggadgets.common.util.Utilities;
+import baubles.api.BaublesApi;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 
@@ -62,7 +71,16 @@ public class PlayerTickHandler
 				player.riddenByEntity.ridingEntity=null;
 				player.riddenByEntity=null;
 			}
-
+			
+			IInventory baubles = BaublesApi.getBaubles(player);
+			if(Utilities.isPlayerUsingBow(player) && baubles!=null && (OreDictionary.itemMatches(new ItemStack(WGContent.ItemMagicalBaubles,1,6),baubles.getStackInSlot(1), true)||OreDictionary.itemMatches(new ItemStack(WGContent.ItemMagicalBaubles,1,6),baubles.getStackInSlot(2), true)))
+				if(!Utilities.livingHasAttributeMod(player, SharedMonsterAttributes.movementSpeed, new UUID(Lib.ATTRIBUTE_MOD_UUID, 6)))
+					Utilities.addAttributeModToLivingUnsaved(player, SharedMonsterAttributes.movementSpeed, new UUID(Lib.ATTRIBUTE_MOD_UUID, 6), "WGBowBonus", 2.75f, 1);
+		}
+		else if(player != null && event.phase.equals(TickEvent.Phase.END))
+		{
+			if(Utilities.livingHasAttributeMod(player, SharedMonsterAttributes.movementSpeed, new UUID(Lib.ATTRIBUTE_MOD_UUID, 6)))
+				Utilities.removeAttributeModFromLiving(player, SharedMonsterAttributes.movementSpeed, new UUID(Lib.ATTRIBUTE_MOD_UUID, 6), "WGBowBonus", 2.75f, 1);
 		}
 	}
 

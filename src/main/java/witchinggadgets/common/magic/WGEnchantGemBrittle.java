@@ -41,4 +41,10 @@ public class WGEnchantGemBrittle extends Enchantment
 	{
 		return false;
 	}
+	
+	@Override
+    public boolean isAllowedOnBooks()
+    {
+        return false;
+    }
 }
