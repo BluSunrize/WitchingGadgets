@@ -197,7 +197,7 @@ public class WGResearch
 		registerInfusionRecipe("WGBAUBLES","_DOUBLEJUMPSHOULDERS",new ItemStack(WGContent.ItemMagicalBaubles,1,0),2,infusionAspects,OreDictionary.getOres("travelgearShoulderBase").get(0),new ItemStack[] {new ItemStack(Items.feather),stack_ingot,new ItemStack(Items.feather),new ItemStack(ConfigItems.itemShard,1,0),new ItemStack(Items.feather),stack_ingot});
 
 		infusionAspects = new AspectList().add(Aspect.AIR,16).add(Aspect.WEAPON, 8).add(Aspect.ORDER,8);
-		registerInfusionRecipe("WGBAUBLES","_SNIPERRING",new ItemStack(WGContent.ItemMagicalBaubles,1,6),2,infusionAspects,new ItemStack(ConfigItems.itemBaubleBlanks,1,1),new ItemStack[] {new ItemStack(Items.arrow),new ItemStack(ConfigItems.itemShard,1,0),new ItemStack(Items.arrow),new ItemStack(ConfigItems.itemShard,1,0),new ItemStack(Items.arrow)});
+		registerInfusionRecipe("WGBAUBLES","_SNIPERRING",new ItemStack(WGContent.ItemMagicalBaubles,1,6),2,infusionAspects,new ItemStack(ConfigItems.itemBaubleBlanks,1,1),new ItemStack[] {new ItemStack(ConfigItems.itemPrimalArrow,1,0),new ItemStack(ConfigItems.itemPrimalArrow,1,1),new ItemStack(ConfigItems.itemPrimalArrow,1,2),new ItemStack(ConfigItems.itemPrimalArrow,1,3),new ItemStack(ConfigItems.itemPrimalArrow,1,4),new ItemStack(ConfigItems.itemPrimalArrow,1,5)});
 
 		infusionAspects = new AspectList().add(Aspect.GREED,32).add(Aspect.TOOL,16);
 		registerInfusionRecipe("WGBAUBLES","_LUCKRING",new ItemStack(WGContent.ItemMagicalBaubles,1,5),3,infusionAspects,luckyCoin,new ItemStack[] {new ItemStack(Items.gold_ingot),new ItemStack(Items.dye,1,4),stack_ingot,new ItemStack(Items.dye,1,4),stack_ingot,new ItemStack(Items.dye,1,4),stack_ingot,new ItemStack(Items.dye,1,4)});

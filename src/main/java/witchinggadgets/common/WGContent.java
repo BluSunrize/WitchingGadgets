@@ -441,6 +441,9 @@ public class WGContent
 		addAspects = new AspectList().add(Aspect.MIND,3).add(Aspect.HUNGER,2).add(Aspect.FLESH,2);
 		ThaumcraftApi.registerObjectTag(new ItemStack(ItemMagicFoodstuffs,1,2),addAspects);
 
+		addAspects = new AspectList().add(Aspect.SENSES,2).add(Aspect.MAN,1);
+		ThaumcraftApi.registerObjectTag(new ItemStack(ItemMagicalBaubles,1,4),addAspects);
+
 		//		//Biomes o' Plenty
 		//		ThaumcraftApi.registerObjectTag("gemAmber", new AspectList().add(Aspect.TRAP, 2).add(Aspect.CRYSTAL, 2));
 		//		ThaumcraftApi.registerObjectTag("gemPeridot", new AspectList().add(Aspect.CRYSTAL, 2).add(Aspect.GREED, 2));
