@@ -25,7 +25,7 @@ public class BlockTimeStone extends BlockContainer
 	@Override
 	public void registerBlockIcons(IIconRegister iconRegister)
 	{
-		this.blockIcon = iconRegister.registerIcon("BluDecorations:TimeStone");
+		this.blockIcon = iconRegister.registerIcon("witchinggadgets:timeStone");
 	}
 
 	@Override
