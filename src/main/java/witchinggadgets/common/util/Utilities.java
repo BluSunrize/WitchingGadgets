@@ -397,9 +397,9 @@ public class Utilities
 	static Class c_tconProjectileWeapon;
 	public static boolean isPlayerUsingBow(EntityPlayer player)
 	{
-		if(!player.isUsingItem() || player.getItemInUse()==null || player.getItemInUse().getItem()==null)
+		if(!player.isUsingItem() || player.inventory.getCurrentItem()==null || player.inventory.getCurrentItem().getItem()==null)
 			return false;
-		if(player.getItemInUse().getItem() instanceof ItemBow)
+		if(player.inventory.getCurrentItem().getItem() instanceof ItemBow)
 			return true;
 		if(Loader.isModLoaded("TConstruct"))
 		{
@@ -407,7 +407,7 @@ public class Utilities
 				try{
 					c_tconProjectileWeapon = Class.forName("tconstruct.library.weaponry.ProjectileWeapon");
 				}catch(Exception e){}
-			if(c_tconProjectileWeapon!=null && c_tconProjectileWeapon.isAssignableFrom(player.getItemInUse().getItem().getClass()))
+			if(c_tconProjectileWeapon!=null && c_tconProjectileWeapon.isAssignableFrom(player.inventory.getCurrentItem().getItem().getClass()))
 				return true;
 		}
 		return false;
