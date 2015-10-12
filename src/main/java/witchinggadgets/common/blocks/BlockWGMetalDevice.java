@@ -106,7 +106,7 @@ public class BlockWGMetalDevice extends BlockContainer implements ITerraformFocu
 	@Override
 	public boolean shouldSideBeRendered(IBlockAccess iBlockAccess, int x, int y, int z, int side)
 	{
-		return iBlockAccess.getBlock(x, y, z) == this ? false : super.shouldSideBeRendered(iBlockAccess, x, y, z, side);
+		return super.shouldSideBeRendered(iBlockAccess, x, y, z, side);
 	}
 
 	@Override

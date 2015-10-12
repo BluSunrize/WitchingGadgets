@@ -104,7 +104,7 @@ public class ItemPrimordialArmor extends ItemFortressArmor implements IActiveAbi
 		{
 		case 0:
 			//Thanks WayOfFlowingTime =P
-			AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(player.posX-1.5,player.posY-2,player.posZ-1.5, player.posX+1.5,player.posY+2.5,player.posZ+1.5);
+			AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(player.posX-.5,player.posY-.5,player.posZ-.5, player.posX+.5,player.posY+.5,player.posZ+.5).expand(4,4,4);
 			for(Entity projectile : (List<Entity>)world.getEntitiesWithinAABB(Entity.class, aabb))
 			{
 				if(projectile==null)
@@ -118,7 +118,7 @@ public class ItemPrimordialArmor extends ItemFortressArmor implements IActiveAbi
 				else if(projectile instanceof EntityThrowable)
 					shooter = ((EntityThrowable) projectile).getThrower();
 
-				if(projectile!=null && projectile.equals(player))
+				if(shooter!=null && shooter.equals(player))
 					continue;
 
 				double delX = projectile.posX - player.posX;
@@ -320,6 +320,10 @@ public class ItemPrimordialArmor extends ItemFortressArmor implements IActiveAbi
 		{
 			switch(getAbility(stack))
 			{
+			case 0:
+				if(event.source.isProjectile())
+					event.setCanceled(true);
+				break;
 			case 5:
 				if(event.source.getSourceOfDamage() instanceof EntityLivingBase)
 					if(event.entityLiving.getRNG().nextInt(4)==0)
