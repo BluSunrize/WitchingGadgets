@@ -116,6 +116,7 @@ wg.title.crimsonCultist=血腥信徒
 wg.title.crimsonKnight=血腥骑士
 wg.title.crimsonPraetor=血腥主教
 item.WG_Baubles.ringLuck.name=贪婪指环
+item.WG_Baubles.ringSniper.name=狙击指环
 
 item.WG_ScanCamera.name=神秘相机
 
@@ -326,7 +327,8 @@ witchinggadgets_research_page.WGBAUBLES.1=这几页看上去是从巫术装备�
 witchinggadgets_research_page.WGBAUBLES.2=§l狂战士护腕:§r<BR>这些覆盖着狼皮的护腕禁不住刀刃的攻击.但有了注入其中的魔力,就能让使用者如狼般的凶猛.另外,它们也是毛茸茸的.<BR>§o会让你的攻击伤害提升2点.§r
 witchinggadgets_research_page.WGBAUBLES.3=§l迅捷护腕:§r<BR>这些护腕由矮人中的神秘使所设计,能赋予你快速挖掘的能力.它们的效果随工作环境而变化,提升水下,空中以及对坚硬材料的挖掘速度.<BR>它们也会提升爬梯子的速度,以便你能快速从地下脱离.
 witchinggadgets_research_page.WGBAUBLES.4=§l炽天使肩铠:§r<BR>飞翔是许多人所向往的.让使用者飞行算是很高级的魔法了,但在空中继续跳跃还是力所能及的.<BR>这些肩铠会生成强力的魔法之翼,让你能在半空中进行第二次跳跃.
-witchinggadgets_research_page.WGBAUBLES.5=§l贪婪指环:§r<BR>幸运万岁!但没人能一直保持好运气.你想出了一个办法来增加自己的运气,给戒指镶上一枚金币然后施以魔法.<BR>§o戴着这个指环时你的时运和抢夺等级就会提升2级.<BR>制作金币的附魔书所带的附魔种类不限.§r
+witchinggadgets_research_page.WGBAUBLES.5=§lRing of the Sniper:§r<BR>Some creatures of the dark are jsut too strong to face in melee combat, so taking them out from the distance seems more adviseable. With the ring of the Sniper, this task is made much easier.<BR>As long as you wear the ring, you will be able to move quicker while drawing a bow. Sneaking with an arrow knocked will allow you to focus on target is in the distance.
+witchinggadgets_research_page.WGBAUBLES.6=§l贪婪指环:§r<BR>幸运万岁!但没人能一直保持好运气.你想出了一个办法来增加自己的运气,给戒指镶上一枚金币然后施以魔法.<BR>§o戴着这个指环时你的时运和抢夺等级就会提升2级.<BR>制作金币的附魔书所带的附魔种类不限.§r
 #
 witchinggadgets_research_name.CLOAKKAMA=卡玛短袍
 witchinggadgets_research_text.CLOAKKAMA=[WG] It's not a kilt!
