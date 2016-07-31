@@ -312,6 +312,7 @@ public class EventHandler
 				else if(event.entityPlayer.inventory.getStackInSlot(i).getItemDamage()==3)
 				{
 					ItemStack[] inv = ((ItemBag)event.entityPlayer.inventory.getStackInSlot(i).getItem()).getStoredItems(event.entityPlayer.inventory.getStackInSlot(i));
+					boolean itemWasPickedUp = false;
 					for(int f=0; f<inv.length; f++)
 					{
 						if(inv[f]==null)
@@ -319,6 +320,7 @@ public class EventHandler
 							inv[f] = event.item.getEntityItem().copy();
 							event.item.setDead();
 							event.setCanceled(true);
+							itemWasPickedUp = true;
 							break;
 						}
 						else if(OreDictionary.itemMatches(inv[f], event.item.getEntityItem(), true))
@@ -330,11 +332,16 @@ public class EventHandler
 							{
 								event.item.setDead();
 								event.setCanceled(true);
+								itemWasPickedUp = true;
 								break;
 							}
 						}
 					}
 					((ItemBag)event.entityPlayer.inventory.getStackInSlot(i).getItem()).setStoredItems(event.entityPlayer.inventory.getStackInSlot(i), inv);
+					if (itemWasPickedUp)
+					{
+						break;
+					}
 				}
 			}
 	}
