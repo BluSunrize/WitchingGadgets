@@ -176,7 +176,7 @@ wg.desc.filteredItems=Accepted Items:
 
 wg.desc.active=Active
 
-wg.desc.infusionStabilizer=Works as an Infusion Stabilizer
+wg.desc.infusionStabilizer=May work as an Infusion Stabilizer
 
 wg.gui.search=Search
 wg.chat.nodeContents.primal=Primal Aspects within this node: §eAer: %1$s§f, §2Terra: %2$s§f, §cIgnis: %3$s§f, §3Aqua: %4$s§f, §7Ordo: %5$s§f, §8Perditio: %6$s
